@@ -1,0 +1,9 @@
+{
+  "@@locale": "vi",
+  "appName": "Sử Ký",
+  "taps": "Số lần nhấn: {count}",
+  "@taps": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "increment": "Tăng"
+}

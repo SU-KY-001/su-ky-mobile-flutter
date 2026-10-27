@@ -1,0 +1,9 @@
+{
+  "@@locale": "en",
+  "appName": "Su Ky",
+  "taps": "Taps: {count}",
+  "@taps": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "increment": "Increment"
+}
