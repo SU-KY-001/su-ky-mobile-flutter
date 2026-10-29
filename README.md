@@ -4,6 +4,23 @@ Flutter mobile app. Architecture: feature-first MVVM — see
 [docs/adr/0001-architecture.md](docs/adr/0001-architecture.md) and
 [AGENTS.md](AGENTS.md).
 
+## Sử Kế reference UI
+
+Five implemented screens: Discover (`/`), Search (`/search`), Login (`/login`),
+Series (`/series/bach-dang-938`) and Player (`/player`). Vietnamese is the initial
+locale; all copy also has English translations. Profile opens the login form.
+
+VS Code: select an Android emulator/device, choose `Su Ke - Android` and press F5.
+The configuration loads the local `env/dev.json` copied from the example.
+
+This implementation uses local artwork cropped from the supplied reference and
+an in-memory playback simulation. Play/pause, seeking, episode selection,
+favorites, bookmarks, playback speed and sleep timer share state across routes.
+Audio streaming, account authentication, OAuth, downloads and sharing need real
+services; their placeholder actions display a demo notice. No new packages were
+added. Inter is bundled locally from the supplied Google Fonts archive, including
+weights 400–800 and italic. The SIL OFL license is included. See ADR 0002.
+
 ## Requirements
 Flutter 3.47+ / Dart 3.13+.
 

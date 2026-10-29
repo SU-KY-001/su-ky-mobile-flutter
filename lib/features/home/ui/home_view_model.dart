@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Reference ViewModel: owns UI state, no `BuildContext` or widget types.
-/// Replace with real feature logic.
-class HomeViewModel extends Notifier<int> {
+class HomeViewModel extends Notifier<AsyncValue<int>> {
   @override
-  int build() => 0;
-
-  void increment() => state++;
+  AsyncValue<int> build() => const AsyncData(0);
+  void selectCategory(int index) {
+    if (index >= 0 && index < 3) state = AsyncData(index);
+  }
 }
 
-final homeViewModelProvider = NotifierProvider.autoDispose<HomeViewModel, int>(
-  HomeViewModel.new,
-);
+final homeViewModelProvider =
+    NotifierProvider.autoDispose<HomeViewModel, AsyncValue<int>>(
+      HomeViewModel.new,
+    );
