@@ -10,6 +10,35 @@ Five implemented screens: Discover (`/`), Search (`/search`), Login (`/login`),
 Series (`/series/bach-dang-938`) and Player (`/player`). Vietnamese is the initial
 locale; all copy also has English translations. Profile opens the login form.
 
+## Episode quiz
+
+Episode 2 of Bach Dang 938 includes a six-question local sample quiz. Open
+`Ôn tập với Quiz` from its Series entry or Player. The route is
+`/episodes/1/quiz` (episode indices follow the existing zero-based player).
+Other episode IDs display an unavailable state rather than another episode's quiz.
+
+The quiz includes an introduction, answer selection and feedback, results,
+and expandable answer review with correct/incorrect filters. Answers lock after
+checking; completion calculates accuracy and elapsed time. Starting a quiz pauses
+the simulated player. Leaving an unfinished attempt requires confirmation.
+
+The last completed result is stored locally in SharedPreferences under a versioned
+quiz key, including answers, completion time and duration. It survives app restarts;
+unfinished attempts do not. Results are device-local, not linked to the mock login.
+Read/write failures are visible and a failed result write can be retried.
+`QuizRepository` can be replaced when a quiz API and real authentication exist.
+No audio clip playback or points/badge economy is simulated by the quiz.
+
+Quiz screens use the bundled Inter family, white backgrounds and existing red
+accents. Sample question copy and explanations live in the Vietnamese/English ARB
+files; the ordered question IDs and correct options live in `QuizDefinition`.
+Changing the question/answer schema requires a new quiz ID to isolate old results.
+
+To capture UI test previews: `flutter test --dart-define=CAPTURE_UI=true`.
+Images are written to `build/ui_previews/`. Quiz coverage includes scoring,
+answer locking, restarting, local persistence, storage errors, exit confirmation,
+review filtering and navigation at 320/390 logical pixels.
+
 VS Code: select an Android emulator/device, choose `Su Ke - Android` and press F5.
 The configuration loads the local `env/dev.json` copied from the example.
 

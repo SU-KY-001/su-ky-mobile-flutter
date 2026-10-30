@@ -6,7 +6,13 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class SeriesScreen extends ConsumerWidget {
-  const SeriesScreen({super.key, required this.onBack, required this.onPlayer});
+  const SeriesScreen({
+    super.key,
+    required this.onBack,
+    required this.onPlayer,
+    this.onQuiz,
+  });
+  final ValueChanged<int>? onQuiz;
   final VoidCallback onBack, onPlayer;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -278,6 +284,12 @@ class SeriesScreen extends ConsumerWidget {
                           color: context.accent,
                           backgroundColor: AppDesign.line,
                         ),
+                      ),
+                    if (index == 1 && onQuiz != null)
+                      TextButton.icon(
+                        onPressed: () => onQuiz!(index),
+                        icon: const Icon(Icons.quiz_outlined),
+                        label: Text(l.quizEntry),
                       ),
                   ],
                 ),

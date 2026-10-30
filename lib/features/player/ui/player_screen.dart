@@ -6,7 +6,13 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class PlayerScreen extends ConsumerWidget {
-  const PlayerScreen({super.key, required this.onBack, required this.onSeries});
+  const PlayerScreen({
+    super.key,
+    required this.onBack,
+    required this.onSeries,
+    this.onQuiz,
+  });
+  final ValueChanged<int>? onQuiz;
   final VoidCallback onBack, onSeries;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -208,6 +214,13 @@ class PlayerScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 24),
+          if (audio.episode == 1 && onQuiz != null)
+            FilledButton.icon(
+              onPressed: () => onQuiz!(audio.episode),
+              icon: const Icon(Icons.quiz_outlined),
+              label: Text(l.quizEntry),
+            ),
           const SizedBox(height: 24),
         ],
       ),

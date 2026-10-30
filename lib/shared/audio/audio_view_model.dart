@@ -62,6 +62,7 @@ class AudioViewModel extends Notifier<AudioState> {
   }
 
   void toggle() => state = state.copyWith(playing: !state.playing);
+  void pause() => state = state.copyWith(playing: false);
   void playEpisode(int index) {
     if (index < 0 || index >= AppDesign.episodeSeconds.length) return;
     state = state.copyWith(

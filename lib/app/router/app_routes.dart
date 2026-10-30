@@ -5,4 +5,6 @@ abstract final class AppRoutes {
   static const login = '/login';
   static const series = '/series/bach-dang-938';
   static const player = '/player';
+  static const quiz = '/episodes/:episode/quiz';
+  static String quizFor(int episode) => '/episodes/$episode/quiz';
 }

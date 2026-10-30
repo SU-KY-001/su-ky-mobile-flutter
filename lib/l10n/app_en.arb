@@ -124,5 +124,154 @@
   "voiceUnavailable": "Voice search is not connected yet.",
   "initials": "HN",
   "avatarInitials": "VK",
-  "rating": "4.9"
+  "rating": "4.9",
+  "quizTitle": "Episode quiz",
+  "quizSubtitle": "History knowledge check",
+  "quizHeading": "Review your knowledge",
+  "quizIntro": "Review the stakes, tides and tactics behind Ngo Quyen’s victory at Bach Dang in 938.",
+  "quizQuestions": "{count} questions",
+  "@quizQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizEstimate": "About {count} minutes",
+  "@quizEstimate": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizChoiceType": "Multiple choice",
+  "quizEstimated": "Estimated time",
+  "quizPrevious": "Previous result",
+  "quizTip": "Study tip",
+  "quizTipBody": "Focus on how the stakes, tides and timing of the counterattack work together.",
+  "quizStart": "Start quiz",
+  "quizRestart": "Try again",
+  "quizReturnEpisode": "Back to episode",
+  "quizProgress": "QUIZ PROGRESS",
+  "quizCounter": "Question {current}/{total}",
+  "@quizCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizCategory": "Naval strategy",
+  "quizInstruction": "Choose the best answer before continuing.",
+  "quizCheck": "Check answer",
+  "quizNext": "Next question",
+  "quizFinish": "See results",
+  "quizCorrect": "Correct!",
+  "quizIncorrect": "Not quite",
+  "quizRightAnswer": "Correct answer",
+  "quizYourAnswer": "Your answer",
+  "quizExplanation": "Explanation",
+  "quizSource": "Sample learning content · Bach Dang 938",
+  "quizResults": "Quiz results",
+  "quizScore": "{correct}/{total} correct",
+  "@quizScore": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizAccuracy": "Accuracy: {percent}%",
+  "@quizAccuracy": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "quizExcellent": "Excellent work!",
+  "quizEncourage": "Keep exploring!",
+  "quizResultBody": "Review the explanations to remember the key ideas from this episode.",
+  "quizStatistics": "Detailed statistics",
+  "quizElapsed": "Time taken",
+  "quizDuration": "{minutes} min {seconds} sec",
+  "@quizDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizRightCount": "Correct answers",
+  "quizWrongCount": "Questions to review",
+  "quizReview": "Review answers",
+  "quizReviewTitle": "History quiz & explanations",
+  "quizFilterAll": "All ({count})",
+  "@quizFilterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterWrong": "Incorrect ({count})",
+  "@quizFilterWrong": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterRight": "Correct ({count})",
+  "@quizFilterRight": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoMatches": "No questions in this category.",
+  "quizBackResults": "Back to results",
+  "quizExitTitle": "Leave this quiz?",
+  "quizExitBody": "This attempt’s progress will be discarded. Previous completed results will be kept.",
+  "quizContinue": "Keep going",
+  "quizExit": "Leave quiz",
+  "quizHelp": "Help",
+  "quizHelpBody": "Select an option, check it and read the explanation. Each question can only be checked once. Results are saved on this device.",
+  "quizStorageError": "Could not read or save local history. You can still take the quiz and review this attempt.",
+  "quizRetrySave": "Retry save",
+  "quizSaving": "Saving result…",
+  "quizLoadError": "Could not load quiz.",
+  "quizRetry": "Retry",
+  "quizUnavailable": "No quiz is available for this episode yet.",
+  "quizEntry": "Review with a quiz",
+  "quizLocalNote": "Saved on this device only · No account sync",
+  "quizQuestion1": "How were the wooden stakes at Bach Dang prepared?",
+  "quizOptions1": "Sharpened and iron-tipped | Left floating freely | Arranged as a bridge | Placed on transport boats",
+  "quizExplanation1": "Ngo Quyen had large wooden stakes sharpened, tipped with iron and driven into the riverbed to damage enemy ships.",
+  "quizQuestion2": "Which natural feature of the Bach Dang River did Ngo Quyen exploit for the hidden stakes?",
+  "quizOptions2": "A constant one-way current | The changing water level of the tides | Winter ice on the river | Cliffs in the middle of the river",
+  "quizExplanation2": "High tide concealed the stakes. As the tide fell, they trapped and damaged the enemy ships during the counterattack.",
+  "quizQuestion3": "Who commanded the Southern Han fleet entering the Bach Dang River in 938?",
+  "quizOptions3": "Liu Gong | Kieu Cong Tien | Liu Hongcao | Tran Ich Tac",
+  "quizExplanation3": "Liu Hongcao, son of the Southern Han ruler Liu Gong, led the invading fleet and was defeated at Bach Dang.",
+  "quizQuestion4": "When did Ngo Quyen’s forces lure enemy ships past the stakes?",
+  "quizOptions4": "When high tide covered the stakes | When low tide exposed all stakes | After removing the stakes | After the enemy had retreated",
+  "quizExplanation4": "Light boats lured the fleet in at high tide. The counterattack began as the tide fell and the stakes obstructed the enemy ships.",
+  "quizQuestion5": "What was a major significance of the victory at Bach Dang in 938?",
+  "quizOptions5": "The beginning of the Tran dynasty | Moving the capital to Thang Long | Ending the resistance against the Ming | Beginning a lasting era of independence",
+  "quizExplanation5": "The victory defeated the Southern Han invasion and marked a turning point toward a lasting era of independence.",
+  "quizQuestion6": "Which action shows Ngo Quyen’s careful preparation?",
+  "quizOptions6": "Waiting without a plan | Studying terrain and tides and preparing the battlefield | Relying only on fleet size | Abandoning river defenses",
+  "quizExplanation6": "Combining the river terrain, tidal patterns, stake field and feigned retreat allowed Ngo Quyen to control how the battle unfolded."
 }

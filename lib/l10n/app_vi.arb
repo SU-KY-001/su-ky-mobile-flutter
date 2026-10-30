@@ -124,5 +124,154 @@
   "voiceUnavailable": "Tìm kiếm bằng giọng nói chưa được kết nối.",
   "initials": "HN",
   "avatarInitials": "VK",
-  "rating": "4.9"
+  "rating": "4.9",
+  "quizTitle": "Ôn tập Quiz",
+  "quizSubtitle": "Khảo thí lịch sử",
+  "quizHeading": "Ôn lại kiến thức",
+  "quizIntro": "Củng cố hiểu biết về trận địa cọc, thủy triều và chiến thuật của Ngô Quyền trong chiến thắng Bạch Đằng năm 938.",
+  "quizQuestions": "{count} câu hỏi",
+  "@quizQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizEstimate": "Khoảng {count} phút",
+  "@quizEstimate": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizChoiceType": "Trắc nghiệm",
+  "quizEstimated": "Thời gian ước tính",
+  "quizPrevious": "Kết quả lần trước",
+  "quizTip": "Mẹo ôn tập",
+  "quizTipBody": "Chú ý mối liên hệ giữa bãi cọc, con nước và thời điểm phản công.",
+  "quizStart": "Bắt đầu quiz",
+  "quizRestart": "Làm lại quiz",
+  "quizReturnEpisode": "Quay về tập nghe",
+  "quizProgress": "TIẾN ĐỘ BÀI LÀM",
+  "quizCounter": "Câu {current}/{total}",
+  "@quizCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizCategory": "Chiến lược thủy chiến",
+  "quizInstruction": "Chọn một phương án chính xác nhất trước khi tiếp tục.",
+  "quizCheck": "Kiểm tra đáp án",
+  "quizNext": "Câu tiếp theo",
+  "quizFinish": "Xem kết quả",
+  "quizCorrect": "Chính xác!",
+  "quizIncorrect": "Chưa chính xác",
+  "quizRightAnswer": "Đáp án chính xác",
+  "quizYourAnswer": "Đáp án bạn chọn",
+  "quizExplanation": "Lời giải chi tiết",
+  "quizSource": "Nội dung ôn tập mẫu · Bạch Đằng 938",
+  "quizResults": "Kết quả ôn tập",
+  "quizScore": "{correct}/{total} câu đúng",
+  "@quizScore": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizAccuracy": "Tỷ lệ chính xác: {percent}%",
+  "@quizAccuracy": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "quizExcellent": "Rất xuất sắc!",
+  "quizEncourage": "Tiếp tục khám phá nhé!",
+  "quizResultBody": "Xem lại lời giải để ghi nhớ những kiến thức quan trọng của tập nghe.",
+  "quizStatistics": "Thống kê chi tiết",
+  "quizElapsed": "Thời gian hoàn thành",
+  "quizDuration": "{minutes} phút {seconds} giây",
+  "@quizDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizRightCount": "Số câu đúng",
+  "quizWrongCount": "Số câu cần lưu ý",
+  "quizReview": "Xem lại chi tiết đáp án",
+  "quizReviewTitle": "Khảo thí lịch sử & Lời giải",
+  "quizFilterAll": "Tất cả ({count})",
+  "@quizFilterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterWrong": "Câu sai ({count})",
+  "@quizFilterWrong": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterRight": "Câu đúng ({count})",
+  "@quizFilterRight": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoMatches": "Không có câu hỏi trong mục này.",
+  "quizBackResults": "Quay lại màn hình kết quả",
+  "quizExitTitle": "Thoát bài đang làm?",
+  "quizExitBody": "Tiến trình lượt làm này sẽ không được lưu. Kết quả đã hoàn thành trước đó vẫn được giữ lại.",
+  "quizContinue": "Tiếp tục làm",
+  "quizExit": "Thoát quiz",
+  "quizHelp": "Hướng dẫn",
+  "quizHelpBody": "Chọn một đáp án, bấm kiểm tra rồi đọc lời giải. Mỗi câu chỉ được kiểm tra một lần. Kết quả được lưu trên thiết bị này.",
+  "quizStorageError": "Không thể đọc hoặc lưu lịch sử trên thiết bị. Bạn vẫn có thể làm và xem kết quả lượt này.",
+  "quizRetrySave": "Thử lưu lại",
+  "quizSaving": "Đang lưu kết quả…",
+  "quizLoadError": "Không thể tải quiz.",
+  "quizRetry": "Thử lại",
+  "quizUnavailable": "Tập này chưa có bộ câu hỏi ôn tập.",
+  "quizEntry": "Ôn tập với Quiz",
+  "quizLocalNote": "Kết quả chỉ lưu trên thiết bị · Chưa đồng bộ tài khoản",
+  "quizQuestion1": "Cọc gỗ trong trận địa Bạch Đằng được chuẩn bị như thế nào?",
+  "quizOptions1": "Vót nhọn và bịt sắt ở đầu | Để nổi tự do trên mặt nước | Xếp thành cầu qua sông | Đặt trên thuyền vận tải",
+  "quizExplanation1": "Ngô Quyền cho chuẩn bị những cọc gỗ lớn, vót nhọn và bịt sắt, đóng xuống lòng sông để tạo trận địa đánh thuyền giặc.",
+  "quizQuestion2": "Ngô Quyền đã lợi dụng đặc điểm tự nhiên nào của sông Bạch Đằng để xây dựng bãi cọc ngầm?",
+  "quizOptions2": "Dòng chảy một chiều quanh năm | Sự thay đổi mực nước khi triều lên và rút | Lòng sông đóng băng vào mùa đông | Những vách núi dựng giữa sông",
+  "quizExplanation2": "Khi triều lên, nước che khuất bãi cọc. Khi triều rút, bãi cọc trở thành chướng ngại khiến thuyền địch mắc kẹt và bị phá hủy trong cuộc phản công.",
+  "quizQuestion3": "Ai trực tiếp chỉ huy thủy quân Nam Hán tiến vào sông Bạch Đằng năm 938?",
+  "quizOptions3": "Lưu Cung | Kiều Công Tiễn | Lưu Hoằng Tháo | Trần Ích Tắc",
+  "quizExplanation3": "Lưu Hoằng Tháo, con của vua Nam Hán Lưu Cung, trực tiếp chỉ huy đạo thủy quân xâm lược và thất bại trong trận Bạch Đằng.",
+  "quizQuestion4": "Quân ta nhử thuyền giặc vượt qua bãi cọc vào thời điểm nào?",
+  "quizOptions4": "Khi nước triều dâng che lấp cọc | Khi nước rút để lộ toàn bộ cọc | Sau khi tháo bỏ bãi cọc | Khi thuyền giặc đã rút lui",
+  "quizExplanation4": "Quân ta dùng thuyền nhẹ nhử địch khi triều lên. Khi nước rút, quân ta phản công, đẩy thuyền địch vào thế bị bãi cọc cản trở.",
+  "quizQuestion5": "Ý nghĩa nổi bật của chiến thắng Bạch Đằng năm 938 là gì?",
+  "quizOptions5": "Mở đầu triều Trần | Dời đô về Thăng Long | Kết thúc kháng chiến chống Minh | Mở ra thời kỳ độc lập tự chủ lâu dài",
+  "quizExplanation5": "Chiến thắng Bạch Đằng năm 938 đánh bại cuộc xâm lược của Nam Hán, là bước ngoặt mở ra thời kỳ độc lập tự chủ lâu dài của dân tộc.",
+  "quizQuestion6": "Yếu tố nào thể hiện sự chủ động chuẩn bị của Ngô Quyền?",
+  "quizOptions6": "Chỉ chờ địch tiến đến rồi ứng phó | Kết hợp khảo sát địa hình, thủy triều và bố trí trận địa | Dựa hoàn toàn vào số lượng thuyền | Bỏ phòng thủ đường sông",
+  "quizExplanation6": "Việc kết hợp địa hình sông nước, quy luật thủy triều, bãi cọc và kế nghi binh giúp quân ta chủ động chọn cách đánh phù hợp."
 }
