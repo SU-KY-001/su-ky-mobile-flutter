@@ -53,6 +53,26 @@ weights 400–800 and italic. The SIL OFL license is included. See ADR 0002.
 ## Requirements
 Flutter 3.47+ / Dart 3.13+.
 
+## Weekly missions layout
+Weekly missions uses the shared `AppPage` layout: centered content up to 520
+logical pixels, 24-pixel page padding, and the same three navigation destinations
+as Discover. The header scrolls with the content; calendar and mission section
+headings wrap on narrow phones. Layout tests cover 320, 390 and 1440-pixel widths,
+scrolling to the final card and navigation callbacks.
+
+The listening challenge “Hành trình chưa dừng lại” opens
+`/weekly-missions/listening`, with completion requirements, sample progress,
+and a recommended episode. “Nghe ngay” and “Tiếp tục nhiệm vụ” open episode 3
+in the existing simulated player. The medal button opens
+`/weekly-missions/honours`, a sample completion summary for week 42 of 2024,
+with a badge collection preview. Back, profile and Discover actions use the
+existing navigation. Share displays the sample-data notice; no external sharing
+service is connected. Points, badges and listening requirements are illustrative
+and are not awarded, persisted or synced to an account. Both screens include
+Vietnamese/English copy and layout tests at 320, 390 and 1440 logical pixels.
+`flutter test --dart-define=CAPTURE_UI=true` also writes previews of both screens
+to `build/ui_previews/`.
+
 ## Run
 ```sh
 flutter pub get
@@ -62,6 +82,20 @@ flutter gen-l10n
 flutter run --dart-define-from-file=env/dev.json
 ```
 Android only. Generated files (`*.g.dart`, `*.freezed.dart`, `lib/l10n/gen/`) are git-ignored; regenerate after clone.
+
+On Windows PowerShell, create the local config with
+`Copy-Item env/dev.example.json env/dev.json`. The example API URL is a placeholder;
+replace it with the backend URL before using API-backed functionality.
+Run `flutter devices`, then select an Android device explicitly:
+`flutter run -d <android-device-id> --dart-define-from-file=env/dev.json`.
+If no Android device is listed, start an Android emulator or connect a phone
+with USB debugging enabled.
+
+If startup shows a blank screen, check that the run command includes the config
+file. A missing or invalid `API_BASE_URL` throws before `runApp`, so a connected
+debug service alone does not mean the UI started. After changing build-time
+configuration, stop the current run with `q` and launch again. Chrome is not a
+supported target for this Android app.
 
 ## Configuration (build-time, `--dart-define`)
 | Key | Values | Default | Purpose |

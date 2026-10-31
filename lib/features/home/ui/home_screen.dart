@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -94,6 +96,27 @@ class HomeScreen extends ConsumerWidget {
             l.homeSubtitle,
             style: context.text.bodyMedium?.copyWith(color: AppDesign.muted),
           ),
+          const SizedBox(height: 18),
+          // NÚT CHUYỂN ĐẾN MÀN HÌNH NHIỆM VỤ TUẦN
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                context.push(AppRoutes.weeklyMissions);
+              },
+              icon: const Icon(Icons.calendar_month_outlined),
+              label: const Text('Nhiệm vụ tuần'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF922D2D),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+
           const SizedBox(height: 18),
           InkWell(
             onTap: onSearch,
