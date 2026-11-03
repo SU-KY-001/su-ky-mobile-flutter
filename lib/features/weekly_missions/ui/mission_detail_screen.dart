@@ -7,24 +7,16 @@ import 'package:su_ky_mobile/features/weekly_missions/ui/mission_detail_challeng
 import 'package:su_ky_mobile/features/weekly_missions/ui/mission_detail_next_card.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/mission_widgets.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class MissionDetailScreen extends ConsumerWidget {
   const MissionDetailScreen({super.key});
 
-  static const recommendedEpisode = 2;
-
-  void _listen(BuildContext context, WidgetRef ref) {
-    ref.read(audioViewModelProvider.notifier).playEpisode(recommendedEpisode);
-    context.push(AppRoutes.player);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    void listen() => _listen(context, ref);
+    void listen() => context.go(AppRoutes.podcast);
     return AppPage(
       bottom: MissionFooter(
         label: l.missionContinue,

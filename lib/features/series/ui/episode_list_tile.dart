@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
+import 'package:su_ky_mobile/shared/audio/audio_time.dart';
+import 'package:su_ky_mobile/shared/audio/play_gate.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
@@ -33,9 +32,7 @@ class EpisodeListTile extends ConsumerWidget {
             .showSnackBar(SnackBar(content: Text(l.episodeNoAudioNotice)));
         return;
       }
-      // Mock playback until the audio engine lands.
-      ref.read(audioViewModelProvider.notifier).playEpisode(position);
-      context.push(AppRoutes.player);
+      playFromUi(context, ref, episode.slug, narrationId: narration.id);
     }
 
     return Padding(

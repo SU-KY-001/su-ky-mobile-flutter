@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
+import 'package:su_ky_mobile/shared/audio/playback_controller.dart';
 
 import '../data/quiz_repository.dart';
 import '../domain/quiz.dart';
@@ -26,7 +26,7 @@ class QuizViewModel extends AsyncNotifier<QuizSession> {
   void start() {
     if (episode != QuizDefinition.episode) return;
     if (_value.saving) return;
-    ref.read(audioViewModelProvider.notifier).pause();
+    ref.read(playbackControllerProvider.notifier).pause();
     _started = ref.read(quizClockProvider)();
     state = AsyncData(
       QuizSession(stage: QuizStage.question, attempt: _value.attempt),

@@ -4,6 +4,7 @@ import '../../../core/di/cache_for.dart';
 import '../../../core/error/result.dart';
 import '../catalog_constants.dart';
 import '../domain/episode.dart';
+import '../domain/episode_detail.dart';
 import '../domain/historical_period.dart';
 import '../domain/series.dart';
 import 'catalog_repository.dart';
@@ -32,6 +33,14 @@ final seriesDetailProvider = FutureProvider.autoDispose
       ref.cacheFor(CatalogDefaults.staleTime);
       return _unwrap(
         await ref.watch(catalogRepositoryProvider).seriesDetail(slug),
+      );
+    });
+
+final episodeDetailProvider = FutureProvider.autoDispose
+    .family<EpisodeDetail, String>((ref, slug) async {
+      ref.cacheFor(CatalogDefaults.staleTime);
+      return _unwrap(
+        await ref.watch(catalogRepositoryProvider).episodeDetail(slug),
       );
     });
 

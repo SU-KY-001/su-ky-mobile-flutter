@@ -8,6 +8,7 @@ import '../../../core/logging/app_logger.dart';
 import '../../../core/network/dio_factory.dart';
 import '../catalog_constants.dart';
 import '../domain/episode.dart';
+import '../domain/episode_detail.dart';
 import '../domain/historical_period.dart';
 import '../domain/paged.dart';
 import '../domain/series.dart';
@@ -15,6 +16,7 @@ import 'catalog_parser.dart';
 
 const _seriesPath = '/api/series';
 const _periodsPath = '/api/historical-periods';
+const _episodesPath = '/api/episodes';
 const _notFoundStatus = 404;
 const _notFoundCode = 'NOT_FOUND';
 
@@ -26,6 +28,7 @@ abstract class CatalogRepository {
     String? periodId,
   });
   Future<Result<SeriesDetail>> seriesDetail(String slug);
+  Future<Result<EpisodeDetail>> episodeDetail(String slug);
   Future<Result<List<HistoricalPeriod>>> periods();
 
   /// Newest playable episodes across the first series. The API has no
@@ -56,6 +59,25 @@ class ApiCatalogRepository implements CatalogRepository {
     );
     return CatalogParser.seriesPage(res.data);
   });
+
+  @override
+  Future<Result<EpisodeDetail>> episodeDetail(String slug) {
+    if (!isValidSlug(slug)) {
+      return Future.value(
+        const Err(
+          ApiException(
+            'Invalid episode slug',
+            statusCode: _notFoundStatus,
+            errorCode: _notFoundCode,
+          ),
+        ),
+      );
+    }
+    return _guard('Episode detail', () async {
+      final res = await _dio.get<Object?>('$_episodesPath/$slug');
+      return CatalogParser.episodeDetail(res.data);
+    });
+  }
 
   @override
   Future<Result<SeriesDetail>> seriesDetail(String slug) {

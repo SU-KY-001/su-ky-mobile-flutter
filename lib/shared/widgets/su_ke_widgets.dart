@@ -105,12 +105,3 @@ class RoundPlay extends StatelessWidget {
     icon: Icon(playing ? Icons.pause_rounded : Icons.play_arrow_rounded),
   );
 }
-
-String episodeTitle(AppLocalizations l, int index) => [
-  l.episode1,
-  l.episode2,
-  l.episode3,
-  l.episode4,
-  l.episode5,
-  l.episode6,
-][index];

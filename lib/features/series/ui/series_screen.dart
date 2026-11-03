@@ -6,7 +6,7 @@ import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/features/series/ui/episode_list_tile.dart';
 import 'package:su_ky_mobile/features/series/ui/series_hero.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
+import 'package:su_ky_mobile/shared/audio/play_gate.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -102,11 +102,12 @@ class _SeriesBody extends ConsumerWidget {
         FilledButton.icon(
           onPressed: first == null
               ? null
-              : () {
-                  // Mock playback until the audio engine lands.
-                  ref.read(audioViewModelProvider.notifier).startOver();
-                  context.push(AppRoutes.player);
-                },
+              : () => playFromUi(
+                  context,
+                  ref,
+                  first.slug,
+                  narrationId: first.playable?.id,
+                ),
           icon: const Icon(Icons.play_arrow, size: 18),
           label: Text(l.seriesPlayFirst),
         ),

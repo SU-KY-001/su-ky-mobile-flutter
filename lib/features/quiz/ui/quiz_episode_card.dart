@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
-import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 import 'quiz_colors.dart';
 import 'quiz_primitives.dart';

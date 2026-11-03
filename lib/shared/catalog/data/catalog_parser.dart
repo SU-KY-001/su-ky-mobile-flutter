@@ -1,4 +1,5 @@
 import '../domain/episode.dart';
+import '../domain/episode_detail.dart';
 import '../domain/historical_period.dart';
 import '../domain/paged.dart';
 import '../domain/series.dart';
@@ -29,6 +30,42 @@ abstract final class CatalogParser {
       coverUrl: _imageUrl(json, 'cover'),
       landscapeUrl: _imageUrl(json, 'coverLandscape'),
       episodes: _list(json, 'episodes').map(_episode).toList(growable: false),
+    );
+  }
+
+  static EpisodeDetail episodeDetail(Object? body) {
+    final json = _object(body, 'episode detail');
+    final series = _object(json['series'], 'series');
+    final hasQuiz = json['hasQuiz'];
+    if (hasQuiz is! bool) {
+      throw const FormatException('Field "hasQuiz" must be a bool');
+    }
+    return EpisodeDetail(
+      id: _string(json, 'id'),
+      slug: _string(json, 'slug'),
+      title: _string(json, 'title'),
+      description: _optString(json, 'description'),
+      seriesSlug: _string(series, 'slug'),
+      seriesTitle: _string(series, 'title'),
+      seriesCoverUrl: _imageUrl(series, 'cover'),
+      narrations: _list(
+        json,
+        'narrations',
+      ).map(_narration).toList(growable: false),
+      previous: _link(json, 'previousEpisode'),
+      next: _link(json, 'nextEpisode'),
+      hasQuiz: hasQuiz,
+    );
+  }
+
+  static EpisodeLink? _link(Map<String, Object?> json, String key) {
+    final value = json[key];
+    if (value == null) return null;
+    final link = _object(value, key);
+    return EpisodeLink(
+      id: _string(link, 'id'),
+      slug: _string(link, 'slug'),
+      title: _string(link, 'title'),
     );
   }
 
