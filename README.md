@@ -6,9 +6,11 @@ Flutter mobile app. Architecture: feature-first MVVM — see
 
 ## Sử Kế reference UI
 
-Five implemented screens: Discover (`/`), Search (`/search`), Login (`/login`),
-Series (`/series/bach-dang-938`) and Player (`/player`). Vietnamese is the initial
-locale; all copy also has English translations. Profile opens the login form.
+Screens: Discover (`/`), Podcast (`/podcast`), Profile (`/profile`) as tabs
+(see ADR 0004), plus Search (`/search`), Login (`/login`), Series
+(`/series/:slug`) and Player (`/player`). Series, episodes and historical
+periods come from the real API (see ADR 0005); the Player is still a mock.
+Vietnamese is the initial locale; all copy also has English translations.
 
 ## Episode quiz
 
@@ -59,10 +61,10 @@ Flutter 3.47+ / Dart 3.13+.
 
 ## Weekly missions layout
 Weekly missions uses the shared `AppPage` layout: centered content up to 520
-logical pixels, 24-pixel page padding, and the same three navigation destinations
-as Discover. The header scrolls with the content; calendar and mission section
-headings wrap on narrow phones. Layout tests cover 320, 390 and 1440-pixel widths,
-scrolling to the final card and navigation callbacks.
+logical pixels and 24-pixel page padding. It is a root route opened over the tab
+shell (no tab bar), see ADR 0004. The header scrolls with the content; calendar
+and mission section headings wrap on narrow phones. Layout tests cover 320, 390
+and 1440-pixel widths and scrolling to the final card.
 
 The listening challenge “Hành trình chưa dừng lại” opens
 `/weekly-missions/listening`, with completion requirements, sample progress,

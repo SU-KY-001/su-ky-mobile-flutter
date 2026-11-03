@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
+import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
-import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
+
+const _heroHeight = 220.0;
+const _heroRadius = 16.0;
 
 class SeriesHero extends StatelessWidget {
-  const SeriesHero({super.key});
+  const SeriesHero({super.key, required this.series});
+
+  final SeriesDetail series;
+
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
+    final startYear = series.startYear;
+    final endYear = series.endYear;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(_heroRadius),
       child: Stack(
         children: [
-          const CoverArt(height: 220),
+          CoverArt(
+            url: series.landscapeUrl ?? series.coverUrl,
+            seed: series.slug,
+            height: _heroHeight,
+          ),
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -24,46 +35,27 @@ class SeriesHero extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 14,
-            left: 14,
-            right: 14,
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    l.eraTag,
-                    style: const TextStyle(
-                      color: AppDesign.white,
-                      fontSize: 11,
-                    ),
-                  ),
+          if (startYear != null)
+            Positioned(
+              top: 14,
+              left: 14,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
                 ),
-                const Spacer(),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 16),
-                    Text(
-                      l.rating,
-                      style: const TextStyle(
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                decoration: BoxDecoration(
+                  color: Colors.black38,
+                  borderRadius: BorderRadius.circular(5),
                 ),
-              ],
+                child: Text(
+                  endYear == null || endYear == startYear
+                      ? '$startYear'
+                      : '$startYear – $endYear',
+                  style: const TextStyle(color: AppDesign.white, fontSize: 11),
+                ),
+              ),
             ),
-          ),
           Positioned(
             bottom: 18,
             left: 16,
@@ -72,19 +64,21 @@ class SeriesHero extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l.seriesTitle,
+                  series.title,
                   style: context.text.titleLarge?.copyWith(
                     color: AppDesign.white,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  l.seriesAuthor,
-                  style: context.text.bodySmall?.copyWith(
-                    color: Colors.white70,
+                if (series.creatorName != null) ...[
+                  const SizedBox(height: 5),
+                  Text(
+                    series.creatorName!,
+                    style: context.text.bodySmall?.copyWith(
+                      color: Colors.white70,
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

@@ -4,45 +4,62 @@ import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
+import 'package:su_ky_mobile/shared/catalog/domain/episode.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
-import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
-/// Episode whose row shows the quiz entry point.
-const _quizEpisodeIndex = 1;
+/// Episodes without audio stay visible but dimmed (same as RN).
+const _unavailableOpacity = 0.72;
 
 class EpisodeListTile extends ConsumerWidget {
-  const EpisodeListTile({super.key, required this.index});
-  final int index;
+  const EpisodeListTile({
+    super.key,
+    required this.position,
+    required this.episode,
+  });
+
+  /// Zero-based position in the series list.
+  final int position;
+  final EpisodeSummary episode;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final audio = ref.watch(audioViewModelProvider);
-    final vm = ref.read(audioViewModelProvider.notifier);
-    final current = index == audio.episode;
+    final narration = episode.playable;
+    final durationMs = narration?.durationMs;
+    void open() {
+      if (narration == null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l.episodeNoAudioNotice)));
+        return;
+      }
+      // Mock playback until the audio engine lands.
+      ref.read(audioViewModelProvider.notifier).playEpisode(position);
+      context.push(AppRoutes.player);
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Surface(
-        selected: current,
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Row(
+      child: Opacity(
+        opacity: narration == null ? _unavailableOpacity : 1,
+        child: InkWell(
+          onTap: open,
+          borderRadius: BorderRadius.circular(AppDesign.radius),
+          child: Surface(
+            padding: const EdgeInsets.all(12),
+            child: Row(
               children: [
                 Container(
                   width: 36,
                   height: 38,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: current ? context.accent : AppDesign.canvas,
+                    color: AppDesign.canvas,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    (index + 1).toString().padLeft(2, '0'),
-                    style: TextStyle(
-                      color: current ? AppDesign.white : AppDesign.ink,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    '${position + 1}'.padLeft(2, '0'),
+                    style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -51,54 +68,32 @@ class EpisodeListTile extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        episodeTitle(l, index),
+                        episode.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: context.text.labelLarge?.copyWith(
-                          color: current ? context.accent : AppDesign.ink,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '${audioTime(MockCatalog.episodeSeconds[index])}${index == 0 ? '  ·  ✓ ${l.listened}' : ''}',
+                        durationMs == null
+                            ? l.episodeNoAudio
+                            : audioTime(
+                                durationMs ~/ Duration.millisecondsPerSecond,
+                              ),
                         style: context.text.labelSmall?.copyWith(
-                          color: index == 0 ? Colors.teal : AppDesign.muted,
+                          color: AppDesign.muted,
                         ),
                       ),
                     ],
                   ),
                 ),
-                RoundPlay(
-                  onTap: () {
-                    if (current && audio.playing) {
-                      vm.toggle();
-                    } else {
-                      vm.playEpisode(index);
-                      context.push(AppRoutes.player);
-                    }
-                  },
-                  playing: current && audio.playing,
-                  filled: current,
-                  size: 36,
-                ),
+                if (narration != null)
+                  Icon(Icons.play_circle_outline, color: context.accent),
               ],
             ),
-            if (current)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: LinearProgressIndicator(
-                  value: audio.progress,
-                  minHeight: 3,
-                  color: context.accent,
-                  backgroundColor: AppDesign.line,
-                ),
-              ),
-            if (index == _quizEpisodeIndex)
-              TextButton.icon(
-                onPressed: () => context.push(AppRoutes.quizFor(index)),
-                icon: const Icon(Icons.quiz_outlined),
-                label: Text(l.quizEntry),
-              ),
-          ],
+          ),
         ),
       ),
     );

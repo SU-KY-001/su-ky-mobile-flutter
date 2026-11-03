@@ -491,6 +491,47 @@
     }
   },
   "weeklyMissions": "Nhiệm vụ tuần",
+  "profileTitle": "Hồ sơ cá nhân",
+  "profileGuestTitle": "Chưa đăng nhập",
+  "profileGuestMessage": "Đăng nhập để đồng bộ tiến trình nghe, lưu quiz và tích luỹ XP.",
+  "profileSignInNow": "Đăng nhập ngay",
+  "profileSignOut": "Đăng xuất",
+  "tabHistory": "Lịch sử",
+  "tabPodcast": "Podcast",
+  "tabQuiz": "Quiz",
+  "podcastTitle": "Podcast",
+  "podcastFeatured": "NỔI BẬT",
+  "podcastSeriesHeading": "Series lịch sử",
+  "podcastEmptyTitle": "Chưa có series nào",
+  "podcastEmptyMessage": "Nội dung mới sẽ xuất hiện ở đây khi được phát hành.",
+  "catalogErrorNetwork": "Không kết nối được máy chủ.",
+  "catalogErrorGeneric": "Không tải được nội dung.",
+  "catalogRetry": "Thử lại",
+  "episodeMinutes": "{minutes} phút",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesEpisodeCount": "{count, plural, =1{1 tập} other{{count} tập}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNotFound": "Không tìm thấy series này.",
+  "seriesBackToPodcast": "Về Podcast",
+  "seriesNoAudio": "Series này chưa có tập nào có audio.",
+  "seriesPlayFirst": "Phát tập có audio",
+  "episodeNoAudio": "Chưa có audio",
+  "episodeNoAudioNotice": "Tập này chưa có audio để nghe.",
+  "homeAllPeriods": "Tất cả",
+  "homeSeriesEmpty": "Chưa có series cho thời kỳ này.",
+  "searchMinCharsHint": "Nhập ít nhất 2 ký tự để tìm kiếm.",
   "playbackSpeed": "{speed}x",
   "@playbackSpeed": {
     "placeholders": {

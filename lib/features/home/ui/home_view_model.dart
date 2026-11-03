@@ -1,16 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const homeCategoryCount = 3;
-
-/// Selected category chip index.
-class HomeViewModel extends Notifier<int> {
+/// Selected historical period id; null means "all periods".
+class HomeViewModel extends Notifier<String?> {
   @override
-  int build() => 0;
-  void selectCategory(int index) {
-    if (index >= 0 && index < homeCategoryCount) state = index;
-  }
+  String? build() => null;
+
+  void select(String? periodId) => state = periodId;
 }
 
-final homeViewModelProvider = NotifierProvider.autoDispose<HomeViewModel, int>(
-  HomeViewModel.new,
-);
+final homeViewModelProvider =
+    NotifierProvider.autoDispose<HomeViewModel, String?>(HomeViewModel.new);

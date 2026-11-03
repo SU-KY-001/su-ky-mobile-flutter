@@ -4,15 +4,44 @@ import 'package:go_router/go_router.dart';
 /// Route path constants. Never inline a path string elsewhere.
 abstract final class AppRoutes {
   static const home = '/';
+  static const profile = '/profile';
   static const search = '/search';
   static const login = '/login';
-  static const series = '/series/bach-dang-938';
+  static const podcast = '/podcast';
+  static const series = '/series/:slug';
   static const player = '/player';
   static const quiz = '/episodes/:episode/quiz';
   static const weeklyMissions = '/weekly-missions';
   static const missionDetail = '/weekly-missions/listening';
   static const honours = '/weekly-missions/honours';
+  static const _returnToParam = 'returnTo';
   static String quizFor(int episode) => '/episodes/$episode/quiz';
+  static String seriesFor(String slug) => '/series/$slug';
+
+  /// Login location that comes back to [returnTo] after signing in.
+  static String loginFor(String? returnTo) => returnTo == null
+      ? login
+      : Uri(
+          path: login,
+          queryParameters: {_returnToParam: returnTo},
+        ).toString();
+
+  /// Reads the `returnTo` query parameter of [uri], or null when it is unsafe.
+  static String? returnToOf(Uri uri) =>
+      safeReturnTo(uri.queryParameters[_returnToParam]);
+
+  /// Deep links are untrusted: only in-app absolute paths that are not the
+  /// login screen itself (avoids open redirects and redirect loops).
+  static String? safeReturnTo(String? value) {
+    if (value == null ||
+        !value.startsWith('/') ||
+        value.startsWith('//') ||
+        value.contains(r'\') ||
+        value.startsWith(login)) {
+      return null;
+    }
+    return value;
+  }
 }
 
 extension AppNavigation on BuildContext {

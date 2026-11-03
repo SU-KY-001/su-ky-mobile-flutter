@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 import 'core/config/app_config.dart';
+import 'core/di/app_retry.dart';
 import 'core/di/providers.dart';
 import 'core/logging/app_logger.dart';
 
@@ -32,6 +33,7 @@ Future<void> main() async {
       final prefs = await SharedPreferences.getInstance();
       runApp(
         ProviderScope(
+          retry: appRetry,
           overrides: [
             appConfigProvider.overrideWithValue(config),
             sharedPreferencesProvider.overrideWithValue(prefs),
