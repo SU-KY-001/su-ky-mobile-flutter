@@ -15,6 +15,9 @@ flutter test           # must pass
 ```
 Definition of done: format + analyze + test green, docs updated.
 
+## Agent tooling
+Edit files with omp built-in tools: `read` to inspect, `edit` for changes to existing files, `write` for new files or whole-file replacement. No `bash` heredocs/`cat >`/`sed`/scripts to write or patch files. `bash` only runs real binaries (flutter, dart, git).
+
 ## Layout
 ```
 lib/
