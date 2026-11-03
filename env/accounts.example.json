@@ -1,0 +1,5 @@
+{
+  "accounts": [
+    { "role": "user", "email": "user@example.com", "password": "change-me" }
+  ]
+}
