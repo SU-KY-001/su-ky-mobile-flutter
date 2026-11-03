@@ -1,48 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
 
-import '../domain/quiz.dart';
+import '../data/quiz_constants.dart';
+import '../domain/quiz_stage.dart';
 import 'quiz_dialogs.dart';
 import 'quiz_intro_view.dart';
 import 'quiz_navigation.dart';
 import 'quiz_question_view.dart';
 import 'quiz_review_view.dart';
+import 'quiz_session.dart';
 import 'quiz_summary_view.dart';
 import 'quiz_view_model.dart';
 
 const _toolbarHeight = 84.0;
+const _contentPadding = 20.0;
+const _titleSize = 19.0;
+const _subtitleSize = 12.0;
+const _stateGap = 24.0;
+const _stateTextGap = 12.0;
 
 class QuizScreen extends ConsumerWidget {
-  const QuizScreen({super.key, required this.episode});
-  final int episode;
+  const QuizScreen({super.key, required this.slug});
+
+  final String slug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final provider = quizViewModelProvider(episode);
+    final provider = quizViewModelProvider(slug);
     final async = ref.watch(provider);
-    final vm = ref.read(provider.notifier);
+    final viewModel = ref.read(provider.notifier);
     final session = async.asData?.value;
-    final active = session?.stage == QuizStage.question;
+    final stage = session?.stage;
+    final active = stage == QuizStage.question;
 
     Future<void> leave() async {
       if (active) {
         if (!await confirmQuizExit(context) || !context.mounted) return;
-        vm.abandon();
+        viewModel.abandon();
         await WidgetsBinding.instance.endOfFrame;
         if (!context.mounted) return;
       }
-      if (session?.stage == QuizStage.review) {
-        vm.summary();
+      if (stage == QuizStage.review) {
+        viewModel.summary();
       } else {
         leaveQuiz(context);
       }
     }
 
     return PopScope(
-      canPop: !active && session?.stage != QuizStage.review,
+      canPop: !active && stage != QuizStage.review,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) leave();
       },
@@ -60,20 +71,23 @@ class QuizScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                session?.stage == QuizStage.review
+                stage == QuizStage.review
                     ? l.quizReviewTitle
-                    : session?.stage == QuizStage.summary
+                    : stage == QuizStage.summary
                     ? l.quizResults
                     : l.quizTitle,
                 maxLines: 2,
                 style: const TextStyle(
-                  fontSize: 19,
+                  fontSize: _titleSize,
                   fontWeight: FontWeight.w800,
                 ),
               ),
               Text(
                 l.quizSubtitle,
-                style: const TextStyle(fontSize: 12, color: AppDesign.muted),
+                style: const TextStyle(
+                  fontSize: _subtitleSize,
+                  color: AppDesign.muted,
+                ),
               ),
             ],
           ),
@@ -89,25 +103,14 @@ class QuizScreen extends ConsumerWidget {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: AppDesign.maxWidth),
-              child: episode != QuizDefinition.episode
-                  ? Center(child: Text(l.quizUnavailable))
-                  : async.when(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (error, stack) => Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(l.quizLoadError),
-                            TextButton(
-                              onPressed: () => ref.invalidate(provider),
-                              child: Text(l.quizRetry),
-                            ),
-                          ],
-                        ),
-                      ),
-                      data: (s) => _content(s, vm),
-                    ),
+              child: async.when(
+                loading: () => const CatalogLoading(),
+                error: (error, _) => _QuizError(
+                  error: error,
+                  onRetry: () => ref.invalidate(provider),
+                ),
+                data: (value) => _content(value, viewModel),
+              ),
             ),
           ),
         ),
@@ -115,18 +118,70 @@ class QuizScreen extends ConsumerWidget {
     );
   }
 
-  Widget _content(QuizSession s, QuizViewModel vm) {
-    if (s.stage == QuizStage.question) {
-      return QuizQuestionView(session: s, vm: vm);
+  Widget _content(QuizSession session, QuizViewModel viewModel) {
+    if (session.stage == QuizStage.question) {
+      return QuizQuestionView(session: session, viewModel: viewModel);
     }
     return SingleChildScrollView(
-      key: ValueKey(s.stage),
-      padding: const EdgeInsets.all(20),
-      child: switch (s.stage) {
-        QuizStage.introduction => QuizIntroView(session: s, vm: vm),
-        QuizStage.summary => QuizSummaryView(session: s, vm: vm),
-        _ => QuizReviewView(session: s, vm: vm),
+      key: ValueKey(session.stage),
+      padding: const EdgeInsets.all(_contentPadding),
+      child: switch (session.stage) {
+        QuizStage.summary =>
+          session.result == null
+              ? QuizIntroView(
+                  session: session,
+                  viewModel: viewModel,
+                  slug: slug,
+                )
+              : QuizSummaryView(
+                  session: session,
+                  viewModel: viewModel,
+                  slug: slug,
+                ),
+        QuizStage.review =>
+          session.result == null
+              ? QuizIntroView(
+                  session: session,
+                  viewModel: viewModel,
+                  slug: slug,
+                )
+              : QuizReviewView(session: session, viewModel: viewModel),
+        _ => QuizIntroView(session: session, viewModel: viewModel, slug: slug),
       },
+    );
+  }
+}
+
+class _QuizError extends StatelessWidget {
+  const _QuizError({required this.error, required this.onRetry});
+
+  final Object error;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final failure = error;
+    if (failure is ApiException &&
+        failure.statusCode == QuizDefaults.notFoundStatus) {
+      return CatalogEmpty(title: l.quizNotFound, message: l.quizUnavailable);
+    }
+    return Padding(
+      padding: const EdgeInsets.all(_stateGap),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            failure is NetworkException
+                ? l.catalogErrorNetwork
+                : l.quizLoadFailed,
+            textAlign: TextAlign.center,
+            style: context.text.bodyMedium?.copyWith(color: AppDesign.muted),
+          ),
+          const SizedBox(height: _stateTextGap),
+          OutlinedButton(onPressed: onRetry, child: Text(l.quizRetry)),
+        ],
+      ),
     );
   }
 }

@@ -6,102 +6,61 @@ import '../domain/quiz.dart';
 import 'quiz_colors.dart';
 
 const _optionRadius = 16.0;
-const _firstOptionLetterCode = 65; // 'A'
+const _optionBorderWidth = 1.0;
 const _selectedBorderWidth = 2.0;
+const _optionPadding = 18.0;
+const _optionGap = 12.0;
+const _optionLineHeight = 1.6;
 
 class QuizOptionTile extends StatelessWidget {
   const QuizOptionTile({
     super.key,
-    required this.session,
-    required this.text,
-    required this.index,
+    required this.option,
+    required this.selected,
     required this.onSelect,
   });
-  final QuizSession session;
-  final String text;
-  final int index;
-  final ValueChanged<int> onSelect;
+
+  final QuizOption option;
+  final bool selected;
+  final ValueChanged<String> onSelect;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final s = session;
-    final selected = s.selected == index;
-    final correct = s.checked && s.question.correctOption == index;
-    final wrong = s.checked && selected && !correct;
-    final color = correct
-        ? QuizColors.green
-        : wrong || selected
-        ? AppDesign.red
-        : AppDesign.line;
+    final color = selected ? AppDesign.red : AppDesign.line;
     return Material(
-      color: correct
-          ? QuizColors.greenTint
-          : wrong
-          ? QuizColors.redTint
-          : selected
-          ? AppDesign.tint
-          : AppDesign.white,
+      color: selected ? AppDesign.tint : AppDesign.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_optionRadius),
         side: BorderSide(
           color: color,
-          width: selected || correct ? _selectedBorderWidth : 1,
+          width: selected ? _selectedBorderWidth : _optionBorderWidth,
         ),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: s.checked ? null : () => onSelect(index),
+        onTap: () => onSelect(option.id),
         child: Semantics(
           selected: selected,
-          label: correct ? l.quizRightAnswer : null,
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(_optionPadding),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  correct
-                      ? Icons.check_circle
-                      : wrong
-                      ? Icons.cancel
-                      : selected
+                  selected
                       ? Icons.radio_button_checked
                       : Icons.radio_button_unchecked,
-                  color: color == AppDesign.line ? AppDesign.muted : color,
+                  color: selected ? QuizColors.green : AppDesign.muted,
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: _optionGap),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${String.fromCharCode(_firstOptionLetterCode + index)}.  $text',
-                        style: TextStyle(
-                          height: 1.6,
-                          fontWeight: selected || correct
-                              ? FontWeight.w600
-                              : FontWeight.w400,
-                        ),
-                      ),
-                      if (correct) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          l.quizRightAnswer,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: QuizColors.green,
-                          ),
-                        ),
-                      ],
-                      if (wrong) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          l.quizYourAnswer,
-                          style: const TextStyle(color: AppDesign.red),
-                        ),
-                      ],
-                    ],
+                  child: Text(
+                    l.quizOptionLine(option.label, option.text),
+                    style: TextStyle(
+                      height: _optionLineHeight,
+                      fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    ),
                   ),
                 ),
               ],

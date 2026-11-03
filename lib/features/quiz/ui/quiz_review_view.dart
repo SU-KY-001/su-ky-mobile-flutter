@@ -2,32 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
-import '../domain/quiz.dart';
+import '../domain/quiz.dart' as domain;
+import '../domain/quiz_stage.dart';
+import 'quiz_chip.dart';
 import 'quiz_colors.dart';
 import 'quiz_primitives.dart';
 import 'quiz_review_item.dart';
+import 'quiz_session.dart';
 import 'quiz_view_model.dart';
 
 const _progressHeight = 6.0;
+const _percentScale = 100;
+const _sectionGap = 18.0;
+const _itemGap = 14.0;
+const _chipGap = 8.0;
+const _scoreGap = 10.0;
+const _emptyGap = 24.0;
+const _cardHeadingSize = 22.0;
+const _buttonGap = 12.0;
 
 class QuizReviewView extends StatelessWidget {
-  const QuizReviewView({super.key, required this.session, required this.vm});
+  const QuizReviewView({
+    super.key,
+    required this.session,
+    required this.viewModel,
+  });
+
   final QuizSession session;
-  final QuizViewModel vm;
+  final QuizViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final s = session;
-    final attempt = s.attempt!;
-    final total = QuizDefinition.questions.length;
-    final indices = [
-      for (var i = 0; i < total; i++)
-        if (s.filter == QuizFilter.all ||
-            (attempt.answers[i] == QuizDefinition.questions[i].correctOption) ==
-                (s.filter == QuizFilter.correct))
-          i,
-    ];
+    final result = session.result;
+    if (result == null) return const SizedBox.shrink();
+    final entries = session.reviewEntries;
+    final visible = entries.where(_matchesFilter).toList(growable: false);
+    final correct = session.correctCount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -35,85 +46,70 @@ class QuizReviewView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              QuizHeading(l.bachDang, size: 22),
-              const SizedBox(height: 10),
-              Text(l.quizScore(attempt.correctCount, total)),
-              const SizedBox(height: 16),
+              QuizHeading(l.quizReviewTitle, size: _cardHeadingSize),
+              const SizedBox(height: _scoreGap),
+              Text(l.quizScore(correct, session.total)),
+              const SizedBox(height: _sectionGap),
               LinearProgressIndicator(
-                value: attempt.percent / 100,
+                value: result.scorePercent / _percentScale,
                 color: QuizColors.green,
                 backgroundColor: AppDesign.red,
                 minHeight: _progressHeight,
               ),
-              const SizedBox(height: 12),
-              Text(l.quizAccuracy(attempt.percent)),
+              const SizedBox(height: _scoreGap),
+              Text(l.quizAccuracy(result.scorePercent)),
             ],
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: _sectionGap),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: _chipGap,
+          runSpacing: _chipGap,
           children: [
-            _FilterChip(
-              label: l.quizFilterAll(total),
-              active: s.filter == QuizFilter.all,
-              onSelected: () => vm.filter(QuizFilter.all),
+            QuizChoiceChip(
+              label: l.quizFilterAll(entries.length),
+              selected: session.filter == QuizFilter.all,
+              onSelected: () => viewModel.filter(QuizFilter.all),
             ),
-            _FilterChip(
-              label: l.quizFilterWrong(total - attempt.correctCount),
-              active: s.filter == QuizFilter.incorrect,
-              onSelected: () => vm.filter(QuizFilter.incorrect),
+            QuizChoiceChip(
+              label: l.quizFilterWrong(session.total - correct),
+              selected: session.filter == QuizFilter.incorrect,
+              onSelected: () => viewModel.filter(QuizFilter.incorrect),
             ),
-            _FilterChip(
-              label: l.quizFilterRight(attempt.correctCount),
-              active: s.filter == QuizFilter.correct,
-              onSelected: () => vm.filter(QuizFilter.correct),
+            QuizChoiceChip(
+              label: l.quizFilterRight(correct),
+              selected: session.filter == QuizFilter.correct,
+              onSelected: () => viewModel.filter(QuizFilter.correct),
             ),
           ],
         ),
-        const SizedBox(height: 18),
-        if (indices.isEmpty)
+        const SizedBox(height: _sectionGap),
+        if (visible.isEmpty)
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(_emptyGap),
             child: Text(l.quizNoMatches),
           ),
-        for (final i in indices) ...[
-          QuizReviewItem(attempt: attempt, index: i),
-          const SizedBox(height: 14),
+        for (final entry in visible) ...[
+          QuizReviewItem(
+            entry: entry,
+            position: entries.indexOf(entry) + 1,
+            total: session.total,
+          ),
+          const SizedBox(height: _itemGap),
         ],
-        const SizedBox(height: 12),
+        const SizedBox(height: _buttonGap),
         QuizPrimaryButton(
           l.quizBackResults,
-          vm.summary,
+          viewModel.summary,
           icon: Icons.arrow_back,
         ),
-        const SizedBox(height: 20),
       ],
     );
   }
-}
 
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.active,
-    required this.onSelected,
-  });
-  final String label;
-  final bool active;
-  final VoidCallback onSelected;
-
-  @override
-  Widget build(BuildContext context) => ChoiceChip(
-    label: Text(
-      label,
-      style: TextStyle(
-        fontFamily: 'Inter',
-        color: active ? AppDesign.white : AppDesign.ink,
-      ),
-    ),
-    selected: active,
-    onSelected: (_) => onSelected(),
-  );
+  bool _matchesFilter(domain.QuizReviewEntry entry) {
+    if (session.filter == QuizFilter.all) return true;
+    final correct = entry.answer.isCorrect;
+    return session.filter == QuizFilter.correct ? correct : !correct;
+  }
 }

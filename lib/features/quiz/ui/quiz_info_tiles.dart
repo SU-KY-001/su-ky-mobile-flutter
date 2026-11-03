@@ -4,6 +4,12 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'quiz_colors.dart';
 import 'quiz_primitives.dart';
 
+const _metricGap = 12.0;
+const _labelGap = 4.0;
+const _answerGap = 8.0;
+const _subtitleSize = 12.0;
+const _bodyHeight = 1.6;
+
 class QuizMetric extends StatelessWidget {
   const QuizMetric({
     super.key,
@@ -11,6 +17,7 @@ class QuizMetric extends StatelessWidget {
     required this.title,
     required this.subtitle,
   });
+
   final IconData icon;
   final String title;
   final String subtitle;
@@ -22,51 +29,17 @@ class QuizMetric extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(icon, color: QuizColors.gold),
-        const SizedBox(height: 12),
+        const SizedBox(height: _metricGap),
         Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-        const SizedBox(height: 4),
+        const SizedBox(height: _labelGap),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 12, color: AppDesign.muted),
+          style: const TextStyle(
+            fontSize: _subtitleSize,
+            color: AppDesign.muted,
+          ),
         ),
       ],
-    ),
-  );
-}
-
-class QuizStat extends StatelessWidget {
-  const QuizStat({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.value,
-    this.color = AppDesign.ink,
-  });
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: QuizCard(
-      color: QuizColors.soft,
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          const SizedBox(width: 12),
-          Expanded(child: Text(label)),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: TextStyle(fontWeight: FontWeight.w700, color: color),
-            ),
-          ),
-        ],
-      ),
     ),
   );
 }
@@ -78,6 +51,7 @@ class QuizAnswerBox extends StatelessWidget {
     required this.body,
     required this.color,
   });
+
   final String label;
   final String body;
   final Color color;
@@ -91,8 +65,8 @@ class QuizAnswerBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          Text(body, style: const TextStyle(height: 1.6)),
+          const SizedBox(height: _answerGap),
+          Text(body, style: const TextStyle(height: _bodyHeight)),
         ],
       ),
     ),

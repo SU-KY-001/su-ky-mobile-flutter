@@ -9,6 +9,7 @@ import 'player_controls.dart';
 import 'player_header.dart';
 import 'player_narration_chips.dart';
 import 'player_next_card.dart';
+import 'player_quiz_button.dart';
 import 'player_seek_bar.dart';
 import 'player_status.dart';
 import 'player_track_info.dart';
@@ -42,6 +43,7 @@ class PlayerScreen extends ConsumerWidget {
             const PlayerSeekBar(),
             PlayerControls(state: state),
             PlayerNarrationChips(episode: episode),
+            if (episode.hasQuiz) PlayerQuizButton(slug: episode.slug),
             PlayerNextCard(episode: episode),
           ] else
             PlayerStatusView(state: state),

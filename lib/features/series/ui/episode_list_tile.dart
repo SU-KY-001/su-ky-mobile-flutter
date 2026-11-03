@@ -7,6 +7,8 @@ import 'package:su_ky_mobile/shared/catalog/domain/episode.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
+import 'episode_quiz_button.dart';
+
 /// Episodes without audio stay visible but dimmed (same as RN).
 const _unavailableOpacity = 0.72;
 
@@ -88,6 +90,7 @@ class EpisodeListTile extends ConsumerWidget {
                 ),
                 if (narration != null)
                   Icon(Icons.play_circle_outline, color: context.accent),
+                EpisodeQuizButton(slug: episode.slug),
               ],
             ),
           ),

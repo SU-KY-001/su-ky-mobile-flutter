@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe) và P7 (Nhiệm vụ tuần + XP) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P6, P8–P11. Auth, catalog, phát audio và tiến độ nghe đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe), P6 (Quiz) và P7 (Nhiệm vụ tuần + XP) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P8–P11. Auth, catalog, phát audio, tiến độ nghe và quiz đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -12,10 +12,10 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 | Auth | sign-in/up/out, Bearer từ `set-auth-token`, hydrate `/api/me`, 401 => xoá phiên | **Đã nối thật (P1)**: `AuthRepository`, `TokenStore`, `SessionController`, `AuthInterceptor`; chưa kiểm runtime |
 | Catalog | series, series detail, periods, events, topics | **Đã nối thật (P3)**: series list/detail, periods, tìm kiếm `q`, "tập mới" (quét 6 series như RN); events/topics còn thiếu |
 | Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4, P5)**: `just_audio` + phát nền, đổi ngôi kể, resume local → server, sync bitmap và completion |
-| Quiz | list + episode quiz + `Idempotency-Key` | chấm local, SharedPreferences |
+| Quiz | list + episode quiz + `Idempotency-Key` | **Đã nối thật (P6)**: tab Quiz, làm bài theo slug, nộp attempt với UUID v4, kết quả + xem lại |
 | Missions | `/me/weekly-missions` chỉ hiện trong tab Hồ sơ (XP, nhiệm vụ xong, thanh tiến độ); RN không có màn vinh danh | **Đã nối thật (P7)**: `shared/missions` + màn nhiệm vụ tuần (XP, tiến độ); Vinh danh và chi tiết nhiệm vụ đã xoá |
 | Profile/History/Schedule | có | không có |
-| Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Podcast, Hồ sơ (Lịch sử, Quiz thêm khi có màn) |
+| Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Podcast, Quiz (P6), Hồ sơ; Lịch sử thêm khi có màn |
 | Search | placeholder (chưa thật) | **Thật (P3)**: debounce 400ms, tối thiểu 2 ký tự, khớp `title` |
 
 Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory` (nay có `AuthInterceptor`), `Result`/`AppException` (có `ApiException`), `AppLogger`, `TokenStore` + `SessionController` (P1), router, theme, l10n, connectivity. Drift có DB nhưng 0 bảng và 0 consumer (xem "Phản biện").
@@ -24,7 +24,7 @@ Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory` (nay có `Au
 - Guest xem được, **không nghe**; bấm Play => login rồi quay lại đúng tập.
 - Tiến độ theo `narrationId`; `playedBitmap` = 1 bit/giây, Base64; sync theo `sync.intervalMs` (>=5s), khi pause, khi hết bài. Hoàn thành khi vượt `completionThreshold` (~90%).
 - Resume ưu tiên: local `pos.<narrationId>` -> server `progress.positionMs` -> 0.
-- Quiz: `Idempotency-Key` UUID mỗi lần nộp; pass = score >= passingScore (mặc định 80%); XP chỉ lần pass đầu.
+- Quiz: `Idempotency-Key` UUID v4 mỗi lượt nộp, giữ nguyên khi retry; đạt/chưa đạt lấy từ `isPassed` của server (không còn ngưỡng 80 phía client); XP chỉ lần pass đầu, nên `xpAwarded` có thể 0.
 - Lỗi xử lý theo `error_code`, không theo `message`. Retry cùng key cho: `RATE_LIMITED`, `WRITE_CONFLICT`, 5xx...; `AUDIO_CHANGED` (409), `PROGRESS_INVALID` (422) không retry.
 - Tuần mission neo thứ Hai 00:00 Asia/Ho_Chi_Minh.
 
@@ -61,7 +61,7 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 |---|---|---|---|
 | Đăng nhập | Có (đã nối API thật ở P1) | `login_screen.dart` + `auth_form_view_model.dart` | xong ở 1.6 |
 | Đăng ký (form tên/email/mật khẩu) | Có (đã nối API thật ở P1) | Cùng màn login, chuyển chế độ | xong ở 1.0 |
-| Thanh tab | Có (P2) | `MainNavigation` + `AppTab` trong `AppShell`; widget hỗ trợ 5 mục, shell chỉ gắn tab đã có màn: Khám phá, Podcast, Hồ sơ. Lịch sử và Quiz thêm khi có màn | 6.0, 9.0a |
+| Thanh tab | Có (P2) | `MainNavigation` + `AppTab` trong `AppShell`; widget hỗ trợ 5 mục, shell gắn 4 tab có màn: Khám phá, Podcast, Quiz (P6), Hồ sơ. Lịch sử thêm khi có màn | 6.3, 9.0a |
 | Tab Hồ sơ | Tối thiểu (P2.4) | `profile_screen.dart`: khách thấy thẻ "Đăng nhập ngay", người dùng thấy tên, email, Đăng xuất. Chưa có XP, nhiệm vụ xong | đầy đủ ở 8.0a |
 | Khám phá (Home) | Thật (P3.5) | Pills thời kỳ, series, tập mới lấy từ API (`home_screen.dart`, `period_pills.dart`) | xong |
 | Tab Podcast (banner, carousel, tập mới) | Thật (P3.3) | `podcast_screen.dart`, `podcast_banner.dart` | xong |
@@ -71,8 +71,8 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 | Mini-player | Thật (P4), nằm trong shell | `mini_player.dart`, hiện khi `hasEpisode` | xong |
 | Chọn ngôi kể 1/3 trên Player | Thật (P4.0) | `player_narration_chips.dart`, chỉ hiện khi tập có > 1 ngôi | xong |
 | Hộp thoại yêu cầu đăng nhập khi khách bấm Play | Thật (P4.0) | `login_required_dialog.dart` + `playFromUi` | xong |
-| Làm quiz + kết quả + giải thích + làm lại | Có | `quiz_screen.dart` (đã tách 15 file trong `features/quiz/ui`, màn chính 132 dòng) | nối thật ở 6.4, 6.5 |
-| Tab Quiz (danh sách, lọc topic, badge) | **Chưa** | | 6.0 |
+| Làm quiz + kết quả + giải thích + làm lại | Thật (P6) | `features/quiz/{domain,data,ui}`: làm bài theo slug, nộp attempt, kết quả và xem lại; bỏ kiểm tra từng câu | xong |
+| Tab Quiz (danh sách, lọc topic, badge) | Thật (P6) | `quiz_list_screen.dart` + `quiz_card.dart`; topic suy ra từ catalog, khách xem được | xong |
 | Nhiệm vụ tuần | Thật (P7) | `weekly_missions_screen.dart` + `shared/missions/{domain,data}`; chi tiết nhiệm vụ đã xoá | xong |
 | Vinh danh | Đã xoá (P7) | RN không có; đã bỏ màn, route, widget và key l10n | xong |
 | Hồ sơ đầy đủ (XP, nhiệm vụ xong) | **Chưa** | | 8.0a |
@@ -144,7 +144,7 @@ Mốc: khách không cần đăng nhập vẫn duyệt, tìm kiếm, xem chi ti�
 |---|---|---|---|
 | 3.0 | Gộp vào 3.3 (endpoint công khai, dựng UI thẳng trên provider thật) | - | Gộp |
 | 3.1 | Domain + parser từng trường + repository + providers; `appRetry` (tối đa 2 lần, chỉ lỗi retryable) và `cacheFor` 60 s | M | Xong |
-| 3.2 | ~~Episode detail repo + Topics~~ bỏ khỏi P3 (không consumer): episode detail sang 4.2, topics sang 6.1 | - | Bỏ |
+| 3.2 | ~~Episode detail repo + Topics~~ bỏ khỏi P3 (không consumer): episode detail sang 4.2, topics bỏ ở P6 (suy ra từ catalog quiz) | - | Bỏ |
 | 3.3 | Tab Podcast: banner, carousel series, tập mới nhất | M | Xong |
 | 3.4 | Series detail theo slug: hero, danh sách tập, badge audio | M | Xong |
 | 3.5 | Home theo thời kỳ (`/api/historical-periods`) | M | Xong |
@@ -185,17 +185,19 @@ Lệch so với plan/RN: thêm `ProgressSync.rearm()` để nghe lại sau khi h
 Review sau khi code (đọc diff, không dùng subagent): `ProgressSync.end()` ban đầu bỏ mất lần gửi cuối nếu một lần gửi định kỳ đang chạy (cờ `_saving` còn bật), nên có thể mất `completion` lúc hết bài. Đã sửa: `end()` chờ lần gửi đang chạy (`_inFlight`) rồi mới `flush()` và tăng `_generation`. Chấp nhận, chưa sửa: tua ≤ 5 giây tiến có thể đánh dấu vài giây bị nhảy qua (server vẫn giới hạn ngân sách bit); phản hồi PUT có `completion` sai dạng bị coi là lỗi và thử lại, lần sau `completion` là `null` nên mất một lần bump làm mới nhiệm vụ.
 Chưa kiểm (không gọi PUT thật): ánh xạ 409/422/429, mẫu bitmap đối chiếu RN, resume từ `progress.positionMs` với tài khoản đã có tiến độ, và việc bump `learningActivityProvider` chỉ xảy ra đúng lần chạm ngưỡng. Gom vào P11.
 
-### P6. Quiz
-Mốc: làm quiz thật, nộp, xem kết quả và đáp án giải thích.
-| # | Task | Cỡ |
-|---|---|---|
-| 6.0 | **Dựng mock UI tab Quiz** (chưa có mock): danh sách thẻ quiz, pills lọc topic, badge hoàn thành, trạng thái trống | M |
-| 6.1 | Quiz DTO + repo (catalog `/api/quizzes`, `/api/episodes/{slug}/quiz`); thêm `GET /api/topics` cho lọc (chuyển từ 3.2) | M |
-| 6.2 | Nộp attempt với `Idempotency-Key` UUID, giữ nguyên key khi retry | M |
-| 6.3 | Tab Quiz: danh sách, lọc theo topic, badge hoàn thành | M |
-| 6.4 | Màn làm quiz nối thật (giữ timer nếu 0.4 xác nhận) | M |
-| 6.5 | Màn kết quả: điểm, đạt/chưa đạt, đáp án giải thích, làm lại | M |
-| 6.6 | Bỏ lưu attempt bằng `SharedPreferences` cũ | S |
+### P6. Quiz — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: làm quiz thật, nộp, xem kết quả và đáp án giải thích. Plan: `plans/261105-0100-p6-quiz/`. ADR: `docs/adr/0009-quiz-attempt.md`. Mã: `lib/features/quiz/{domain,data,ui}`; route `/quizzes` (tab) và `/episodes/:slug/quiz`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 6.0 | Gộp vào 6.3: dựng thẳng trên dữ liệu thật, không mock trung gian | - | Gộp |
+| 6.1 | Domain + parser từng trường + repo + providers (`/api/quizzes`, `/api/episodes/{slug}/quiz`); **không dùng `/api/topics`**, topic suy ra từ catalog | M | Xong |
+| 6.2 | Nộp attempt với `Idempotency-Key` UUID v4 tự sinh; giữ key khi retry, đổi khi làm lại | M | Xong |
+| 6.3 | Tab Quiz: danh sách, lọc topic, badge hoàn thành, khách xem được | M | Xong |
+| 6.4 | Màn làm quiz nối thật theo slug; bỏ kiểm tra từng câu và bỏ timer (`timeLimit`) | M | Xong |
+| 6.5 | Màn kết quả: điểm, `isPassed`, XP, xem lại đáp án/lời giải, làm lại | M | Xong |
+| 6.6 | Bỏ `SharedPreferences`/`QuizDefinition`/`LocalQuizRepository`/`quiz_text.dart` | S | Xong |
+
+Chốt khi làm: route đổi thành `/episodes/:slug/quiz` (authGuard + `returnTo`); tab Quiz thêm vào `tabRoutes` giữa Podcast và Hồ sơ. Không phân trang (`limit=50`). `timeLimit` bị bỏ khỏi model (parity RN; web mới đếm giờ). Nút "Làm quiz" có ở Player khi `hasQuiz`; ở Series dùng `episodeDetailProvider` vì payload series không có `hasQuiz` (một request mỗi dòng, cache 60 s). `xpAwarded == 0` khi đạt lần sau được hiển thị bình thường. Sau nộp luôn `invalidate(quizCatalogProvider)`; chỉ khi `isPassed` mới `bump()` `learningActivityProvider` (đóng 7.2). Test quiz cũ đã xoá một phần; các test UI/view model cũ vỡ chờ P11. Chưa kiểm: gọi API thật, POST thật, replay idempotency, XP 0 khi đạt lại; gom vào P11.
 
 ### P7. Nhiệm vụ tuần + XP — ĐÃ LÀM (code xong, chưa kiểm runtime)
 Mốc: nhiệm vụ tuần và XP thật, cập nhật sau khi nghe xong tập hoặc đạt quiz. Không có Vinh danh (chốt 2026-11-04: RN không có, giữ đơn giản). Plan: `plans/261105-0000-p7-missions-xp/`. ADR: `docs/adr/0008-weekly-missions.md`. Mã: `lib/shared/missions/` (domain + repo + providers), `lib/features/weekly_missions/ui/`.
@@ -276,4 +278,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P5 và P7 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007) và P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008) đã `completed`. P8 không còn bị P7 chặn: 8.1 dùng `weeklyMissionsProvider` của P7. Tiếp: P6 (Quiz) và P9 độc lập có thể làm song song, rồi P8. Chạy test và emulator một lần ở P11.
+P-1 đến P7 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007), P6 `plans/261105-0100-p6-quiz/` (ADR 0009) và P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008) đã `completed`. P6 đã gọi `bump()` khi `isPassed`, nên 7.2 khép lại. P8 không còn bị P7 chặn: 8.1 dùng `weeklyMissionsProvider` của P7. Tiếp: P8 và P9 (độc lập, có thể song song), rồi P10. Chạy test và emulator một lần ở P11.

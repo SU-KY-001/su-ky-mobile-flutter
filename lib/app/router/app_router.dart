@@ -7,6 +7,7 @@ import 'package:su_ky_mobile/features/home/ui/home_screen.dart';
 import 'package:su_ky_mobile/features/player/ui/player_screen.dart';
 import 'package:su_ky_mobile/features/podcast/ui/podcast_screen.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
+import 'package:su_ky_mobile/features/quiz/ui/quiz_list_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
 import 'package:su_ky_mobile/features/search/ui/search_screen.dart';
 import 'package:su_ky_mobile/features/series/ui/series_screen.dart';
@@ -34,6 +35,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     AppTab.podcast: GoRoute(
       path: AppRoutes.podcast,
       builder: (context, state) => const PodcastScreen(),
+    ),
+    AppTab.quiz: GoRoute(
+      path: AppRoutes.quizzes,
+      builder: (context, state) => const QuizListScreen(),
     ),
     AppTab.profile: GoRoute(
       path: AppRoutes.profile,
@@ -75,9 +80,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.quiz,
         redirect: authGuard(ref),
-        builder: (context, state) => QuizScreen(
-          episode: int.tryParse(state.pathParameters['episode'] ?? '') ?? -1,
-        ),
+        builder: (context, state) =>
+            QuizScreen(slug: state.pathParameters['slug'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.weeklyMissions,

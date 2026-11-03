@@ -7,7 +7,7 @@ status: completed
 ## 7.2 Làm mới
 `weeklyMissionsProvider` đã `ref.watch(learningActivityProvider)` (phase 1) nên mỗi `bump()` làm nó tải lại. Producer:
 - P5: `ProgressSync.onCompleted` đã `bump()` (khi `completion != null`).
-- P6 (chưa có): sau nộp quiz với `isPassed == true` phải `ref.read(learningActivityProvider.notifier).bump()`. Ghi vào plan P6 khi lập, hoặc thêm ngay nếu P6 xong trước.
+- P6 (đã xong): sau nộp quiz với `isPassed == true` gọi `ref.read(learningActivityProvider.notifier).bump()` trong `QuizViewModel`; luôn `invalidate(quizCatalogProvider)`. Đã đóng 7.2.
 Không có polling.
 
 ## 7.3 Xoá (đã tra tham chiếu)

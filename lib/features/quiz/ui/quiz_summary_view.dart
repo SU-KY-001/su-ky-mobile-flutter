@@ -2,141 +2,102 @@ import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
-import '../domain/quiz.dart';
 import 'quiz_colors.dart';
 import 'quiz_episode_card.dart';
-import 'quiz_info_tiles.dart';
 import 'quiz_navigation.dart';
 import 'quiz_primitives.dart';
+import 'quiz_session.dart';
 import 'quiz_view_model.dart';
 
-const _secondsPerMinute = 60;
 const _trophySize = 100.0;
+const _sectionGap = 20.0;
+const _scoreGap = 12.0;
+const _statusGap = 24.0;
+const _buttonGap = 12.0;
+const _scoreSize = 30.0;
+const _statusSize = 23.0;
+const _accuracySize = 17.0;
 
 class QuizSummaryView extends StatelessWidget {
-  const QuizSummaryView({super.key, required this.session, required this.vm});
+  const QuizSummaryView({
+    super.key,
+    required this.session,
+    required this.viewModel,
+    required this.slug,
+  });
+
   final QuizSession session;
-  final QuizViewModel vm;
+  final QuizViewModel viewModel;
+  final String slug;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final s = session;
-    final attempt = s.attempt!;
-    final count = QuizDefinition.questions.length;
+    final result = session.result;
+    if (result == null) return const SizedBox.shrink();
+    final statusColor = result.isPassed ? QuizColors.green : AppDesign.red;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 20),
-        const Icon(
-          Icons.workspace_premium_outlined,
+        const SizedBox(height: _sectionGap),
+        Icon(
+          result.isPassed
+              ? Icons.workspace_premium_outlined
+              : Icons.school_outlined,
           size: _trophySize,
-          color: QuizColors.gold,
+          color: statusColor,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: _sectionGap),
         Text(
-          l.quizScore(attempt.correctCount, count),
+          l.quizScore(session.correctCount, session.total),
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+          style: const TextStyle(
+            fontSize: _scoreSize,
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: _scoreGap),
         Text(
-          l.quizAccuracy(attempt.percent),
+          l.quizAccuracy(result.scorePercent),
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: QuizColors.gold,
-            fontSize: 17,
+            fontSize: _accuracySize,
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: _statusGap),
         Text(
-          attempt.percent >= QuizDefinition.excellentPercent
-              ? l.quizExcellent
-              : l.quizEncourage,
+          result.isPassed ? l.quizPassed : l.quizFailed,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 23,
+          style: TextStyle(
+            fontSize: _statusSize,
             fontWeight: FontWeight.w800,
-            color: AppDesign.red,
+            color: statusColor,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: _scoreGap),
         Text(
-          l.quizResultBody,
+          l.quizXpLine(result.xpAwarded, result.totalXp),
           textAlign: TextAlign.center,
-          style: const TextStyle(height: 1.7, color: AppDesign.muted),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 28),
-        QuizCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              QuizHeading(l.quizStatistics, size: 20),
-              const SizedBox(height: 16),
-              QuizStat(
-                icon: Icons.schedule,
-                label: l.quizElapsed,
-                value: l.quizDuration(
-                  attempt.elapsedSeconds ~/ _secondsPerMinute,
-                  attempt.elapsedSeconds % _secondsPerMinute,
-                ),
-              ),
-              QuizStat(
-                icon: Icons.check_circle_outline,
-                label: l.quizRightCount,
-                value: '${attempt.correctCount}',
-                color: QuizColors.green,
-              ),
-              QuizStat(
-                icon: Icons.error_outline,
-                label: l.quizWrongCount,
-                value: '${count - attempt.correctCount}',
-                color: AppDesign.red,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        const QuizEpisodeCard(),
-        const SizedBox(height: 24),
-        if (s.saving) ...[
-          const LinearProgressIndicator(),
-          const SizedBox(height: 8),
-          Text(l.quizSaving),
-          const SizedBox(height: 12),
-        ],
-        if (s.saveFailed) ...[
-          Text(l.quizStorageError),
-          TextButton(
-            onPressed: s.saving ? null : vm.retrySave,
-            child: Text(l.quizRetrySave),
-          ),
-        ],
+        const SizedBox(height: _statusGap),
+        QuizEpisodeCard(slug: slug),
+        const SizedBox(height: _statusGap),
         QuizPrimaryButton(
           l.quizReview,
-          vm.review,
+          viewModel.review,
           icon: Icons.format_list_bulleted,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: _buttonGap),
+        QuizSecondaryButton(l.quizRestart, viewModel.retake, Icons.replay),
+        const SizedBox(height: _buttonGap),
         QuizSecondaryButton(
-          l.quizRestart,
-          s.saving ? null : vm.start,
-          Icons.replay,
-        ),
-        const SizedBox(height: 12),
-        QuizSecondaryButton(
-          l.quizReturnEpisode,
+          l.quizBackToQuizzes,
           () => leaveQuiz(context),
           Icons.arrow_back,
         ),
-        const SizedBox(height: 16),
-        Text(
-          l.quizLocalNote,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 11, color: AppDesign.muted),
-        ),
-        const SizedBox(height: 20),
       ],
     );
   }
