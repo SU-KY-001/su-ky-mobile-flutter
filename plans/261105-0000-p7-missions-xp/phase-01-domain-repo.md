@@ -1,3 +1,7 @@
+---
+status: completed
+---
+
 # Phase 1 - Domain + repo + provider (task 7.1a)
 
 ## Files (mới)

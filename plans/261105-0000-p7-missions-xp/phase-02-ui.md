@@ -1,3 +1,7 @@
+---
+status: completed
+---
+
 # Phase 2 - Màn nhiệm vụ tuần nối API (task 7.1b)
 
 ## Files

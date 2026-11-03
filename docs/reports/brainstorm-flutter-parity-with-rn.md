@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio) và P5 (Đồng bộ tiến độ nghe) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P6–P11. Auth, catalog, phát audio và tiến độ nghe đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe) và P7 (Nhiệm vụ tuần + XP) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P6, P8–P11. Auth, catalog, phát audio và tiến độ nghe đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -13,7 +13,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 | Catalog | series, series detail, periods, events, topics | **Đã nối thật (P3)**: series list/detail, periods, tìm kiếm `q`, "tập mới" (quét 6 series như RN); events/topics còn thiếu |
 | Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4, P5)**: `just_audio` + phát nền, đổi ngôi kể, resume local → server, sync bitmap và completion |
 | Quiz | list + episode quiz + `Idempotency-Key` | chấm local, SharedPreferences |
-| Missions | `/me/weekly-missions` chỉ hiện trong tab Hồ sơ (XP, nhiệm vụ xong, thanh tiến độ); RN không có màn vinh danh | UI mock (có thêm màn Vinh danh, sẽ xoá) |
+| Missions | `/me/weekly-missions` chỉ hiện trong tab Hồ sơ (XP, nhiệm vụ xong, thanh tiến độ); RN không có màn vinh danh | **Đã nối thật (P7)**: `shared/missions` + màn nhiệm vụ tuần (XP, tiến độ); Vinh danh và chi tiết nhiệm vụ đã xoá |
 | Profile/History/Schedule | có | không có |
 | Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Podcast, Hồ sơ (Lịch sử, Quiz thêm khi có màn) |
 | Search | placeholder (chưa thật) | **Thật (P3)**: debounce 400ms, tối thiểu 2 ký tự, khớp `title` |
@@ -53,7 +53,7 @@ flowchart LR
   P3 --> P9
   P5 & P7 & P8 & P9 --> P10 --> P11
 ```
-Sau P3: chuỗi P4→P5, chuỗi P6→P7 và P9 độc lập nhau, giao song song được. P8 chờ cả P5 (lịch sử nghe, nút nghe) và P7 (XP, nhiệm vụ cho 8.1); P4 đã nằm trong P5.
+Sau P3: chuỗi P4→P5, chuỗi P6→P7 và P9 độc lập nhau, giao song song được. P8 chờ P5 (lịch sử nghe, nút nghe) và P7 (XP, nhiệm vụ cho 8.1); cả hai đã xong, P4 đã nằm trong P5.
 
 ### Kiểm kê mock UI hiện có (đối chiếu `lib/features`, `lib/shared`)
 Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu bằng một task `x.0 Dựng mock UI` (theo Figma Flutter), rồi mới nối API thật trong cùng plan. Mock dựng ở `x.0` phải được thay bằng dữ liệu thật trước khi plan đóng mốc.
@@ -73,8 +73,8 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 | Hộp thoại yêu cầu đăng nhập khi khách bấm Play | Thật (P4.0) | `login_required_dialog.dart` + `playFromUi` | xong |
 | Làm quiz + kết quả + giải thích + làm lại | Có | `quiz_screen.dart` (đã tách 15 file trong `features/quiz/ui`, màn chính 132 dòng) | nối thật ở 6.4, 6.5 |
 | Tab Quiz (danh sách, lọc topic, badge) | **Chưa** | | 6.0 |
-| Nhiệm vụ tuần, chi tiết nhiệm vụ | Có | `weekly_missions_view_model.dart` + `domain/mission.dart`; dữ liệu mock ở `data/mock_missions.dart` | nối thật ở 7.1 (thay `MockMissions` bằng repository) |
-| Vinh danh | Có (bỏ) | `honours_screen.dart`: RN không có, đã chốt không làm | xoá ở 7.3 |
+| Nhiệm vụ tuần | Thật (P7) | `weekly_missions_screen.dart` + `shared/missions/{domain,data}`; chi tiết nhiệm vụ đã xoá | xong |
+| Vinh danh | Đã xoá (P7) | RN không có; đã bỏ màn, route, widget và key l10n | xong |
 | Hồ sơ đầy đủ (XP, nhiệm vụ xong) | **Chưa** | | 8.0a |
 | Lịch sử nghe | **Chưa** | | 8.0b |
 | Lịch phát hành (có trạng thái rỗng) | **Chưa** | Dữ liệu thật tháng 10-11 đang rỗng | 8.0c |
@@ -197,13 +197,15 @@ Mốc: làm quiz thật, nộp, xem kết quả và đáp án giải thích.
 | 6.5 | Màn kết quả: điểm, đạt/chưa đạt, đáp án giải thích, làm lại | M |
 | 6.6 | Bỏ lưu attempt bằng `SharedPreferences` cũ | S |
 
-### P7. Nhiệm vụ tuần + XP
-Mốc: nhiệm vụ tuần và XP thật, cập nhật sau khi nghe xong tập hoặc đạt quiz. Không có Vinh danh (chốt 2026-11-04: RN không có, giữ đơn giản).
-| # | Task | Cỡ |
-|---|---|---|
-| 7.1 | Missions repo (`GET /api/me/weekly-missions`: `totalXp`, `items[]` có `progressCount`, `targetCount`, `status`, `activityType`) + nối màn danh sách/chi tiết hiện có, thay `MockMissions` | M |
-| 7.2 | Làm mới missions/XP sau khi hoàn thành tập (P5) hoặc đạt quiz (P6) | S |
-| 7.3 | Xoá màn Vinh danh (`honours_screen`, route, lối vào, key l10n) | S |
+### P7. Nhiệm vụ tuần + XP — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: nhiệm vụ tuần và XP thật, cập nhật sau khi nghe xong tập hoặc đạt quiz. Không có Vinh danh (chốt 2026-11-04: RN không có, giữ đơn giản). Plan: `plans/261105-0000-p7-missions-xp/`. ADR: `docs/adr/0008-weekly-missions.md`. Mã: `lib/shared/missions/` (domain + repo + providers), `lib/features/weekly_missions/ui/`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 7.1 | Missions repo (`GET /api/me/weekly-missions`: `totalXp`, `items[]` có `progressCount`, `targetCount`, `status`, `activityType`) + nối màn danh sách, thay `MockMissions`/màn chi tiết | M | Xong |
+| 7.2 | Làm mới missions/XP sau khi hoàn thành tập (P5) hoặc đạt quiz (P6) | S | Xong phần missions: `weeklyMissionsProvider` nghe `learningActivityProvider`; P6 phải `bump()` khi `isPassed == true` |
+| 7.3 | Xoá màn Vinh danh (`honours_screen`, route, lối vào, key l10n) và chi tiết nhiệm vụ/streak/điểm danh | S | Xong |
+
+Chốt khi làm: khách vào màn thấy lời mời đăng nhập (provider trả `null`, không gọi API) vì route chưa guard; `activityType`/`status` lạ bị bỏ từng item và ghi log, thiếu `items`/`totalXp` mới lỗi cả phản hồi. Xoá `test/features/weekly_missions/ui/mission_detail_screen_test.dart` và test view model cũ để ở P11 (cùng đợt sửa test). Chưa kiểm: gọi API thật, đổi tuần khi app mở, làm mới sau khi hoàn thành tập; gom vào P11.
 
 ### P8. Hồ sơ đầy đủ, Lịch sử nghe, Lịch phát hành
 Mốc: hồ sơ có XP, lịch sử có nghe tiếp, lịch phát hành theo tháng.
@@ -274,4 +276,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P5 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006) và P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007) đã `completed`. Tiếp: P6 (Quiz) và P9 độc lập có thể làm song song; P7 (Nhiệm vụ tuần + XP) đã có plan `plans/261105-0000-p7-missions-xp/`, giờ hết bị P5 chặn. Chạy test và emulator một lần ở P11.
+P-1 đến P5 và P7 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007) và P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008) đã `completed`. P8 không còn bị P7 chặn: 8.1 dùng `weeklyMissionsProvider` của P7. Tiếp: P6 (Quiz) và P9 độc lập có thể làm song song, rồi P8. Chạy test và emulator một lần ở P11.

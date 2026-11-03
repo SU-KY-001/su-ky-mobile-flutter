@@ -1,7 +1,7 @@
 ---
 title: "P7 - Nhiệm vụ tuần + XP (thật, không Vinh danh)"
 description: "Thay mock nhiệm vụ bằng GET /api/me/weekly-missions: tổng XP, danh sách nhiệm vụ với tiến độ; tự làm mới khi hoàn thành tập/đạt quiz; xoá Vinh danh, chi tiết nhiệm vụ và dữ liệu giả."
-status: pending
+status: completed
 priority: P2
 effort: 1.5d
 branch: dev
@@ -35,10 +35,10 @@ Không có màn riêng. `AccountScreens.tsx` (Hồ sơ): ô "Tổng điểm XP" 
 ## Phases
 | # | File | Nội dung | Trạng thái |
 |---|---|---|---|
-| 1 | [phase-01-domain-repo.md](phase-01-domain-repo.md) | domain + repo + providers (tasks 7.1a) | pending |
-| 2 | [phase-02-ui.md](phase-02-ui.md) | viết lại màn danh sách, nối thật (7.1b) | pending |
-| 3 | [phase-03-refresh-cleanup.md](phase-03-refresh-cleanup.md) | tự làm mới (7.2) + xoá Vinh danh/chi tiết/mock (7.3) | pending |
-| 4 | [phase-04-docs.md](phase-04-docs.md) | ADR, report | pending |
+| 1 | [phase-01-domain-repo.md](phase-01-domain-repo.md) | domain + repo + providers (tasks 7.1a) | completed |
+| 2 | [phase-02-ui.md](phase-02-ui.md) | viết lại màn danh sách, nối thật (7.1b) | completed |
+| 3 | [phase-03-refresh-cleanup.md](phase-03-refresh-cleanup.md) | tự làm mới (7.2) + xoá Vinh danh/chi tiết/mock (7.3) | completed |
+| 4 | [phase-04-docs.md](phase-04-docs.md) | ADR, report | completed |
 
 ## Rủi ro
 - Màn hiện có nặng mock (header có nút huy hiệu, widget thẻ chi tiết); viết lại nhiều hơn sửa. Giữ lại chỉ phần thuần trình bày dùng được (thanh tiến độ, thẻ), không giữ logic giả.

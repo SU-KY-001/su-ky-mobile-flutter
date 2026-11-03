@@ -1,73 +1,22 @@
 import 'package:flutter/material.dart';
+
+import 'package:su_ky_mobile/features/weekly_missions/ui/mission_widgets.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/missions_panel.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_colors.dart';
-import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_view_model.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/missions/domain/weekly_missions.dart';
 
-class WeeklyIntroCard extends StatelessWidget {
-  const WeeklyIntroCard({super.key});
+const _boxRadius = 12.0;
+const _boxPadding = EdgeInsets.symmetric(horizontal: 11, vertical: 10);
+const _iconSize = 22.0;
+const _gap = 9.0;
+const _weekEndIcon = 16.0;
 
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return MissionsPanel(
-      color: WeeklyMissionsColors.introPanel,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(
-            spacing: AppDesign.gap,
-            runSpacing: 8,
-            alignment: WrapAlignment.spaceBetween,
-            children: [
-              Text(
-                l.missionsIntroEyebrow,
-                style: const TextStyle(
-                  color: AppDesign.red,
-                  fontSize: 10,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Text(
-                l.missionsIntroWeek,
-                style: TextStyle(
-                  color: AppDesign.muted.withValues(alpha: .9),
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            l.missionsIntroTitle,
-            style: const TextStyle(
-              color: AppDesign.ink,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            l.missionsIntroBody,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppDesign.muted,
-              height: 1.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+class WeeklySummaryCard extends StatelessWidget {
+  const WeeklySummaryCard({super.key, required this.missions});
 
-class WeeklyProgressCard extends StatelessWidget {
-  const WeeklyProgressCard({super.key, required this.state});
-
-  final WeeklyMissionsState state;
+  final WeeklyMissions missions;
 
   @override
   Widget build(BuildContext context) {
@@ -76,76 +25,47 @@ class WeeklyProgressCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Wrap(
-            spacing: AppDesign.gap,
-            runSpacing: 8,
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Text(
-                l.missionsProgressTitle,
-                style: const TextStyle(
-                  color: AppDesign.muted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: AppDesign.red,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  l.missionsProgressPercent(
-                    (state.weeklyProgress * 100).round(),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Text(
-            l.missionsProgressCount(
-              state.completedCount,
-              state.missions.length,
-            ),
-            style: const TextStyle(
-              fontSize: 24,
-              color: AppDesign.red,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 9),
-          MissionsProgressBar(progress: state.weeklyProgress, height: 8),
-          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: _StatBox(
+                child: _SummaryBox(
                   icon: Icons.stars_rounded,
-                  value: '${state.totalPoints}',
-                  label: l.missionsStatPoints,
+                  label: l.missionsTotalXp,
+                  value: '${missions.totalXp}',
                   background: WeeklyMissionsColors.pointsStatBackground,
-                  foreground: WeeklyMissionsColors.gold,
+                  foreground: MissionDesign.gold,
                 ),
               ),
-              const SizedBox(width: 9),
+              const SizedBox(width: _gap),
               Expanded(
-                child: _StatBox(
-                  icon: Icons.local_fire_department_outlined,
-                  value: l.missionsStatStreakValue(state.streakDays),
-                  label: l.missionsStatStreak,
-                  background: WeeklyMissionsColors.streakStatBackground,
-                  foreground: AppDesign.red,
+                child: _SummaryBox(
+                  icon: Icons.task_alt,
+                  label: l.missionsCompletedLabel,
+                  value: l.missionsProgressRatio(
+                    missions.completedCount,
+                    missions.items.length,
+                  ),
+                  background: MissionDesign.paleGreen,
+                  foreground: MissionDesign.green,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Icon(
+                Icons.event_outlined,
+                size: _weekEndIcon,
+                color: AppDesign.muted,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  l.missionsWeekEnd(missions.weekEnd.toLocal()),
+                  style: context.text.bodySmall?.copyWith(
+                    color: AppDesign.muted,
+                  ),
                 ),
               ),
             ],
@@ -156,31 +76,31 @@ class WeeklyProgressCard extends StatelessWidget {
   }
 }
 
-class _StatBox extends StatelessWidget {
-  const _StatBox({
+class _SummaryBox extends StatelessWidget {
+  const _SummaryBox({
     required this.icon,
-    required this.value,
     required this.label,
+    required this.value,
     required this.background,
     required this.foreground,
   });
 
   final IconData icon;
-  final String value;
   final String label;
+  final String value;
   final Color background;
   final Color foreground;
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 10),
+    padding: _boxPadding,
     decoration: BoxDecoration(
       color: background,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(_boxRadius),
     ),
     child: Row(
       children: [
-        Icon(icon, color: foreground, size: 22),
+        Icon(icon, color: foreground, size: _iconSize),
         const SizedBox(width: 7),
         Expanded(
           child: Column(
@@ -188,15 +108,16 @@ class _StatBox extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: context.text.titleSmall?.copyWith(
                   color: AppDesign.ink,
                   fontWeight: FontWeight.w800,
-                  fontSize: 13,
                 ),
               ),
               Text(
                 label,
-                style: const TextStyle(fontSize: 9, color: AppDesign.muted),
+                style: context.text.labelSmall?.copyWith(
+                  color: AppDesign.muted,
+                ),
               ),
             ],
           ),

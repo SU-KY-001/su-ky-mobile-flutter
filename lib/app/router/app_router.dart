@@ -10,8 +10,6 @@ import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
 import 'package:su_ky_mobile/features/search/ui/search_screen.dart';
 import 'package:su_ky_mobile/features/series/ui/series_screen.dart';
-import 'package:su_ky_mobile/features/weekly_missions/ui/honours_screen.dart';
-import 'package:su_ky_mobile/features/weekly_missions/ui/mission_detail_screen.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_screen.dart';
 import 'package:su_ky_mobile/shared/widgets/main_navigation.dart';
 
@@ -80,14 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => QuizScreen(
           episode: int.tryParse(state.pathParameters['episode'] ?? '') ?? -1,
         ),
-      ),
-      GoRoute(
-        path: AppRoutes.missionDetail,
-        builder: (context, state) => const MissionDetailScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.honours,
-        builder: (context, state) => const HonoursScreen(),
       ),
       GoRoute(
         path: AppRoutes.weeklyMissions,

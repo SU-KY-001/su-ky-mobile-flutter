@@ -1,3 +1,7 @@
+---
+status: completed
+---
+
 # Phase 3 - Làm mới tự động + dọn Vinh danh (tasks 7.2, 7.3)
 
 ## 7.2 Làm mới
