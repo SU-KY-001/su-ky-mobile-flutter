@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/missions_list_section.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_calendar_card.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_header.dart';
@@ -18,12 +16,6 @@ class WeeklyMissionsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(weeklyMissionsViewModelProvider);
     return AppPage(
-      bottom: MainNavigation(
-        index: 0,
-        onDiscover: () => context.go(AppRoutes.home),
-        onSearch: () => context.go(AppRoutes.search),
-        onProfile: () => context.push(AppRoutes.login),
-      ),
       child: ListView(
         padding: const EdgeInsets.all(AppDesign.pagePadding),
         children: [

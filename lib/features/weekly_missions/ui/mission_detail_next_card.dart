@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/mission_widgets.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class MissionDetailNextCard extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/auth/ui/auth_colors.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -11,7 +12,10 @@ import 'auth_form_view_model.dart';
 import 'auth_mode_footer.dart';
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, this.returnTo});
+
+  /// Already validated by `AppRoutes.safeReturnTo`.
+  final String? returnTo;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
@@ -95,8 +99,14 @@ class LoginScreen extends ConsumerWidget {
                   ? null
                   : () async {
                       final ok = await vm.submit();
-                      if (ok && context.mounted) {
+                      if (!ok || !context.mounted) return;
+                      final target = returnTo;
+                      if (target == null) {
                         context.popOrGo(AppRoutes.home);
+                      } else if (context.canPop()) {
+                        context.pushReplacement(target);
+                      } else {
+                        context.go(target);
                       }
                     },
               icon: form.submitting

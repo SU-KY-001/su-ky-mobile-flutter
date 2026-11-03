@@ -16,20 +16,11 @@ class App extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<App> {
-  // Created once: rebuilding the router would reset navigation state.
-  final _router = AppRouter.create();
-
   @override
   void initState() {
     super.initState();
     // read, not watch: hydration must not rebuild MaterialApp.
     ref.read(sessionControllerProvider);
-  }
-
-  @override
-  void dispose() {
-    _router.dispose();
-    super.dispose();
   }
 
   @override
@@ -40,7 +31,7 @@ class _AppState extends ConsumerState<App> {
       locale: const Locale('vi'),
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      routerConfig: _router,
+      routerConfig: ref.watch(routerProvider),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

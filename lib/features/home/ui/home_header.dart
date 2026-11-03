@@ -42,7 +42,7 @@ class HomeHeader extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () => context.push(AppRoutes.login),
+          onPressed: () => context.go(AppRoutes.profile),
           icon: CircleAvatar(
             radius: 18,
             backgroundColor: AppDesign.tint,

@@ -58,7 +58,7 @@ class HonoursScreen extends ConsumerWidget {
             title: l.honoursTitle,
             onBack: () => _back(context),
             onHonours: () => MissionDesign.showPreviewNotice(context),
-            onProfile: () => context.push(AppRoutes.login),
+            onProfile: () => context.go(AppRoutes.profile),
           ),
           MissionDesign.gap,
           Row(

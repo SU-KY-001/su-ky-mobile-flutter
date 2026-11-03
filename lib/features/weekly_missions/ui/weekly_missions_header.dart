@@ -50,7 +50,7 @@ class WeeklyMissionsHeader extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => context.push(AppRoutes.login),
+          onTap: () => context.go(AppRoutes.profile),
           child: const CircleAvatar(
             radius: 17,
             backgroundColor: AppDesign.red,

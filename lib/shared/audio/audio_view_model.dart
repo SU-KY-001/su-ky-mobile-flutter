@@ -13,6 +13,7 @@ class AudioState {
     this.saved = false,
     this.speed = 1.2,
     this.sleepEnabled = false,
+    this.loaded = false,
   });
   final int episode;
   final int position;
@@ -21,6 +22,9 @@ class AudioState {
   final bool saved;
   final double speed;
   final bool sleepEnabled;
+
+  /// True once an episode was started; the shell shows the mini-player then.
+  final bool loaded;
   int get duration => MockCatalog.episodeSeconds[episode];
   double get progress => position / duration;
   AudioState copyWith({
@@ -31,6 +35,7 @@ class AudioState {
     bool? saved,
     double? speed,
     bool? sleepEnabled,
+    bool? loaded,
   }) => AudioState(
     episode: episode ?? this.episode,
     position: position ?? this.position,
@@ -39,6 +44,7 @@ class AudioState {
     saved: saved ?? this.saved,
     speed: speed ?? this.speed,
     sleepEnabled: sleepEnabled ?? this.sleepEnabled,
+    loaded: loaded ?? this.loaded,
   );
 }
 
@@ -62,7 +68,8 @@ class AudioViewModel extends Notifier<AudioState> {
     return const AudioState();
   }
 
-  void toggle() => state = state.copyWith(playing: !state.playing);
+  void toggle() =>
+      state = state.copyWith(playing: !state.playing, loaded: true);
   void pause() => state = state.copyWith(playing: false);
   void playEpisode(int index) {
     if (index < 0 || index >= MockCatalog.episodeSeconds.length) return;
@@ -70,11 +77,16 @@ class AudioViewModel extends Notifier<AudioState> {
       episode: index,
       position: index == state.episode ? state.position : 0,
       playing: true,
+      loaded: true,
     );
   }
 
-  void startOver() =>
-      state = state.copyWith(episode: 0, position: 0, playing: true);
+  void startOver() => state = state.copyWith(
+    episode: 0,
+    position: 0,
+    playing: true,
+    loaded: true,
+  );
   void seek(double progress) => state = state.copyWith(
     position: (progress.clamp(0, 1) * state.duration).round(),
   );

@@ -39,7 +39,7 @@ class MissionDetailScreen extends ConsumerWidget {
             onBack: () =>
                 MissionDesign.goBack(context, AppRoutes.weeklyMissions),
             onHonours: () => context.push(AppRoutes.honours),
-            onProfile: () => context.push(AppRoutes.login),
+            onProfile: () => context.go(AppRoutes.profile),
           ),
           MissionDesign.gap,
           const MissionDetailChallengeCard(),
