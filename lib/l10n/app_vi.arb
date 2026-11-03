@@ -338,5 +338,154 @@
   "honoursCollection": "Xem bộ sưu tập huy hiệu",
   "missionSampleNotice": "Dữ liệu minh họa. Tiến độ, điểm và huy hiệu chưa đồng bộ với tài khoản.",
   "missionStepTwoNumber": "02",
-  "missionStepThreeNumber": "03"
+  "missionStepThreeNumber": "03",
+  "missionsHeaderTitle": "Nhiệm Vụ Tuần",
+  "missionsEyebrow": "KHÁM PHÁ LỊCH SỬ",
+  "missionsIntroEyebrow": "● HÀNH TRÌNH SỬ VIỆT",
+  "missionsIntroWeek": "Tuần 3/10 – 9/11",
+  "missionsIntroTitle": "Mỗi tuần một trang sử",
+  "missionsIntroBody": "Lắng nghe lịch sử, tích lũy tri thức và nhận những phần thưởng xứng đáng qua thử thách của bạn.",
+  "missionsProgressTitle": "Tiến độ tuần này",
+  "missionsProgressPercent": "Hoàn thành {percent}%",
+  "@missionsProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsProgressCount": "{done}/{total} nhiệm vụ",
+  "@missionsProgressCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatPoints": "Điểm tích lũy",
+  "missionsStatStreakValue": "{days} Ngày",
+  "@missionsStatStreakValue": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatStreak": "Chuỗi liên tiếp",
+  "missionsCalendarTitle": "Điểm danh nghe sử tuần này",
+  "missionsCalendarToday": "Hôm nay: Thứ Năm",
+  "missionsDayMon": "T2",
+  "missionsDayTue": "T3",
+  "missionsDayWed": "T4",
+  "missionsDayThu": "T5",
+  "missionsDayFri": "T6",
+  "missionsDaySat": "T7",
+  "missionsDaySun": "CN",
+  "missionsListTitle": "Nhiệm vụ của bạn",
+  "missionsHistory": "Lịch sử quy định ›",
+  "missionsHistoryMessage": "Bạn đã hoàn thành {count} nhiệm vụ",
+  "@missionsHistoryMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsViewAll": "Xem chi tiết →",
+  "missionsCollapse": "Thu gọn",
+  "missionsPoints": "+{points} điểm",
+  "@missionsPoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsCompleted": "Đã hoàn thành",
+  "missionsContinueListening": "Tiếp tục nghe ›",
+  "missionsAlreadyDone": "Bạn đã hoàn thành nhiệm vụ này!",
+  "missionsDemoDone": "Đã hoàn thành nhiệm vụ demo!",
+  "missionsTryComplete": "Hoàn thành thử nghiệm",
+  "missionsRewardEyebrow": "✧ PHẦN THƯỞNG TUẦN",
+  "missionsRewardTitle": "Huy hiệu Sử Ký\nƯu Điểm Thường",
+  "missionsRewardBody": "Hoàn thành đủ 5/5 nhiệm vụ để nhận danh hiệu tuần cùng 100 điểm thưởng hoàng gia.",
+  "missionsQuote": "\"Sử để ghi việc xưa, răn đời sau, mở\nmang trí đời ta!\"",
+  "missionsQuoteSource": "— ĐẠI VIỆT SỬ KÝ TOÀN THƯ",
+  "missionsListenTitle": "Lắng nghe dòng chảy lịch sử",
+  "missionsListenSubtitle": "Nghe podcast lịch sử trong 30 phút",
+  "missionsListenDetail": "Thời lượng: {current}/{target} phút",
+  "@missionsListenDetail": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsExploreTitle": "Khám phá trận Bạch Đằng",
+  "missionsExploreSubtitle": "Hoàn thành 2 tập podcast thuộc chủ đề",
+  "missionsExploreDetail": "Tiến độ: {current}/{target} tập",
+  "@missionsExploreDetail": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsQuizTitle": "Thử tài sử học",
+  "missionsQuizSubtitle": "Trả lời đúng ít nhất 4/5 câu hỏi",
+  "missionsQuizDetail": "Tiến độ: {current}/{target} câu",
+  "@missionsQuizDetail": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsJourneyTitle": "Hành trình chưa dừng lại",
+  "missionsJourneySubtitle": "Nghe thêm 3 tập podcast bất kỳ",
+  "missionsJourneyDetail": "Tiến trình: {current}/{target} tập",
+  "@missionsJourneyDetail": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStreakTitle": "Người giữ lửa lịch sử",
+  "missionsStreakSubtitle": "Nghe podcast vào 5 ngày khác nhau trong tuần",
+  "missionsStreakDetail": "Tiến trình: {current}/{target} ngày",
+  "@missionsStreakDetail": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "weeklyMissions": "Nhiệm vụ tuần",
+  "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  }
 }

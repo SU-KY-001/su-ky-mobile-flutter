@@ -15,4 +15,19 @@ void main() {
     expect(vm.submit(), isTrue);
     expect(sub.read().requireValue.invalid, isFalse);
   });
+
+  test('login rejects malformed email and too-short password', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+    container.listen(loginViewModelProvider, (_, _) {});
+    final vm = container.read(loginViewModelProvider.notifier);
+    vm.email('not-an-email');
+    vm.password('x' * minPasswordLength);
+    expect(vm.submit(), isFalse);
+    vm.email('student@example.com');
+    vm.password('x' * (minPasswordLength - 1));
+    expect(vm.submit(), isFalse);
+    vm.password('x' * minPasswordLength);
+    expect(vm.submit(), isTrue);
+  });
 }

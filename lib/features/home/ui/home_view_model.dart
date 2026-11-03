@@ -1,14 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeViewModel extends Notifier<AsyncValue<int>> {
+const homeCategoryCount = 3;
+
+/// Selected category chip index.
+class HomeViewModel extends Notifier<int> {
   @override
-  AsyncValue<int> build() => const AsyncData(0);
+  int build() => 0;
   void selectCategory(int index) {
-    if (index >= 0 && index < 3) state = AsyncData(index);
+    if (index >= 0 && index < homeCategoryCount) state = index;
   }
 }
 
-final homeViewModelProvider =
-    NotifierProvider.autoDispose<HomeViewModel, AsyncValue<int>>(
-      HomeViewModel.new,
-    );
+final homeViewModelProvider = NotifierProvider.autoDispose<HomeViewModel, int>(
+  HomeViewModel.new,
+);

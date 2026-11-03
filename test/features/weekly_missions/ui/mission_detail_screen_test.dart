@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/app.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
 import 'package:su_ky_mobile/features/player/ui/player_screen.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/honours_screen.dart';
@@ -31,7 +32,7 @@ void main() {
       'MaterialIcons',
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
-  void noop() {}
+
   for (final locale in ['vi', 'en']) {
     for (final width in [320.0, 390.0, 1440.0]) {
       for (final honours in [false, true]) {
@@ -41,30 +42,37 @@ void main() {
         ) async {
           await tester.binding.setSurfaceSize(Size(width, 844));
           addTearDown(() => tester.binding.setSurfaceSize(null));
-          var continued = false;
           final key = GlobalKey();
+          final router = GoRouter(
+            initialLocation: '/start',
+            routes: [
+              GoRoute(
+                path: '/start',
+                builder: (_, _) => RepaintBoundary(
+                  key: key,
+                  child: honours
+                      ? const HonoursScreen()
+                      : const MissionDetailScreen(),
+                ),
+              ),
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (_, _) => const SizedBox(),
+              ),
+              GoRoute(
+                path: AppRoutes.player,
+                builder: (_, _) => const SizedBox(),
+              ),
+            ],
+          );
           await tester.pumpWidget(
             ProviderScope(
-              child: MaterialApp(
+              child: MaterialApp.router(
                 theme: AppTheme.light,
                 locale: Locale(locale),
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
-                home: RepaintBoundary(
-                  key: key,
-                  child: honours
-                      ? HonoursScreen(
-                          onBack: noop,
-                          onDiscover: () => continued = true,
-                          onProfile: noop,
-                        )
-                      : MissionDetailScreen(
-                          onBack: noop,
-                          onHonours: noop,
-                          onProfile: noop,
-                          onListen: () => continued = true,
-                        ),
-                ),
+                routerConfig: router,
               ),
             ),
           );
@@ -100,11 +108,6 @@ void main() {
             find.text(l.missionSampleNotice).hitTestable(),
             findsOneWidget,
           );
-          await tester.tap(
-            find.text(honours ? l.honoursDiscover : l.missionContinue),
-          );
-          await tester.pumpAndSettle();
-          expect(continued, isTrue);
           if (honours) {
             await tester.tap(find.text(l.honoursCollection));
             await tester.pumpAndSettle();
@@ -114,7 +117,18 @@ void main() {
               findsOneWidget,
             );
             expect(tester.takeException(), isNull);
+            Navigator.of(tester.element(find.byType(BottomSheet))).pop();
+            await tester.pumpAndSettle();
           }
+          await tester.tap(
+            find.text(honours ? l.honoursDiscover : l.missionContinue),
+          );
+          await tester.pumpAndSettle();
+          final expected = honours ? AppRoutes.home : AppRoutes.player;
+          expect(
+            router.routerDelegate.currentConfiguration.last.matchedLocation,
+            expected,
+          );
           await tester.pumpWidget(const SizedBox());
         });
       }
@@ -131,33 +145,33 @@ void main() {
         UncontrolledProviderScope(container: container, child: const App()),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Nhiệm vụ tuần'));
-      await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
-        find.text('Hành trình chưa dừng lại'),
-        300,
+      final l = AppLocalizations.of(
+        tester.element(find.byType(Scaffold).first),
       );
-      await tester.ensureVisible(find.text('Hành trình chưa dừng lại'));
+      await tester.tap(find.text(l.weeklyMissions));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Hành trình chưa dừng lại'));
+      await tester.scrollUntilVisible(find.text(l.missionsJourneyTitle), 300);
+      await tester.ensureVisible(find.text(l.missionsJourneyTitle));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.missionsJourneyTitle));
       await tester.pumpAndSettle();
       expect(find.byType(MissionDetailScreen), findsOneWidget);
-      await tester.tap(find.text('Tiếp tục nhiệm vụ'));
+      await tester.tap(find.text(l.missionContinue));
       await tester.pumpAndSettle();
       expect(find.byType(PlayerScreen), findsOneWidget);
       expect(container.read(audioViewModelProvider).episode, 2);
       expect(container.read(audioViewModelProvider).playing, isTrue);
       GoRouter.of(tester.element(find.byType(PlayerScreen))).pop();
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Bảng Vinh Danh'));
+      await tester.tap(find.byTooltip(l.honoursTitle));
       await tester.pumpAndSettle();
       expect(find.byType(HonoursScreen), findsOneWidget);
-      await tester.tap(find.byTooltip('Chia sẻ'));
+      await tester.tap(find.byTooltip(l.share));
       await tester.pump();
       expect(find.byType(SnackBar), findsOneWidget);
-      await tester.tap(find.text('Quay về Khám phá'));
+      await tester.tap(find.text(l.honoursDiscover));
       await tester.pumpAndSettle();
-      expect(find.text('Lắng nghe tiền nhân'), findsOneWidget);
+      expect(find.text(l.homeHeading), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
       container.dispose();
     },

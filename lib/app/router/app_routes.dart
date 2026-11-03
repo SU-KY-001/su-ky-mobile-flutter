@@ -1,3 +1,6 @@
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+
 /// Route path constants. Never inline a path string elsewhere.
 abstract final class AppRoutes {
   static const home = '/';
@@ -10,4 +13,9 @@ abstract final class AppRoutes {
   static const missionDetail = '/weekly-missions/listening';
   static const honours = '/weekly-missions/honours';
   static String quizFor(int episode) => '/episodes/$episode/quiz';
+}
+
+extension AppNavigation on BuildContext {
+  /// Pops when a previous route exists, otherwise jumps to [fallback].
+  void popOrGo(String fallback) => canPop() ? pop() : go(fallback);
 }

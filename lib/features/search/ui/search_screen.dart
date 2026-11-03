@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
+import 'package:su_ky_mobile/features/search/ui/related_episode_tile.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/search_input.dart';
 import 'package:su_ky_mobile/shared/widgets/series_card.dart';
@@ -10,20 +12,12 @@ import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 import 'search_view_model.dart';
 
 class SearchScreen extends ConsumerWidget {
-  const SearchScreen({
-    super.key,
-    required this.onHome,
-    required this.onProfile,
-    required this.onSeries,
-    required this.onPlayer,
-  });
-  final VoidCallback onHome, onProfile, onSeries, onPlayer;
+  const SearchScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final state = ref.watch(searchViewModelProvider).requireValue;
     final vm = ref.read(searchViewModelProvider.notifier);
-    final audio = ref.watch(audioViewModelProvider);
     final recent = [l.recent1, l.recent2, l.recent3];
     final matches = vm.matches(
       '${l.seriesTitle} ${l.author} ${l.searchDescription}',
@@ -32,12 +26,12 @@ class SearchScreen extends ConsumerWidget {
       bottom: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          MiniPlayer(onOpen: onPlayer),
+          MiniPlayer(onOpen: () => context.push(AppRoutes.player)),
           MainNavigation(
             index: 1,
-            onDiscover: onHome,
+            onDiscover: () => context.go(AppRoutes.home),
             onSearch: () {},
-            onProfile: onProfile,
+            onProfile: () => context.push(AppRoutes.login),
           ),
         ],
       ),
@@ -73,7 +67,7 @@ class SearchScreen extends ConsumerWidget {
                 icon: const Icon(Icons.notifications_none),
               ),
               InkWell(
-                onTap: onProfile,
+                onTap: () => context.push(AppRoutes.login),
                 child: CircleAvatar(
                   radius: 17,
                   backgroundColor: AppDesign.tint,
@@ -159,7 +153,11 @@ class SearchScreen extends ConsumerWidget {
             action: matches ? l.resultsCount : null,
           ),
           if (matches)
-            SeriesCard(onTap: onSeries, secondary: state.era == 2, large: true)
+            SeriesCard(
+              onTap: () => context.push(AppRoutes.series),
+              secondary: state.era == 2,
+              large: true,
+            )
           else
             Padding(
               padding: const EdgeInsets.all(24),
@@ -168,68 +166,7 @@ class SearchScreen extends ConsumerWidget {
           if (matches) ...[
             const SizedBox(height: 24),
             SectionHeading(l.relatedEpisodes, action: l.bestMatch),
-            for (final index in [0, 1, 2, 3])
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Surface(
-                  selected: index == audio.episode,
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      CoverArt(
-                        path: index.isEven
-                            ? AppDesign.cover
-                            : AppDesign.secondCover,
-                        width: 48,
-                        height: 54,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: InkWell(
-                          onTap: onSeries,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (index == audio.episode)
-                                Text(
-                                  l.listeningBadge,
-                                  style: context.text.labelSmall?.copyWith(
-                                    color: context.accent,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              Text(
-                                episodeTitle(l, index),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: context.text.labelLarge?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(l.bachDang, style: context.text.bodySmall),
-                              Text(
-                                audioTime(AppDesign.episodeSeconds[index]),
-                                style: context.text.labelSmall?.copyWith(
-                                  color: AppDesign.muted,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      RoundPlay(
-                        onTap: () {
-                          ref
-                              .read(audioViewModelProvider.notifier)
-                              .playEpisode(index);
-                          onPlayer();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            for (final index in [0, 1, 2, 3]) RelatedEpisodeTile(index: index),
           ],
           const SizedBox(height: 14),
           Surface(
@@ -250,7 +187,10 @@ class SearchScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                TextButton(onPressed: onHome, child: Text(l.discover)),
+                TextButton(
+                  onPressed: () => context.go(AppRoutes.home),
+                  child: Text(l.discover),
+                ),
               ],
             ),
           ),

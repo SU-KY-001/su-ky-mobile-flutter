@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class SeriesCard extends StatelessWidget {
@@ -27,7 +28,7 @@ class SeriesCard extends StatelessWidget {
             Stack(
               children: [
                 CoverArt(
-                  path: secondary ? AppDesign.secondCover : AppDesign.cover,
+                  path: secondary ? MockCatalog.secondCover : MockCatalog.cover,
                   height: large ? 155 : 126,
                 ),
                 Positioned(

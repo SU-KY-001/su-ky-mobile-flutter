@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/audio/audio_defaults.dart';
+import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 
 class AudioState {
   const AudioState({
     this.episode = 1,
-    this.position = AppDesign.initialPosition,
+    this.position = MockCatalog.initialPositionSeconds,
     this.playing = false,
     this.favorite = false,
     this.saved = false,
@@ -20,7 +21,7 @@ class AudioState {
   final bool saved;
   final double speed;
   final bool sleepEnabled;
-  int get duration => AppDesign.episodeSeconds[episode];
+  int get duration => MockCatalog.episodeSeconds[episode];
   double get progress => position / duration;
   AudioState copyWith({
     int? episode,
@@ -46,7 +47,7 @@ class AudioViewModel extends Notifier<AudioState> {
   Timer? _sleepTimer;
   @override
   AudioState build() {
-    final ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+    final ticker = Timer.periodic(AudioDefaults.tickInterval, (_) {
       if (!state.playing) return;
       final next = state.position + state.speed;
       state = state.copyWith(
@@ -64,7 +65,7 @@ class AudioViewModel extends Notifier<AudioState> {
   void toggle() => state = state.copyWith(playing: !state.playing);
   void pause() => state = state.copyWith(playing: false);
   void playEpisode(int index) {
-    if (index < 0 || index >= AppDesign.episodeSeconds.length) return;
+    if (index < 0 || index >= MockCatalog.episodeSeconds.length) return;
     state = state.copyWith(
       episode: index,
       position: index == state.episode ? state.position : 0,
@@ -90,7 +91,7 @@ class AudioViewModel extends Notifier<AudioState> {
     state = state.copyWith(sleepEnabled: enabled);
     if (enabled) {
       _sleepTimer = Timer(
-        const Duration(minutes: AppDesign.sleepMinutes),
+        const Duration(minutes: AudioDefaults.sleepTimerMinutes),
         () => state = state.copyWith(playing: false, sleepEnabled: false),
       );
     }

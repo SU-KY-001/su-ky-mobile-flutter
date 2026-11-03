@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
+import 'package:su_ky_mobile/features/auth/ui/auth_colors.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
@@ -7,12 +10,7 @@ import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 import 'login_view_model.dart';
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({
-    super.key,
-    required this.onClose,
-    required this.onContinue,
-  });
-  final VoidCallback onClose, onContinue;
+  const LoginScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
@@ -30,7 +28,7 @@ class LoginScreen extends ConsumerWidget {
             Row(
               children: [
                 IconButton.outlined(
-                  onPressed: onClose,
+                  onPressed: () => context.popOrGo(AppRoutes.home),
                   tooltip: l.close,
                   icon: const Icon(Icons.close),
                 ),
@@ -135,7 +133,7 @@ class LoginScreen extends ConsumerWidget {
             const SizedBox(height: 18),
             FilledButton.icon(
               onPressed: () {
-                if (vm.submit()) onContinue();
+                if (vm.submit()) context.go(AppRoutes.home);
               },
               icon: const Icon(Icons.play_arrow_rounded),
               label: Text(l.loginAction),
@@ -173,7 +171,7 @@ class LoginScreen extends ConsumerWidget {
                   fontFamily: 'Inter',
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF4285F4),
+                  color: AuthColors.googleBlue,
                 ),
               ),
               label: Text(

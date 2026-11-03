@@ -11,6 +11,7 @@ class QuizQuestion {
 abstract final class QuizDefinition {
   static const episode = 1;
   static const id = 'bach-dang-938-episode-2-v1';
+  static const excellentPercent = 80;
   static const estimatedMinutes = 5;
   static const questions = [
     QuizQuestion('stakes', 0),

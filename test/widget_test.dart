@@ -48,7 +48,6 @@ void main() {
       'MaterialIcons',
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
-  void noop() {}
   testWidgets(
     'navigation connects discovery, series, player, search and login',
     (tester) async {
@@ -87,22 +86,12 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
-  final screens = <String, Widget>{
-    'home': HomeScreen(
-      onSearch: noop,
-      onSeries: noop,
-      onPlayer: noop,
-      onProfile: noop,
-    ),
-    'login': LoginScreen(onClose: noop, onContinue: noop),
-    'search': SearchScreen(
-      onHome: noop,
-      onProfile: noop,
-      onSeries: noop,
-      onPlayer: noop,
-    ),
-    'series': SeriesScreen(onBack: noop, onPlayer: noop),
-    'player': PlayerScreen(onBack: noop, onSeries: noop),
+  const screens = <String, Widget>{
+    'home': HomeScreen(),
+    'login': LoginScreen(),
+    'search': SearchScreen(),
+    'series': SeriesScreen(),
+    'player': PlayerScreen(),
   };
   for (final size in [const Size(390, 844), const Size(320, 640)]) {
     for (final entry in screens.entries) {

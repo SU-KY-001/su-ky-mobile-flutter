@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
+import 'package:su_ky_mobile/shared/audio/audio_defaults.dart';
 import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
+/// Episode that carries the quiz entry point.
+const _quizEpisodeIndex = 1;
+
 class PlayerScreen extends ConsumerWidget {
-  const PlayerScreen({
-    super.key,
-    required this.onBack,
-    required this.onSeries,
-    this.onQuiz,
-  });
-  final ValueChanged<int>? onQuiz;
-  final VoidCallback onBack, onSeries;
+  const PlayerScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
@@ -29,7 +29,7 @@ class PlayerScreen extends ConsumerWidget {
           Row(
             children: [
               IconButton.filledTonal(
-                onPressed: onBack,
+                onPressed: () => context.popOrGo(AppRoutes.home),
                 tooltip: l.close,
                 icon: const Icon(Icons.keyboard_arrow_down),
               ),
@@ -54,7 +54,7 @@ class PlayerScreen extends ConsumerWidget {
                 ),
               ),
               IconButton(
-                onPressed: onSeries,
+                onPressed: () => context.push(AppRoutes.series),
                 tooltip: l.detail,
                 icon: const Icon(Icons.more_vert),
               ),
@@ -67,7 +67,7 @@ class PlayerScreen extends ConsumerWidget {
               aspectRatio: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(26),
-                child: Image.asset(AppDesign.cover, fit: BoxFit.cover),
+                child: Image.asset(MockCatalog.cover, fit: BoxFit.cover),
               ),
             ),
           ),
@@ -161,16 +161,16 @@ class PlayerScreen extends ConsumerWidget {
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: vm.changeSpeed,
-                child: Text('${audio.speed.toStringAsFixed(1)}x'),
+                child: Text(l.playbackSpeed(audio.speed.toStringAsFixed(1))),
               ),
               IconButton(
-                onPressed: () => vm.skip(-AppDesign.seekStep),
+                onPressed: () => vm.skip(-AudioDefaults.seekStepSeconds),
                 tooltip: l.seekBack,
                 icon: const Icon(Icons.replay_10_rounded),
               ),
               RoundPlay(onTap: vm.toggle, playing: audio.playing, size: 68),
               IconButton(
-                onPressed: () => vm.skip(AppDesign.seekStep),
+                onPressed: () => vm.skip(AudioDefaults.seekStepSeconds),
                 tooltip: l.seekForward,
                 icon: const Icon(Icons.forward_10_rounded),
               ),
@@ -210,14 +210,17 @@ class PlayerScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                TextButton(onPressed: onSeries, child: Text(l.detail)),
+                TextButton(
+                  onPressed: () => context.push(AppRoutes.series),
+                  child: Text(l.detail),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 24),
-          if (audio.episode == 1 && onQuiz != null)
+          if (audio.episode == _quizEpisodeIndex)
             FilledButton.icon(
-              onPressed: () => onQuiz!(audio.episode),
+              onPressed: () => context.push(AppRoutes.quizFor(audio.episode)),
               icon: const Icon(Icons.quiz_outlined),
               label: Text(l.quizEntry),
             ),

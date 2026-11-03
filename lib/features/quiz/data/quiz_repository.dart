@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:su_ky_mobile/core/error/app_exception.dart';
@@ -7,6 +5,7 @@ import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/core/logging/app_logger.dart';
 
 import '../domain/quiz.dart';
+import 'quiz_attempt_codec.dart';
 
 abstract class QuizRepository {
   Future<Result<QuizAttempt?>> latest();
@@ -24,26 +23,7 @@ class LocalQuizRepository implements QuizRepository {
       final prefs = await SharedPreferences.getInstance().timeout(_timeout);
       final raw = prefs.getString(_key);
       if (raw == null) return const Ok(null);
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic>) throw const FormatException();
-      final answers = decoded['answers'];
-      final seconds = decoded['seconds'];
-      final date = decoded['finishedAt'];
-      if (answers is! List ||
-          answers.length != QuizDefinition.questions.length ||
-          answers.any((a) => a is! int || a < 0 || a > 3) ||
-          seconds is! int ||
-          seconds < 0 ||
-          date is! String) {
-        throw const FormatException('Invalid quiz attempt');
-      }
-      return Ok(
-        QuizAttempt(
-          answers: answers.cast<int>(),
-          finishedAt: DateTime.parse(date),
-          elapsedSeconds: seconds,
-        ),
-      );
+      return Ok(QuizAttemptCodec.decode(raw));
     } catch (error, stack) {
       AppLogger.error(
         'Cannot read quiz history',
@@ -59,14 +39,7 @@ class LocalQuizRepository implements QuizRepository {
     try {
       final prefs = await SharedPreferences.getInstance().timeout(_timeout);
       final success = await prefs
-          .setString(
-            _key,
-            jsonEncode({
-              'answers': attempt.answers,
-              'seconds': attempt.elapsedSeconds,
-              'finishedAt': attempt.finishedAt.toIso8601String(),
-            }),
-          )
+          .setString(_key, QuizAttemptCodec.encode(attempt))
           .timeout(_timeout);
       if (!success) throw StateError('Preference write rejected');
       return const Ok(null);

@@ -6,7 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/app.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/features/player/ui/player_screen.dart';
@@ -57,25 +59,35 @@ void main() {
       final key = GlobalKey();
       final provider = quizViewModelProvider(1);
       var closed = false;
+      final router = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, state) =>
+                RepaintBoundary(key: key, child: const QuizScreen(episode: 1)),
+          ),
+          GoRoute(
+            path: AppRoutes.player,
+            builder: (context, state) {
+              closed = true;
+              return const SizedBox();
+            },
+          ),
+        ],
+      );
+      addTearDown(router.dispose);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             quizRepositoryProvider.overrideWithValue(repository),
             quizClockProvider.overrideWithValue(() => now),
           ],
-          child: MaterialApp(
+          child: MaterialApp.router(
+            routerConfig: router,
             theme: AppTheme.light,
             locale: const Locale('vi'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: RepaintBoundary(
-              key: key,
-              child: QuizScreen(
-                episode: 1,
-                onClose: () => closed = true,
-                onEpisode: () => closed = true,
-              ),
-            ),
           ),
         ),
       );

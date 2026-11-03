@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
+import 'package:su_ky_mobile/features/series/ui/episode_list_tile.dart';
+import 'package:su_ky_mobile/features/series/ui/series_hero.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 class SeriesScreen extends ConsumerWidget {
-  const SeriesScreen({
-    super.key,
-    required this.onBack,
-    required this.onPlayer,
-    this.onQuiz,
-  });
-  final ValueChanged<int>? onQuiz;
-  final VoidCallback onBack, onPlayer;
+  const SeriesScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
@@ -25,7 +23,7 @@ class SeriesScreen extends ConsumerWidget {
     return AppPage(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: onBack,
+          onPressed: () => context.popOrGo(AppRoutes.home),
           tooltip: l.back,
           icon: const Icon(Icons.chevron_left),
         ),
@@ -41,92 +39,7 @@ class SeriesScreen extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Stack(
-              children: [
-                const CoverArt(height: 220),
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: .08),
-                          Colors.black87,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 14,
-                  left: 14,
-                  right: 14,
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          l.eraTag,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 16),
-                          Text(
-                            l.rating,
-                            style: const TextStyle(
-                              color: Colors.amber,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 18,
-                  left: 16,
-                  right: 16,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l.seriesTitle,
-                        style: context.text.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        l.seriesAuthor,
-                        style: context.text.bodySmall?.copyWith(
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          const SeriesHero(),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -177,7 +90,7 @@ class SeriesScreen extends ConsumerWidget {
                 child: FilledButton.icon(
                   onPressed: () {
                     vm.startOver();
-                    onPlayer();
+                    context.push(AppRoutes.player);
                   },
                   icon: const Icon(Icons.play_arrow, size: 18),
                   label: Text(l.listenFromStart),
@@ -201,100 +114,12 @@ class SeriesScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 22),
           SectionHeading(l.episodeList, action: l.sixTracks),
-          for (final index in List.generate(
-            AppDesign.episodeSeconds.length,
-            (i) => i,
-          ))
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Surface(
-                selected: index == audio.episode,
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 36,
-                          height: 38,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: index == audio.episode
-                                ? context.accent
-                                : AppDesign.canvas,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            (index + 1).toString().padLeft(2, '0'),
-                            style: TextStyle(
-                              color: index == audio.episode
-                                  ? Colors.white
-                                  : AppDesign.ink,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                episodeTitle(l, index),
-                                style: context.text.labelLarge?.copyWith(
-                                  color: index == audio.episode
-                                      ? context.accent
-                                      : AppDesign.ink,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                '${audioTime(AppDesign.episodeSeconds[index])}${index == 0 ? '  ·  ✓ ${l.listened}' : ''}',
-                                style: context.text.labelSmall?.copyWith(
-                                  color: index == 0
-                                      ? Colors.teal
-                                      : AppDesign.muted,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RoundPlay(
-                          onTap: () {
-                            if (index == audio.episode && audio.playing) {
-                              vm.toggle();
-                            } else {
-                              vm.playEpisode(index);
-                              onPlayer();
-                            }
-                          },
-                          playing: index == audio.episode && audio.playing,
-                          filled: index == audio.episode,
-                          size: 36,
-                        ),
-                      ],
-                    ),
-                    if (index == audio.episode)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: LinearProgressIndicator(
-                          value: audio.progress,
-                          minHeight: 3,
-                          color: context.accent,
-                          backgroundColor: AppDesign.line,
-                        ),
-                      ),
-                    if (index == 1 && onQuiz != null)
-                      TextButton.icon(
-                        onPressed: () => onQuiz!(index),
-                        icon: const Icon(Icons.quiz_outlined),
-                        label: Text(l.quizEntry),
-                      ),
-                  ],
-                ),
-              ),
-            ),
+          for (
+            var index = 0;
+            index < MockCatalog.episodeSeconds.length;
+            index++
+          )
+            EpisodeListTile(index: index),
         ],
       ),
     );

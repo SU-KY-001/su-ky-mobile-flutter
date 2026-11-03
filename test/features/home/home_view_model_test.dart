@@ -7,10 +7,15 @@ void main() {
     final container = ProviderContainer();
     addTearDown(container.dispose);
     final sub = container.listen(homeViewModelProvider, (_, _) {});
+    expect(sub.read(), 0);
 
     container.read(homeViewModelProvider.notifier).selectCategory(2);
-    expect(sub.read().requireValue, 2);
+    expect(sub.read(), 2);
     container.read(homeViewModelProvider.notifier).selectCategory(-1);
-    expect(sub.read().requireValue, 2);
+    expect(sub.read(), 2);
+    container
+        .read(homeViewModelProvider.notifier)
+        .selectCategory(homeCategoryCount);
+    expect(sub.read(), 2);
   });
 }

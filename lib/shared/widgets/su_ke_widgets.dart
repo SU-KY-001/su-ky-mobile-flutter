@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/mock/mock_catalog.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({super.key, required this.child, this.bottom, this.appBar});
@@ -199,7 +200,7 @@ String episodeTitle(AppLocalizations l, int index) => [
 class CoverArt extends StatelessWidget {
   const CoverArt({
     super.key,
-    this.path = AppDesign.cover,
+    this.path = MockCatalog.cover,
     this.height = 170,
     this.width,
   });

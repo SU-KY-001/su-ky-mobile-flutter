@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Pragmatic format check, not RFC 5322: one `@`, a dot in the domain, no spaces.
+final _emailPattern = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+const minPasswordLength = 6;
+
 class LoginState {
   const LoginState({
     this.email = '',
@@ -37,8 +41,8 @@ class LoginViewModel extends Notifier<AsyncValue<LoginState>> {
   bool submit() {
     final form = state.requireValue;
     final valid =
-        RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(form.email.trim()) &&
-        form.password.length >= 6;
+        _emailPattern.hasMatch(form.email.trim()) &&
+        form.password.length >= minPasswordLength;
     state = AsyncData(form.copyWith(invalid: !valid));
     return valid;
   }
