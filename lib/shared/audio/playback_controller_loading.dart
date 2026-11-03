@@ -82,6 +82,7 @@ Future<void> _onOpened(
     LastListen(slug: detail.slug, narrationId: narration.id),
   );
   c.providerRef.invalidate(lastListenProvider);
+  c._sync.begin(info);
   if (!autoplay) return;
   unawaited(c._player.play());
   unawaited(_askNotificationPermissionOnce(c));
@@ -99,22 +100,33 @@ MediaItem _mediaItem(EpisodeDetail detail, PlaybackInfo info) {
 }
 
 /// [explicit] (narration switch) is kept, clamped inside the new audio;
-/// otherwise the saved position is restored by the RN rule.
+/// otherwise the local position wins, then the server's, then zero.
 Duration? _startPosition(
   PlaybackController c,
   PlaybackInfo info,
   Duration? explicit,
 ) {
   final durationSeconds = info.durationMs ~/ _millisPerSecond;
-  final lastValid = durationSeconds - AudioDefaults.resumeEndMarginSeconds;
   if (explicit != null) {
+    final lastValid = durationSeconds - AudioDefaults.resumeEndMarginSeconds;
     final maxMillis = (lastValid * _millisPerSecond).clamp(0, info.durationMs);
     return Duration(milliseconds: explicit.inMilliseconds.clamp(0, maxMillis));
   }
   final saved = c._store.position(info.narrationId);
-  final valid = saved > AudioDefaults.resumeMinSeconds && saved < lastValid;
-  return valid ? Duration(seconds: saved) : null;
+  if (_validResume(saved, durationSeconds)) {
+    return Duration(seconds: saved);
+  }
+  final serverMs = info.serverPositionMs;
+  if (serverMs != null &&
+      _validResume(serverMs ~/ _millisPerSecond, durationSeconds)) {
+    return Duration(milliseconds: serverMs);
+  }
+  return Duration.zero;
 }
+
+bool _validResume(int seconds, int durationSeconds) =>
+    seconds > AudioDefaults.resumeMinSeconds &&
+    seconds < durationSeconds - AudioDefaults.resumeEndMarginSeconds;
 
 PlaybackError _errorFor(AppException error) {
   if (error is ApiException &&

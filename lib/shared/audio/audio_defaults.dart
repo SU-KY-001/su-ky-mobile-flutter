@@ -14,6 +14,13 @@ abstract final class AudioDefaults {
 
   static const localPositionSaveInterval = Duration(seconds: 3);
   static const loadTimeout = Duration(seconds: 20);
+  static const progressTimeout = Duration(seconds: 10);
+
+  /// Progress is sent no more often than this, whatever the server asks.
+  static const minSyncInterval = Duration(seconds: 5);
+
+  /// Larger position jumps count as a seek and mark no seconds.
+  static const maxTickDeltaSeconds = 5;
 
   /// Saved position is restored only when inside (min, duration - margin).
   static const resumeMinSeconds = 1;

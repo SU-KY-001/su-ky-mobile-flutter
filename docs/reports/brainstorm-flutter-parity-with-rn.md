@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog) và P4 (Phát audio) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P5–P11. Auth, catalog và phát audio đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio) và P5 (Đồng bộ tiến độ nghe) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P6–P11. Auth, catalog, phát audio và tiến độ nghe đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -11,9 +11,9 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 |---|---|---|
 | Auth | sign-in/up/out, Bearer từ `set-auth-token`, hydrate `/api/me`, 401 => xoá phiên | **Đã nối thật (P1)**: `AuthRepository`, `TokenStore`, `SessionController`, `AuthInterceptor`; chưa kiểm runtime |
 | Catalog | series, series detail, periods, events, topics | **Đã nối thật (P3)**: series list/detail, periods, tìm kiếm `q`, "tập mới" (quét 6 series như RN); events/topics còn thiếu |
-| Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4)**: `just_audio` + phát nền, đổi ngôi kể, resume cục bộ; sync bitmap lên server còn ở P5 |
+| Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4, P5)**: `just_audio` + phát nền, đổi ngôi kể, resume local → server, sync bitmap và completion |
 | Quiz | list + episode quiz + `Idempotency-Key` | chấm local, SharedPreferences |
-| Missions/Honours | `/me/weekly-missions`, `/showcase/honors` | UI mock |
+| Missions | `/me/weekly-missions` chỉ hiện trong tab Hồ sơ (XP, nhiệm vụ xong, thanh tiến độ); RN không có màn vinh danh | UI mock (có thêm màn Vinh danh, sẽ xoá) |
 | Profile/History/Schedule | có | không có |
 | Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Podcast, Hồ sơ (Lịch sử, Quiz thêm khi có màn) |
 | Search | placeholder (chưa thật) | **Thật (P3)**: debounce 400ms, tối thiểu 2 ký tự, khớp `title` |
@@ -74,7 +74,7 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 | Làm quiz + kết quả + giải thích + làm lại | Có | `quiz_screen.dart` (đã tách 15 file trong `features/quiz/ui`, màn chính 132 dòng) | nối thật ở 6.4, 6.5 |
 | Tab Quiz (danh sách, lọc topic, badge) | **Chưa** | | 6.0 |
 | Nhiệm vụ tuần, chi tiết nhiệm vụ | Có | `weekly_missions_view_model.dart` + `domain/mission.dart`; dữ liệu mock ở `data/mock_missions.dart` | nối thật ở 7.1 (thay `MockMissions` bằng repository) |
-| Vinh danh | Có | `honours_screen.dart` | nối thật ở 7.2 |
+| Vinh danh | Có (bỏ) | `honours_screen.dart`: RN không có, đã chốt không làm | xoá ở 7.3 |
 | Hồ sơ đầy đủ (XP, nhiệm vụ xong) | **Chưa** | | 8.0a |
 | Lịch sử nghe | **Chưa** | | 8.0b |
 | Lịch phát hành (có trạng thái rỗng) | **Chưa** | Dữ liệu thật tháng 10-11 đang rỗng | 8.0c |
@@ -106,7 +106,6 @@ Mốc: biết chắc dữ kiện trước khi code. Kết quả (kiểm bằng g
 - **Bitmap**: byte `floor(sec/8)`, bit `1 << (sec % 8)` (LSB trước), base64 chuẩn có padding, độ dài `ceil(totalSeconds/8)`. Bit thừa ở byte cuối bị server tự che; bitmap dài hơn thời lượng bị 422 `PROGRESS_INVALID` (ảnh hưởng 5.1).
 - **Playback**: `GET /api/narrations/{id}/playback` trả 200 **cả khi chưa đăng nhập** (`progress: null`). Chặn khách nghe là quy tắc của app theo docs/RN, không phải API ép (ảnh hưởng 4.7). Phản hồi: `audio{assetId,url,mimeType,durationMs}`, `sync{intervalMs,completionThreshold}`. URL Cloudinary tải được (206).
 - **Quiz**: `GET /api/episodes/{slug}/quiz` cần đăng nhập (401 `AUTH_REQUIRED` khi khách). Quiz: `{id, episodeId, passScorePercent, questions[]}`. Thẻ catalog: `{id,title,description,episodeSlug,episodeTitle,seriesSlug,seriesTitle,topicId,topicName,posterUrl,questionCount,plays,hasCompleted}`. Kết quả nộp: `{id,quizId,scorePercent,isPassed,submittedAt,xpAwarded,totalXp,answers[{questionId,selectedOptionId,correctOptionId,isCorrect,explanation}],missions[...]}`; `optionId` trong câu trả lời có thể `null`. **Báo cáo scout ghi sai** (`score`, `passed`, `rewardXp`, `passingScore`): dùng schema thật ở `packages/shared/src/schemas/quiz-mission.ts`.
-- **Honours**: trường ảnh là `image` (không phải `avatarUrl`), kèm `from`/`to`.
 - **Series**: thẻ có `publishedAt`, cover có thể `null`. Phản hồi series detail có thêm `sources`, `evidenceAsOf`, `evidenceWarning`.
 - **Schema nguồn sự thật**: `packages/shared/src/schemas/*.ts` (zod). DTO Flutter phải bám các file này, không bám báo cáo.
 
@@ -172,15 +171,19 @@ Mốc: người dùng đăng nhập nghe một tập thật; tắt màn hình v�
 Lệch so với plan/RN: nút quiz ở Player ẩn tới P6 (route quiz còn nhận chỉ số tập mock); "Nghe tiếp" của Missions mở tab Podcast tới P7; bỏ nút yêu thích; `shared/mock/mock_catalog.dart` đã bị xoá (không còn consumer); `signedInProvider` (`core/auth`) để `shared` biết phiên mà không import feature. `PlaybackController` tách thành 3 file `part` để giữ ≤ 250 dòng. `playFromUi` chờ tải xong (episode + playback) mới mở Player, nên có độ trễ nhỏ trước khi màn đổi (chưa có trạng thái chờ trên nút).
 Chưa kiểm (không có dữ liệu hoặc chưa chạy): seek trên URL Cloudinary đã ký, ngôi kể thứ hai của một tập, hẹn giờ ngủ khi máy ở Doze, foreground service trên Android 17. Test audio cũ đã lỗi thời, sửa ở P11.
 
-### P5. Đồng bộ tiến độ nghe
-Mốc: tiến độ lên server; resume đúng; hoàn thành tập được ghi nhận.
-| # | Task | Cỡ |
-|---|---|---|
-| 5.1 | Bitmap codec thuần, đối chiếu mẫu của RN (phụ thuộc kết quả 0.2); test ở P11 | M |
-| 5.2 | Progress repo `PUT /api/me/listening-progress/{id}`, xử lý 409 `AUDIO_CHANGED`, 422 `PROGRESS_INVALID` | M |
-| 5.3 | Bộ lập lịch sync theo `positionStream` + `sync.intervalMs` (>=5s), khi pause, khi hết bài | M |
-| 5.4 | Resume: local → server → 0 | S |
-| 5.5 | Xử lý `completion` (XP, làm mới cache liên quan) | S |
+### P5. Đồng bộ tiến độ nghe — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: tiến độ lên server; resume đúng; hoàn thành tập được ghi nhận. Plan: `plans/261104-2359-p5-progress-sync/`. ADR: `docs/adr/0007-listening-progress-sync.md`. Mã: `PlayedBitmap` (`shared/audio/domain`), `ProgressSync` (`shared/audio/progress_sync.dart`), `PlaybackRepository.updateProgress`, `learningActivityProvider` (`core/activity`).
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 5.1 | Bitmap codec thuần, đối chiếu mẫu của RN (phụ thuộc kết quả 0.2); test ở P11 | M | Xong |
+| 5.2 | Progress repo `PUT /api/me/listening-progress/{id}`, xử lý 409 `AUDIO_CHANGED`, 422 `PROGRESS_INVALID` | M | Xong |
+| 5.3 | Bộ lập lịch sync theo `positionStream` + `sync.intervalMs` (>=5s), khi pause, khi hết bài | M | Xong |
+| 5.4 | Resume: local → server → 0 | S | Xong |
+| 5.5 | Xử lý `completion` (XP, làm mới cache liên quan) | S | Xong |
+
+Lệch so với plan/RN: thêm `ProgressSync.rearm()` để nghe lại sau khi hết tập vẫn sync (plan chỉ nêu `begin`/`end`); `PlaybackInfo.serverPositionMs` được giữ dưới dạng mili giây; `PlaybackController` chuyển `_PendingPlay`, `_isLoaded`, `_settle` sang file `part` để giữ ≤ 250 dòng. Không nạp lại bitmap của server (server OR-merge, xem ADR 0007).
+Review sau khi code (đọc diff, không dùng subagent): `ProgressSync.end()` ban đầu bỏ mất lần gửi cuối nếu một lần gửi định kỳ đang chạy (cờ `_saving` còn bật), nên có thể mất `completion` lúc hết bài. Đã sửa: `end()` chờ lần gửi đang chạy (`_inFlight`) rồi mới `flush()` và tăng `_generation`. Chấp nhận, chưa sửa: tua ≤ 5 giây tiến có thể đánh dấu vài giây bị nhảy qua (server vẫn giới hạn ngân sách bit); phản hồi PUT có `completion` sai dạng bị coi là lỗi và thử lại, lần sau `completion` là `null` nên mất một lần bump làm mới nhiệm vụ.
+Chưa kiểm (không gọi PUT thật): ánh xạ 409/422/429, mẫu bitmap đối chiếu RN, resume từ `progress.positionMs` với tài khoản đã có tiến độ, và việc bump `learningActivityProvider` chỉ xảy ra đúng lần chạm ngưỡng. Gom vào P11.
 
 ### P6. Quiz
 Mốc: làm quiz thật, nộp, xem kết quả và đáp án giải thích.
@@ -194,13 +197,13 @@ Mốc: làm quiz thật, nộp, xem kết quả và đáp án giải thích.
 | 6.5 | Màn kết quả: điểm, đạt/chưa đạt, đáp án giải thích, làm lại | M |
 | 6.6 | Bỏ lưu attempt bằng `SharedPreferences` cũ | S |
 
-### P7. Nhiệm vụ tuần + Vinh danh
-Mốc: tiến độ nhiệm vụ và bảng vinh danh thật.
+### P7. Nhiệm vụ tuần + XP
+Mốc: nhiệm vụ tuần và XP thật, cập nhật sau khi nghe xong tập hoặc đạt quiz. Không có Vinh danh (chốt 2026-11-04: RN không có, giữ đơn giản).
 | # | Task | Cỡ |
 |---|---|---|
-| 7.1 | Missions repo + màn danh sách/chi tiết (`/api/me/weekly-missions`) | M |
-| 7.2 | Honours repo + màn (`/api/showcase/honors?period=`) | S |
-| 7.3 | Làm mới missions sau khi hoàn thành tập (P5) hoặc đạt quiz (P6) | S |
+| 7.1 | Missions repo (`GET /api/me/weekly-missions`: `totalXp`, `items[]` có `progressCount`, `targetCount`, `status`, `activityType`) + nối màn danh sách/chi tiết hiện có, thay `MockMissions` | M |
+| 7.2 | Làm mới missions/XP sau khi hoàn thành tập (P5) hoặc đạt quiz (P6) | S |
+| 7.3 | Xoá màn Vinh danh (`honours_screen`, route, lối vào, key l10n) | S |
 
 ### P8. Hồ sơ đầy đủ, Lịch sử nghe, Lịch phát hành
 Mốc: hồ sơ có XP, lịch sử có nghe tiếp, lịch phát hành theo tháng.
@@ -238,11 +241,11 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 |---|---|---|
 | 11.1a | Test hạ tầng + Auth: `mapDioException`/`ApiException` (2 dạng lỗi, bảng retryable), `AuthInterceptor` (gắn Bearer, 401 xoá phiên, không xoá khi sign-in sai), `TokenStore`, `AuthRepository`, `SessionController`, `AuthFormViewModel` (mật khẩu 8 ký tự, ánh xạ lỗi, chống bấm đúp) | M |
 | 11.1b | Test Catalog + Player + Progress: repo series/episode/topics/periods, `PlaybackController`, bitmap codec (mẫu RN, bit order LSB), bộ lập lịch sync, resume local → server → 0 | M |
-| 11.1c | Test Quiz + Missions + Honours + Hồ sơ + Lịch sử nghe + Lịch phát hành + Timeline/Sự kiện: repo, view model (happy path, rỗng, lỗi), `Idempotency-Key` giữ nguyên khi retry | M |
+| 11.1c | Test Quiz + Missions + Hồ sơ + Lịch sử nghe + Lịch phát hành + Timeline/Sự kiện: repo, view model (happy path, rỗng, lỗi), `Idempotency-Key` giữ nguyên khi retry | M |
 | 11.1d | Widget test luồng chính (đăng nhập/đăng ký, shell, guard + `returnTo`, Play khi là khách); sửa/xoá test cũ vỡ hoặc chỉ ghim chữ | M |
 | 11.2 | `dart format --set-exit-if-changed lib test`, `flutter analyze`, `flutter test` xanh; 3 lệnh grep/find trong "Verify" của `AGENTS.md` rỗng | S |
 | 11.3 | Script throwaway gọi API thật bằng tài khoản role `user` từ `env/accounts.local.json`: sign-in, `/api/me`, sai mật khẩu, sign-out rồi 401; playback, progress, quiz. Không `sign-up`. Xoá script sau khi chạy | S |
-| 11.4 | Smoke emulator toàn luồng (`emulator-5554`, `flutter run -d emulator-5554 --dart-define-from-file=env/dev.json`): đăng nhập sai/đúng, hot restart còn phiên, đăng xuất; duyệt và tìm kiếm với tư cách khách; nghe một tập (tắt màn hình vẫn phát, điều khiển ở thông báo); resume; làm quiz và xem kết quả; nhiệm vụ tuần, vinh danh, hồ sơ, lịch sử nghe, lịch phát hành, timeline | M |
+| 11.4 | Smoke emulator toàn luồng (`emulator-5554`, `flutter run -d emulator-5554 --dart-define-from-file=env/dev.json`): đăng nhập sai/đúng, hot restart còn phiên, đăng xuất; duyệt và tìm kiếm với tư cách khách; nghe một tập (tắt màn hình vẫn phát, điều khiển ở thông báo); resume; làm quiz và xem kết quả; nhiệm vụ tuần và XP, hồ sơ, lịch sử nghe, lịch phát hành, timeline | M |
 
 ### Phản biện (ponytail)
 - **Drift đang 0 bảng và 0 consumer**: không tính năng nào ở trên cần SQLite (không offline, cache dùng bộ nhớ). Hoặc viết ADR nêu plan dùng đầu tiên, hoặc gỡ `drift`/`drift_flutter` + `core/storage` + `databaseProvider` ở P10. Gỡ phụ thuộc cần bạn duyệt.
@@ -271,4 +274,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P4 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006) đã `completed`. Tiếp: P5 (đồng bộ tiến độ nghe) cần plan chi tiết trước; P6 (Quiz) và P9 độc lập có thể làm song song. Chạy test và emulator một lần ở P11.
+P-1 đến P5 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006) và P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007) đã `completed`. Tiếp: P6 (Quiz) và P9 độc lập có thể làm song song; P7 (Nhiệm vụ tuần + XP) đã có plan `plans/261105-0000-p7-missions-xp/`, giờ hết bị P5 chặn. Chạy test và emulator một lần ở P11.

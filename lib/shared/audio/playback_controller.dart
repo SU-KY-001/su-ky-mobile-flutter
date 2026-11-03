@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
+import '../../core/activity/learning_activity.dart';
 import '../../core/auth/signed_in.dart';
 import '../../core/error/app_exception.dart';
 import '../../core/error/result.dart';
@@ -18,18 +19,10 @@ import 'domain/playback_info.dart';
 import 'local_playback_store.dart';
 import 'playback_providers.dart';
 import 'playback_state.dart';
+import 'progress_sync.dart';
 
 part 'playback_controller_lifecycle.dart';
 part 'playback_controller_loading.dart';
-
-/// A guest's Play request, replayed once they sign in (within a TTL).
-final class _PendingPlay {
-  _PendingPlay(this.slug, this.narrationId) : requestedAt = DateTime.now();
-
-  final String slug;
-  final String? narrationId;
-  final DateTime requestedAt;
-}
 
 /// The only owner of the [AudioPlayer]. Not autoDispose: the mini-player and
 /// background playback outlive every screen.
@@ -39,6 +32,7 @@ class PlaybackController extends Notifier<PlaybackState> {
   _PendingPlay? _pending;
   bool _askedNotifications = false;
   DateTime _lastSave = DateTime.fromMillisecondsSinceEpoch(0);
+  late ProgressSync _sync;
 
   AudioPlayer get _player => ref.read(audioPlayerProvider);
   LocalPlaybackStore get _store => ref.read(localPlaybackStoreProvider);
@@ -52,6 +46,11 @@ class PlaybackController extends Notifier<PlaybackState> {
   @override
   PlaybackState build() {
     final player = ref.watch(audioPlayerProvider);
+    _sync = ProgressSync(
+      repository: ref.read(playbackRepositoryProvider),
+      isSignedIn: () => ref.read(signedInProvider),
+      onCompleted: (_) => ref.read(learningActivityProvider.notifier).bump(),
+    );
     final subscriptions = [
       player.playerStateStream.listen((it) => _onPlayerState(this, it)),
       player.positionStream.listen((it) => _onPosition(this, it)),
@@ -62,6 +61,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     );
     ref.onDispose(() {
       _sleepTimer?.cancel();
+      unawaited(_sync.end());
       for (final subscription in subscriptions) {
         subscription.cancel();
       }
@@ -80,7 +80,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     state = state.copyWith(
       request: PlayRequest(slug: slug, narrationId: narrationId),
     );
-    if (_isLoaded(slug, narrationId)) {
+    if (_isLoaded(this, slug, narrationId)) {
       await _resume();
       return PlayOutcome.started;
     }
@@ -92,6 +92,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     );
     await _player.pause();
     await _persistPosition(this);
+    await _sync.end();
     final EpisodeDetail detail;
     try {
       detail = await ref.read(episodeDetailProvider(slug).future);
@@ -115,7 +116,7 @@ class PlaybackController extends Notifier<PlaybackState> {
       token,
       autoplay: true,
     );
-    return _settle(token, result);
+    return _settle(this, token, result);
   }
 
   /// Switches to another narration of the loaded episode, keeping the
@@ -131,6 +132,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     final position = _player.position;
     final wasPlaying = state.playing;
     await _persistPosition(this);
+    await _sync.end();
     state = state.copyWith(status: PlaybackStatus.loading, clearError: true);
     final result = await _openPlayback(
       this,
@@ -140,7 +142,7 @@ class PlaybackController extends Notifier<PlaybackState> {
       autoplay: wasPlaying,
       startAt: position,
     );
-    _settle(token, result);
+    _settle(this, token, result);
   }
 
   Future<void> togglePlayPause() async {
@@ -165,6 +167,7 @@ class PlaybackController extends Notifier<PlaybackState> {
   Future<void> restart() async {
     if (state.status != PlaybackStatus.ready) return;
     await _player.seek(Duration.zero);
+    _sync.onSeek();
     await _resume();
   }
 
@@ -172,6 +175,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     if (state.status != PlaybackStatus.ready || state.durationMs <= 0) return;
     final millis = (state.durationMs * ratio.clamp(0.0, 1.0)).round();
     await _player.seek(Duration(milliseconds: millis));
+    _sync.onSeek();
   }
 
   Future<void> skip(int seconds) async {
@@ -179,6 +183,7 @@ class PlaybackController extends Notifier<PlaybackState> {
     final target = _player.position + Duration(seconds: seconds);
     final millis = target.inMilliseconds.clamp(0, state.durationMs);
     await _player.seek(Duration(milliseconds: millis));
+    _sync.onSeek();
   }
 
   Future<void> cycleSpeed() async {
@@ -202,14 +207,10 @@ class PlaybackController extends Notifier<PlaybackState> {
     );
   }
 
-  bool _isLoaded(String slug, String? narrationId) =>
-      state.status == PlaybackStatus.ready &&
-      state.episode?.slug == slug &&
-      (narrationId == null || narrationId == state.narrationId);
-
   Future<void> _resume() async {
     if (state.completed) {
       await _player.seek(Duration.zero);
+      _sync.rearm();
       state = state.copyWith(completed: false);
     }
     unawaited(_player.play());
@@ -230,14 +231,6 @@ class PlaybackController extends Notifier<PlaybackState> {
 
   /// Forgets a guest's Play request (they dismissed the sign-in prompt).
   void cancelPendingPlay() => _pending = null;
-
-  PlayOutcome _settle(int token, _OpenResult result) => switch (result) {
-    _OpenResult.opened => PlayOutcome.started,
-    _OpenResult.superseded => PlayOutcome.started,
-    _OpenResult.unavailable => _fail(token, PlaybackError.unavailable),
-    _OpenResult.network => _fail(token, PlaybackError.network),
-    _OpenResult.player => _fail(token, PlaybackError.player),
-  };
 }
 
 final playbackControllerProvider =
