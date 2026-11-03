@@ -9,7 +9,11 @@ Flutter mobile app. Architecture: feature-first MVVM — see
 Screens: Discover (`/`), Podcast (`/podcast`), Profile (`/profile`) as tabs
 (see ADR 0004), plus Search (`/search`), Login (`/login`), Series
 (`/series/:slug`) and Player (`/player`). Series, episodes and historical
-periods come from the real API (see ADR 0005); the Player is still a mock.
+periods come from the real API (see ADR 0005). The Player streams real audio
+(ADR 0006): signed-in users only, background playback with a notification, speed,
+sleep timer and narration switch. Guests are asked to sign in and the episode
+starts after login. On Android 13+ the app asks once for the notification
+permission; playback works without it.
 Vietnamese is the initial locale; all copy also has English translations.
 
 ## Episode quiz

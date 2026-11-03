@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng) và P3 (Catalog) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, chưa kiểm runtime); còn P4–P11. Auth và catalog (series, tập, thời kỳ, tìm kiếm) đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog) và P4 (Phát audio) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P5–P11. Auth, catalog và phát audio đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -11,7 +11,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 |---|---|---|
 | Auth | sign-in/up/out, Bearer từ `set-auth-token`, hydrate `/api/me`, 401 => xoá phiên | **Đã nối thật (P1)**: `AuthRepository`, `TokenStore`, `SessionController`, `AuthInterceptor`; chưa kiểm runtime |
 | Catalog | series, series detail, periods, events, topics | **Đã nối thật (P3)**: series list/detail, periods, tìm kiếm `q`, "tập mới" (quét 6 series như RN); events/topics còn thiếu |
-| Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | `Timer.periodic` giả |
+| Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4)**: `just_audio` + phát nền, đổi ngôi kể, resume cục bộ; sync bitmap lên server còn ở P5 |
 | Quiz | list + episode quiz + `Idempotency-Key` | chấm local, SharedPreferences |
 | Missions/Honours | `/me/weekly-missions`, `/showcase/honors` | UI mock |
 | Profile/History/Schedule | có | không có |
@@ -61,16 +61,16 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 |---|---|---|---|
 | Đăng nhập | Có (đã nối API thật ở P1) | `login_screen.dart` + `auth_form_view_model.dart` | xong ở 1.6 |
 | Đăng ký (form tên/email/mật khẩu) | Có (đã nối API thật ở P1) | Cùng màn login, chuyển chế độ | xong ở 1.0 |
-| Thanh tab | Có một phần | `MainNavigation` (3 mục: Khám phá, Tìm kiếm, Hồ sơ) là widget, mỗi màn tự nhúng; cần mở lên 5 mục | 2.0 (mở rộng), 2.1 (bọc thành shell) |
-| Tab Hồ sơ | **Chưa** | Chưa có màn riêng, nút tab chỉ `push` sang `/login` | 2.4 (tối thiểu), 8.0a (đầy đủ) |
-| Khám phá (Home) | Có | `home_screen.dart`, thời kỳ là chuỗi cứng | nối thật ở 3.6 |
-| Tab Podcast (banner, carousel, tập mới) | **Chưa** | | 3.0 |
-| Tìm kiếm | Có | `search_screen.dart` | nối thật ở 3.5 |
-| Chi tiết Series | Có | `series_screen.dart` | nối thật ở 3.4 |
-| Player (tua, tốc độ, hẹn giờ, yêu thích) | Có | `player_screen.dart` | nối thật ở 4.4 |
-| Mini-player | Có (widget) | `MiniPlayer` trong `su_ke_widgets.dart` | nối thật ở 4.5 |
-| Chọn ngôi kể 1/3 trên Player | **Chưa** | | 4.0 |
-| Hộp thoại yêu cầu đăng nhập khi khách bấm Play | **Chưa** | | 4.0 |
+| Thanh tab | Có (P2) | `MainNavigation` + `AppTab` trong `AppShell`; widget hỗ trợ 5 mục, shell chỉ gắn tab đã có màn: Khám phá, Podcast, Hồ sơ. Lịch sử và Quiz thêm khi có màn | 6.0, 9.0a |
+| Tab Hồ sơ | Tối thiểu (P2.4) | `profile_screen.dart`: khách thấy thẻ "Đăng nhập ngay", người dùng thấy tên, email, Đăng xuất. Chưa có XP, nhiệm vụ xong | đầy đủ ở 8.0a |
+| Khám phá (Home) | Thật (P3.5) | Pills thời kỳ, series, tập mới lấy từ API (`home_screen.dart`, `period_pills.dart`) | xong |
+| Tab Podcast (banner, carousel, tập mới) | Thật (P3.3) | `podcast_screen.dart`, `podcast_banner.dart` | xong |
+| Tìm kiếm | Thật (P3.6) | `search_screen.dart`, debounce 400 ms, tối thiểu 2 ký tự, khớp `title`; chưa có "tải thêm" | xong |
+| Chi tiết Series | Thật (P3.4) | `series_screen.dart`, route `/series/:slug`; tập không có audio vẫn hiện nhưng mờ | xong |
+| Player (tua, tốc độ, hẹn giờ, đổi ngôi kể) | Thật (P4) | `player_screen.dart` + widget con trên `PlaybackController`; yêu thích đã bỏ | xong |
+| Mini-player | Thật (P4), nằm trong shell | `mini_player.dart`, hiện khi `hasEpisode` | xong |
+| Chọn ngôi kể 1/3 trên Player | Thật (P4.0) | `player_narration_chips.dart`, chỉ hiện khi tập có > 1 ngôi | xong |
+| Hộp thoại yêu cầu đăng nhập khi khách bấm Play | Thật (P4.0) | `login_required_dialog.dart` + `playFromUi` | xong |
 | Làm quiz + kết quả + giải thích + làm lại | Có | `quiz_screen.dart` (đã tách 15 file trong `features/quiz/ui`, màn chính 132 dòng) | nối thật ở 6.4, 6.5 |
 | Tab Quiz (danh sách, lọc topic, badge) | **Chưa** | | 6.0 |
 | Nhiệm vụ tuần, chi tiết nhiệm vụ | Có | `weekly_missions_view_model.dart` + `domain/mission.dart`; dữ liệu mock ở `data/mock_missions.dart` | nối thật ở 7.1 (thay `MockMissions` bằng repository) |
@@ -127,43 +127,50 @@ Mốc: đăng nhập/đăng ký/đăng xuất thật; restart app vẫn còn phi
 
 Lệch so với plan ban đầu: `ValidationException` bị xoá (không còn consumer sau khi 4xx thành `ApiException`). Sau P1, nút Đăng ký trên màn login chuyển chế độ thay vì báo "demo"; nút Google và Quên mật khẩu vẫn là thông báo demo. Chưa có nút Đăng xuất trên UI (làm ở 2.4).
 
-### P2. Khung ứng dụng (shell)
-Mốc: shell dùng chung + route con + guard hoạt động; thanh tab chỉ hiển thị các tab đã có màn thật (widget 5 mục đã có nhưng tab chưa có màn thì chưa gắn route).
-| # | Task | Cỡ |
-|---|---|---|
-| 2.0 | Mở rộng widget `MainNavigation` từ 3 lên 5 mục (Khám phá, Lịch sử, Podcast, Quiz, Hồ sơ); chỉ là widget, chưa gắn route | S |
-| 2.1 | `StatefulShellRoute`: bọc `MainNavigation` + `MiniPlayer` thành shell dùng chung, **gỡ** nhúng riêng khỏi Home, Search, Missions; thanh tab chỉ hiện tab đã có màn thật | M |
-| 2.2 | Route gốc cho search/login/series/player/quiz/missions; **không** khai báo `event`/`schedule` (chưa có màn: P9.2, P8.3) | S |
-| 2.3 | Auth guard + `returnTo` cho route quiz; tab Hồ sơ của khách hiện thẻ đăng nhập thay vì redirect (đúng RN); cổng Play ở 4.7 | M |
-| 2.4 | **Dựng mock UI rồi nối thật tab Hồ sơ tối thiểu** (chưa có mock): tên, email, đăng xuất (từ P1) | S |
+### P2. Khung ứng dụng (shell) — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: shell dùng chung + route con + guard hoạt động; thanh tab chỉ hiển thị các tab đã có màn thật. Đạt ở mức code (`flutter analyze` sạch trong `lib/`, lệnh grep/find "Verify" rỗng). Plan: `plans/261104-2100-p2-app-shell/`. ADR: `docs/adr/0004-app-shell-navigation.md`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 2.0 | Mở rộng widget `MainNavigation` lên 5 mục (`AppTab`) | S | Xong (widget 5 mục, shell chỉ gắn 3 tab có màn) |
+| 2.1 | `StatefulShellRoute` + `AppShell` giữ `MainNavigation` và `MiniPlayer`; gỡ nhúng riêng khỏi Home, Search, Missions | M | Xong |
+| 2.2 | Route gốc search/login/series/player/quiz/missions; không khai báo `event`/`schedule` (P9.2, P8.3) | S | Xong |
+| 2.3 | Auth guard + `returnTo`: khách vào route quiz thì sang login rồi quay lại; `safeReturnTo` chặn `//host`, `\` và `/login`. Cổng Play ở 4.7 | M | Xong |
+| 2.4 | Tab Hồ sơ tối thiểu: tên, email, đăng xuất | S | Xong |
 
-### P3. Catalog (khách duyệt được)
-Mốc: khách không cần đăng nhập vẫn duyệt, tìm kiếm, xem chi tiết series thật.
-| # | Task | Cỡ |
-|---|---|---|
-| 3.0 | Gộp vào 3.3 (endpoint công khai, dựng UI thẳng trên provider thật, không dựng mock rồi thay) | - |
-| 3.1 | DTO phân trang `{items,page,limit,total}` + Series list/detail repo | M |
-| 3.2 | ~~Episode detail repo + Topics~~ **Bỏ khỏi P3** (không consumer): episode detail chuyển sang 4.2, topics sang 6.1 | - |
-| 3.3 | Tab Podcast: banner nổi bật, carousel series, tập mới nhất | M |
-| 3.4 | Màn Series detail: hero, danh sách tập, badge audio | M |
-| 3.5 | Tìm kiếm thật `GET /api/series?q=` có debounce, thay lọc in-memory | M |
-| 3.6 | Tab Khám phá: hero, pills thời kỳ (`/api/historical-periods`) | M |
+Lệch so với plan: nút Đăng xuất đã có trên UI ở tab Hồ sơ (P1 ghi là chưa có). Router chỉ có `routerProvider` một lần cho cả vòng đời app, không theo dõi state phiên để khỏi dựng lại router. Test cũ dựng router phẳng quanh một màn nên vỡ, sửa ở P11.
 
-### P4. Phát audio cốt lõi
-Mốc: người dùng đăng nhập nghe một tập thật; tắt màn hình vẫn phát; có điều khiển ở thông báo/màn hình khóa. Chưa gửi tiến độ lên server.
-| # | Task | Cỡ |
-|---|---|---|
-| 4.0 | **Dựng mock UI** (chưa có mock): nút chọn ngôi kể 1/3 trên Player; hộp thoại yêu cầu đăng nhập cho khách | S |
-| 4.1 | Thêm `just_audio` + `just_audio_background`, manifest, `POST_NOTIFICATIONS`, init, smoke phát một URL | M |
-| 4.2 | Playback repo + DTO `GET /api/narrations/{id}/playback`, map `CONTENT_UNAVAILABLE`; thêm episode detail repo `GET /api/episodes/{slug}` (narrations, next/prev; chuyển từ 3.2) | M |
-| 4.3a | `PlaybackController`: load, play/pause, seek, ±15s, restart (một player toàn app) | M |
-| 4.3b | Đổi ngôi kể (đổi narration, giữ vị trí) | S |
-| 4.4 | Màn Player nối controller (thay `audio_view_model` mock) | M |
-| 4.5 | Nối `MiniPlayer` (widget đã có, đang nhúng riêng ở Search) vào shell P2 và `PlaybackController`; gỡ nhúng ở `search_screen.dart` | M |
-| 4.6 | Tốc độ phát + hẹn giờ ngủ | S |
-| 4.7 | Cổng khách: Play thì login rồi tự phát đúng tập (`pendingPlay`) | M |
-| 4.8 | Lưu tập nghe gần nhất + vị trí cục bộ (`pos.<narrationId>`) | S |
-| 4.9 | ADR audio | S |
+### P3. Catalog (khách duyệt được) — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: khách không cần đăng nhập vẫn duyệt, tìm kiếm, xem chi tiết series thật. Plan: `plans/261104-2130-p3-catalog/`. ADR: `docs/adr/0005-catalog-layer.md`. Tầng catalog ở `lib/shared/catalog/{domain,data}`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 3.0 | Gộp vào 3.3 (endpoint công khai, dựng UI thẳng trên provider thật) | - | Gộp |
+| 3.1 | Domain + parser từng trường + repository + providers; `appRetry` (tối đa 2 lần, chỉ lỗi retryable) và `cacheFor` 60 s | M | Xong |
+| 3.2 | ~~Episode detail repo + Topics~~ bỏ khỏi P3 (không consumer): episode detail sang 4.2, topics sang 6.1 | - | Bỏ |
+| 3.3 | Tab Podcast: banner, carousel series, tập mới nhất | M | Xong |
+| 3.4 | Series detail theo slug: hero, danh sách tập, badge audio | M | Xong |
+| 3.5 | Home theo thời kỳ (`/api/historical-periods`) | M | Xong |
+| 3.6 | Tìm kiếm thật `GET /api/series?q=`, debounce | M | Xong |
+
+Chốt khi làm: "tập mới phát hành" quét 6 series đầu qua `GET /api/series/{slug}` giống RN (không có `/api/episodes`), series lỗi thì ghi log và bỏ qua, chỉ báo lỗi khi cả 6 lỗi. Cả 4 series thật có `cover: null` nên `CoverArt` dùng ảnh đóng gói theo slug. Chưa có chip thời kỳ, lịch sử tìm kiếm, "tải thêm" trong Search. Nút Play đã nối audio thật ở P4.
+
+### P4. Phát audio cốt lõi — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: người dùng đăng nhập nghe một tập thật; tắt màn hình vẫn phát; có điều khiển ở thông báo. Chưa gửi tiến độ lên server. Plan: `plans/261104-2300-p4-audio-core/`. ADR: `docs/adr/0006-audio-playback.md`. Mã ở `lib/shared/audio/` (`PlaybackController`, `LocalPlaybackStore`, `playFromUi`) và `lib/features/player/ui/`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 4.0 | Chọn ngôi kể (chỉ khi có > 1 ngôi) + hộp thoại đăng nhập cho khách | S | Xong |
+| 4.1 | `just_audio` + `just_audio_background`, manifest (service, receiver, quyền), `AudioServiceActivity`, init, xin `POST_NOTIFICATIONS` bằng MethodChannel | M | Xong (`flutter build apk --debug` qua) |
+| 4.2 | Episode detail (`GET /api/episodes/{slug}`) + Playback (`GET /api/narrations/{id}/playback`) | M | Xong |
+| 4.3a | `PlaybackController`: một player toàn app, phát/tạm dừng, tua, ±15s, nghe lại | M | Xong |
+| 4.3b | Đổi ngôi kể giữ vị trí | S | Xong |
+| 4.4 | Màn Player nối controller, gỡ `audio_view_model` mock | M | Xong |
+| 4.5 | `MiniPlayer` nối controller; cờ `loaded` thay bằng `hasEpisode` | M | Xong |
+| 4.6 | Tốc độ (0.75–2.0) + hẹn giờ ngủ | S | Xong |
+| 4.7 | Cổng khách: dialog, login, tự phát lại (`pendingPlay`, hết hạn 10 phút) | M | Xong |
+| 4.8 | Lưu tập gần nhất + vị trí cục bộ | S | Xong |
+| 4.9 | ADR audio | S | Xong (`0006-audio-playback.md`) |
+
+Lệch so với plan/RN: nút quiz ở Player ẩn tới P6 (route quiz còn nhận chỉ số tập mock); "Nghe tiếp" của Missions mở tab Podcast tới P7; bỏ nút yêu thích; `shared/mock/mock_catalog.dart` đã bị xoá (không còn consumer); `signedInProvider` (`core/auth`) để `shared` biết phiên mà không import feature. `PlaybackController` tách thành 3 file `part` để giữ ≤ 250 dòng. `playFromUi` chờ tải xong (episode + playback) mới mở Player, nên có độ trễ nhỏ trước khi màn đổi (chưa có trạng thái chờ trên nút).
+Chưa kiểm (không có dữ liệu hoặc chưa chạy): seek trên URL Cloudinary đã ký, ngôi kể thứ hai của một tập, hẹn giờ ngủ khi máy ở Doze, foreground service trên Android 17. Test audio cũ đã lỗi thời, sửa ở P11.
 
 ### P5. Đồng bộ tiến độ nghe
 Mốc: tiến độ lên server; resume đúng; hoàn thành tập được ghi nhận.
@@ -264,4 +271,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P3 đã xong ở mức code (chưa kiểm runtime; test cũ vỡ do P2/P3 sẽ sửa ở P11). Plan P2 `plans/261104-2100-p2-app-shell/` (ADR 0004) và P3 `plans/261104-2130-p3-catalog/` (ADR 0005) đã `completed`. Tiếp: P4 (phát audio cốt lõi) cần plan chi tiết trước. Làm mỗi lần một plan; chạy test và emulator một lần ở P11.
+P-1 đến P4 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006) đã `completed`. Tiếp: P5 (đồng bộ tiến độ nghe) cần plan chi tiết trước; P6 (Quiz) và P9 độc lập có thể làm song song. Chạy test và emulator một lần ở P11.
