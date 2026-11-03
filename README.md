@@ -24,9 +24,9 @@ the simulated player. Leaving an unfinished attempt requires confirmation.
 
 The last completed result is stored locally in SharedPreferences under a versioned
 quiz key, including answers, completion time and duration. It survives app restarts;
-unfinished attempts do not. Results are device-local, not linked to the mock login.
+unfinished attempts do not. Results are device-local, not linked to the signed-in account.
 Read/write failures are visible and a failed result write can be retried.
-`QuizRepository` can be replaced when a quiz API and real authentication exist.
+`QuizRepository` can be replaced when a quiz API exists (P6 of the parity report).
 No audio clip playback or points/badge economy is simulated by the quiz.
 
 Quiz screens use the bundled Inter family, white backgrounds and existing red
@@ -45,8 +45,12 @@ The configuration loads the local `env/dev.json` copied from the example.
 This implementation uses local artwork cropped from the supplied reference and
 an in-memory playback simulation. Play/pause, seeking, episode selection,
 favorites, bookmarks, playback speed and sleep timer share state across routes.
-Audio streaming, account authentication, OAuth, downloads and sharing need real
-services; their placeholder actions display a demo notice. No new packages were
+Audio streaming, OAuth, downloads and sharing need real
+services; their placeholder actions display a demo notice. Sign-in, sign-up and
+sign-out use the real API (ADR 0003); the session token is kept in secure storage.
+Test credentials go in the git-ignored `env/accounts.local.json`
+(see `env/accounts.example.json`), never in `env/dev.json`: `--dart-define-from-file`
+embeds its values in the APK. No new packages were
 added. Inter is bundled locally from the supplied Google Fonts archive, including
 weights 400–800 and italic. The SIL OFL license is included. See ADR 0002.
 

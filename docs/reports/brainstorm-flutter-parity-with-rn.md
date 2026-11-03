@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1 (dọn nền tảng) và P0 (xác minh API) đã xong; còn P1–P10. Chưa nối API nào.
+Status: **đã duyệt thiết kế**. P-1 (dọn nền tảng), P0 (xác minh API) và P1 (Mạng + Auth, code xong, chưa kiểm runtime) đã xong; còn P2–P11. Auth là phần API duy nhất đã nối. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -9,7 +9,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 ## 2. Hiện trạng (tóm tắt)
 | Khu | RN | Flutter |
 |---|---|---|
-| Auth | sign-in/up/out, Bearer từ `set-auth-token`, hydrate `/api/me`, 401 => xoá phiên | regex local, không API/token |
+| Auth | sign-in/up/out, Bearer từ `set-auth-token`, hydrate `/api/me`, 401 => xoá phiên | **Đã nối thật (P1)**: `AuthRepository`, `TokenStore`, `SessionController`, `AuthInterceptor`; chưa kiểm runtime |
 | Catalog | series, series detail, periods, events, topics | data cứng |
 | Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | `Timer.periodic` giả |
 | Quiz | list + episode quiz + `Idempotency-Key` | chấm local, SharedPreferences |
@@ -18,7 +18,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 | Điều hướng | 5 tab + mini-player nổi | Widget `MainNavigation` (3 mục) vẫn do Home, Search, Missions tự nhúng; `MiniPlayer` chỉ nhúng ở Search. **Chưa có shell dùng chung**. Màn đã tự gọi `context.push/go(AppRoutes.x)`, router không còn truyền callback |
 | Search | placeholder (chưa thật) | lọc in-memory |
 
-Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory`, `Result`/`AppException`, `AppLogger`, router, theme, l10n, connectivity. Chưa nối: secure storage (chưa có token manager). Drift có DB nhưng 0 bảng và 0 consumer (xem "Phản biện").
+Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory` (nay có `AuthInterceptor`), `Result`/`AppException` (có `ApiException`), `AppLogger`, `TokenStore` + `SessionController` (P1), router, theme, l10n, connectivity. Drift có DB nhưng 0 bảng và 0 consumer (xem "Phản biện").
 
 ## 3. Quy tắc nghiệp vụ phải giữ (từ API/docs)
 - Guest xem được, **không nghe**; bấm Play => login rồi quay lại đúng tập.
@@ -37,11 +37,12 @@ Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory`, `Result`/`A
 
 Khuyến nghị **A**. C bác bỏ: RN dùng state làm router chỉ vì Expo setup đơn giản, không phải UX cần giữ.
 
-## 5. Kế hoạch: 10 plan, mỗi plan một mốc ổn định
+## 5. Kế hoạch: 11 plan, mỗi plan một mốc ổn định
 
-Quy ước cỡ task (ước tính, chưa đo): **S** < nửa ngày, **M** nửa đến 1 ngày. Không có task **L**: task nào > 1 ngày đã bị tách. Mỗi task tự kèm test, key l10n vi+en, và không để lại mock trong phần nó thay.
-**Mọi task phải tuân thủ mục "Enforced standards" trong `AGENTS.md`** (không chuỗi cứng, không màu cứng, state bất biến trong view model, mock chỉ ở `mock/` hoặc `data/mock_*`, file <= 250 dòng, màn không nhận callback điều hướng, 3 lệnh grep rỗng). Task xong khi các lệnh Verify trong `AGENTS.md` xanh.
-Mỗi plan kết thúc ở trạng thái app build được, `flutter analyze` + `flutter test` xanh, chạy được trên emulator, không dở dang.
+Quy ước cỡ task (ước tính, chưa đo): **S** < nửa ngày, **M** nửa đến 1 ngày. Không có task **L**: task nào > 1 ngày đã bị tách. Mỗi task kèm key l10n vi+en và không để lại mock trong phần nó thay.
+**Quy ước kiểm thử (chốt 2026-11-04): P1–P10 không viết test và không chạy emulator.** Toàn bộ test (unit, widget, script gọi API thật) và smoke trên emulator gom vào **P11**, chạy một lần sau khi xong P1–P10. Quy tắc "mỗi hành vi mới kèm test" trong `AGENTS.md` được hoãn đến P11; không xoá test hiện có, nhưng test cũ vỡ do P1–P10 (ví dụ `test/widget_test.dart` assert chuỗi lỗi đăng nhập cũ) chỉ sửa ở P11.
+**Mọi task phải tuân thủ mục "Enforced standards" trong `AGENTS.md`** (không chuỗi cứng, không màu cứng, state bất biến trong view model, mock chỉ ở `mock/` hoặc `data/mock_*`, file <= 250 dòng, màn không nhận callback điều hướng). Task xong khi `dart format`, `flutter analyze` và các lệnh grep/find trong "Verify" của `AGENTS.md` sạch; `flutter test` chạy ở P11.
+Mỗi plan kết thúc ở trạng thái app build được và `flutter analyze` sạch, không dở dang.
 
 ### Bản đồ phụ thuộc
 ```mermaid
@@ -50,7 +51,7 @@ flowchart LR
   P3 --> P6 --> P7
   P5 & P7 --> P8
   P3 --> P9
-  P5 & P7 & P8 & P9 --> P10
+  P5 & P7 & P8 & P9 --> P10 --> P11
 ```
 Sau P3: chuỗi P4→P5, chuỗi P6→P7 và P9 độc lập nhau, giao song song được. P8 chờ cả P5 (lịch sử nghe, nút nghe) và P7 (XP, nhiệm vụ cho 8.1); P4 đã nằm trong P5.
 
@@ -58,8 +59,8 @@ Sau P3: chuỗi P4→P5, chuỗi P6→P7 và P9 độc lập nhau, giao song son
 Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu bằng một task `x.0 Dựng mock UI` (theo Figma Flutter), rồi mới nối API thật trong cùng plan. Mock dựng ở `x.0` phải được thay bằng dữ liệu thật trước khi plan đóng mốc.
 | Chức năng | Mock | Ghi chú | Dựng ở |
 |---|---|---|---|
-| Đăng nhập | Có | `login_screen.dart` (kiểm tra regex local) | nối thật ở 1.6 |
-| Đăng ký (form tên/email/mật khẩu) | **Chưa** | Chỉ có nút "Đăng ký miễn phí" gọi thông báo | 1.0 |
+| Đăng nhập | Có (đã nối API thật ở P1) | `login_screen.dart` + `auth_form_view_model.dart` | xong ở 1.6 |
+| Đăng ký (form tên/email/mật khẩu) | Có (đã nối API thật ở P1) | Cùng màn login, chuyển chế độ | xong ở 1.0 |
 | Thanh tab | Có một phần | `MainNavigation` (3 mục: Khám phá, Tìm kiếm, Hồ sơ) là widget, mỗi màn tự nhúng; cần mở lên 5 mục | 2.0 (mở rộng), 2.1 (bọc thành shell) |
 | Tab Hồ sơ | **Chưa** | Chưa có màn riêng, nút tab chỉ `push` sang `/login` | 2.4 (tối thiểu), 8.0a (đầy đủ) |
 | Khám phá (Home) | Có | `home_screen.dart`, thời kỳ là chuỗi cứng | nối thật ở 3.6 |
@@ -91,17 +92,17 @@ Mốc: `dart format`, `flutter analyze`, `flutter test` xanh (69 test); đã hot
 - `HomeViewModel` là `Notifier<int>`; `quiz_attempt_codec.dart` kiểm từng trường dữ liệu lưu; thêm quy tắc chuẩn vào `AGENTS.md`.
 - Còn mở: Drift chưa có consumer (cần ADR hoặc gỡ); `domain/` + `data/` của 6 feature còn lại sẽ thêm ở plan nối API.
 
-### P0. Xác minh sự thật (spike) — ĐÃ LÀM (4/4, 0.1 còn một phần)
+### P0. Xác minh sự thật (spike) — ĐÃ LÀM (4/4)
 Mốc: biết chắc dữ kiện trước khi code. Kết quả (kiểm bằng gọi API thật + đọc code `su-ky-project`, 2026-11-04):
 | # | Task | Kết quả |
 |---|---|---|
-| 0.1 | Sign-in | **Một phần.** Sai mật khẩu: 401 `{"message":"Invalid email or password","code":"INVALID_EMAIL_OR_PASSWORD"}` (không phải `error_code`). RN đọc token từ header `set-auth-token`, dự phòng `body.token`; body có `user{id,name,email}`. **Chưa thấy phản hồi thành công** vì chưa có tài khoản thử (không tự tạo tài khoản trên API) |
+| 0.1 | Sign-in | **Xong.** Có tài khoản thử (role `user`, lưu ở `env/accounts.local.json`, bị gitignore). Sign-in trả 200: token ở **cả** header `set-auth-token` và `body.token`; body `{redirect,token,user{id,name,email,emailVerified,image,role,...}}`. Sai mật khẩu: 401 `{"message":"Invalid email or password","code":"INVALID_EMAIL_OR_PASSWORD"}` (không phải `error_code`). `GET /api/me` + Bearer: 200 `{user{id,name,email,emailVerified,image,role},session{expiresAt}}`; token sai/thiếu: 401 `AUTH_REQUIRED`. `POST /api/auth/sign-out`: 200 `{"success":true}`, token đó sau đó 401. Đăng ký trùng email: code `USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL`. Mật khẩu 8–128 ký tự, tên 2–100 (schema `auth.ts`) |
 | 0.2 | Bitmap | Xem "Hợp đồng đã xác minh" bên dưới |
 | 0.3 | Dữ liệu | Có 4 series publish (5 + 2 + 1 + 1 tập), 1 topic, có quiz, bảng vinh danh có 1 người. `releases` tháng 10-11 rỗng, audio demo ~32 giây |
 | 0.4 | Quiz | Timer là `timeLimit` **theo từng câu** (nullable, 10-120s); RN không dùng timer; passing field là `passScorePercent` |
 
 #### Hợp đồng đã xác minh (sửa sai lệch báo cáo scout)
-- **Lỗi có hai dạng**: API dùng `{error_code, message, details?}`; endpoint `/api/auth/*` (better-auth) dùng `{message, code}`. Parser phải nhận cả hai (ảnh hưởng 1.1).
+- **Lỗi có hai dạng**: API dùng `{error_code, message, details?}`; endpoint `/api/auth/*` (better-auth) dùng `{message, code}`. Parser nhận cả hai (đã làm ở 1.1).
 - **Bitmap**: byte `floor(sec/8)`, bit `1 << (sec % 8)` (LSB trước), base64 chuẩn có padding, độ dài `ceil(totalSeconds/8)`. Bit thừa ở byte cuối bị server tự che; bitmap dài hơn thời lượng bị 422 `PROGRESS_INVALID` (ảnh hưởng 5.1).
 - **Playback**: `GET /api/narrations/{id}/playback` trả 200 **cả khi chưa đăng nhập** (`progress: null`). Chặn khách nghe là quy tắc của app theo docs/RN, không phải API ép (ảnh hưởng 4.7). Phản hồi: `audio{assetId,url,mimeType,durationMs}`, `sync{intervalMs,completionThreshold}`. URL Cloudinary tải được (206).
 - **Quiz**: `GET /api/episodes/{slug}/quiz` cần đăng nhập (401 `AUTH_REQUIRED` khi khách). Quiz: `{id, episodeId, passScorePercent, questions[]}`. Thẻ catalog: `{id,title,description,episodeSlug,episodeTitle,seriesSlug,seriesTitle,topicId,topicName,posterUrl,questionCount,plays,hasCompleted}`. Kết quả nộp: `{id,quizId,scorePercent,isPassed,submittedAt,xpAwarded,totalXp,answers[{questionId,selectedOptionId,correctOptionId,isCorrect,explanation}],missions[...]}`; `optionId` trong câu trả lời có thể `null`. **Báo cáo scout ghi sai** (`score`, `passed`, `rewardXp`, `passingScore`): dùng schema thật ở `packages/shared/src/schemas/quiz-mission.ts`.
@@ -109,20 +110,22 @@ Mốc: biết chắc dữ kiện trước khi code. Kết quả (kiểm bằng g
 - **Series**: thẻ có `publishedAt`, cover có thể `null`. Phản hồi series detail có thêm `sources`, `evidenceAsOf`, `evidenceWarning`.
 - **Schema nguồn sự thật**: `packages/shared/src/schemas/*.ts` (zod). DTO Flutter phải bám các file này, không bám báo cáo.
 
-Còn mở: phản hồi `sign-in` thành công (cần một tài khoản thử từ bạn hoặc bạn đồng ý tạo bằng `sign-up`).
+Không còn mục mở. Credential thử nằm ở `env/accounts.local.json` (không đưa vào `env/dev.json` vì `--dart-define-from-file` nhúng vào APK).
 
-### P1. Mạng + Auth
-Mốc: đăng nhập/đăng ký/đăng xuất thật; restart app vẫn còn phiên; 401 tự đăng xuất.
-| # | Task | Cỡ |
-|---|---|---|
-| 1.0 | **Dựng mock UI Đăng ký** (chưa có mock): form tên/email/mật khẩu, chuyển qua lại Đăng nhập/Đăng ký, hiện/ẩn mật khẩu, trạng thái lỗi | M |
-| 1.1 | Parse envelope `{error_code, message, details}` vào `AppException` (retryable theo bảng mã) | S |
-| 1.2 | `TokenStore` trên `flutter_secure_storage` | S |
-| 1.3 | Interceptor: gắn Bearer, đọc `set-auth-token`, 401 thì xoá phiên | M |
-| 1.4 | `AuthRepository` + DTO (sign-in, sign-up, sign-out, `/api/me`) | M |
-| 1.5 | `SessionController` (Riverpod): hydrate lúc khởi động, trạng thái guest/user | M |
-| 1.6 | Màn đăng nhập + đăng ký nối thật (thay `login_view_model` mock) | M |
-| 1.7 | ADR auth/session | S |
+### P1. Mạng + Auth — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: đăng nhập/đăng ký/đăng xuất thật; restart app vẫn còn phiên; 401 tự đăng xuất. Đạt ở mức code: `flutter gen-l10n`, `dart format lib`, `flutter analyze` sạch trong `lib/`, các lệnh grep/find ở "Verify" rỗng. Kiểm runtime và test ở P11. Plan: `plans/261104-1800-p1-network-auth/`. ADR: `docs/adr/0003-auth-session.md`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 1.0 | **Dựng mock UI Đăng ký**: form tên/email/mật khẩu, chuyển qua lại Đăng nhập/Đăng ký, hiện/ẩn mật khẩu, trạng thái lỗi | M | Xong (`auth_fields.dart`, `auth_mode_footer.dart`, nối thẳng API) |
+| 1.1 | Parse lỗi `{error_code\|code, message}` vào `ApiException` (retryable theo bảng mã) | S | Xong |
+| 1.2 | `TokenStore` trên `flutter_secure_storage` | S | Xong |
+| 1.3 | Interceptor: gắn Bearer, 401 thì xoá phiên (không xoá với sign-in/sign-up). Token đọc ở repo từ `set-auth-token`, dự phòng `body.token` | M | Xong |
+| 1.4 | `AuthRepository` (sign-in, sign-up, sign-out, `/api/me`); parse user từng trường tại ranh giới, chưa tách file DTO riêng | M | Xong |
+| 1.5 | `SessionController` (Riverpod): hydrate lúc khởi động, guest/user | M | Xong |
+| 1.6 | Màn đăng nhập + đăng ký nối thật; `login_view_model` đổi thành `auth_form_view_model` (`AuthFormViewModel`) | M | Xong |
+| 1.7 | ADR auth/session | S | Xong (`0003-auth-session.md`) |
+
+Lệch so với plan ban đầu: `ValidationException` bị xoá (không còn consumer sau khi 4xx thành `ApiException`). Sau P1, nút Đăng ký trên màn login chuyển chế độ thay vì báo "demo"; nút Google và Quên mật khẩu vẫn là thông báo demo. Chưa có nút Đăng xuất trên UI (làm ở 2.4).
 
 ### P2. Khung ứng dụng (shell)
 Mốc: shell dùng chung + route con + guard hoạt động; thanh tab chỉ hiển thị các tab đã có màn thật (widget 5 mục đã có nhưng tab chưa có màn thì chưa gắn route).
@@ -166,7 +169,7 @@ Mốc: người dùng đăng nhập nghe một tập thật; tắt màn hình v�
 Mốc: tiến độ lên server; resume đúng; hoàn thành tập được ghi nhận.
 | # | Task | Cỡ |
 |---|---|---|
-| 5.1 | Bitmap codec thuần, test theo mẫu của RN (phụ thuộc kết quả 0.2) | M |
+| 5.1 | Bitmap codec thuần, đối chiếu mẫu của RN (phụ thuộc kết quả 0.2); test ở P11 | M |
 | 5.2 | Progress repo `PUT /api/me/listening-progress/{id}`, xử lý 409 `AUDIO_CHANGED`, 422 `PROGRESS_INVALID` | M |
 | 5.3 | Bộ lập lịch sync theo `positionStream` + `sync.intervalMs` (>=5s), khi pause, khi hết bài | M |
 | 5.4 | Resume: local → server → 0 | S |
@@ -220,7 +223,19 @@ Mốc: không còn mock/dữ liệu cứng; tài liệu khớp.
 | 10.1 | Xoá mock còn sót: `shared/mock/mock_catalog.dart`, `weekly_missions/data/mock_missions.dart`, dữ liệu trong `audio_view_model`; test cũ không còn đúng | M |
 | 10.2 | Chạy 3 lệnh grep trong `AGENTS.md` (Verify), xử lý nốt `appName` cứng; kiểm l10n vi/en | S |
 | 10.3 | README (env, chạy), ADR còn thiếu (auth/session, audio, Drift) | S |
-| 10.4 | Kiểm tay toàn luồng trên emulator | M |
+| 10.4 | Chuyển phần kiểm tay emulator sang P11.4 | S |
+
+### P11. Kiểm thử một lần (sau khi xong P1–P10)
+Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emulator toàn luồng qua. Chạy đúng một lượt này, không chạy test/emulator rải rác ở P1–P10.
+| # | Task | Cỡ |
+|---|---|---|
+| 11.1a | Test hạ tầng + Auth: `mapDioException`/`ApiException` (2 dạng lỗi, bảng retryable), `AuthInterceptor` (gắn Bearer, 401 xoá phiên, không xoá khi sign-in sai), `TokenStore`, `AuthRepository`, `SessionController`, `AuthFormViewModel` (mật khẩu 8 ký tự, ánh xạ lỗi, chống bấm đúp) | M |
+| 11.1b | Test Catalog + Player + Progress: repo series/episode/topics/periods, `PlaybackController`, bitmap codec (mẫu RN, bit order LSB), bộ lập lịch sync, resume local → server → 0 | M |
+| 11.1c | Test Quiz + Missions + Honours + Hồ sơ + Lịch sử nghe + Lịch phát hành + Timeline/Sự kiện: repo, view model (happy path, rỗng, lỗi), `Idempotency-Key` giữ nguyên khi retry | M |
+| 11.1d | Widget test luồng chính (đăng nhập/đăng ký, shell, guard + `returnTo`, Play khi là khách); sửa/xoá test cũ vỡ hoặc chỉ ghim chữ | M |
+| 11.2 | `dart format --set-exit-if-changed lib test`, `flutter analyze`, `flutter test` xanh; 3 lệnh grep/find trong "Verify" của `AGENTS.md` rỗng | S |
+| 11.3 | Script throwaway gọi API thật bằng tài khoản role `user` từ `env/accounts.local.json`: sign-in, `/api/me`, sai mật khẩu, sign-out rồi 401; playback, progress, quiz. Không `sign-up`. Xoá script sau khi chạy | S |
+| 11.4 | Smoke emulator toàn luồng (`emulator-5554`, `flutter run -d emulator-5554 --dart-define-from-file=env/dev.json`): đăng nhập sai/đúng, hot restart còn phiên, đăng xuất; duyệt và tìm kiếm với tư cách khách; nghe một tập (tắt màn hình vẫn phát, điều khiển ở thông báo); resume; làm quiz và xem kết quả; nhiệm vụ tuần, vinh danh, hồ sơ, lịch sử nghe, lịch phát hành, timeline | M |
 
 ### Phản biện (ponytail)
 - **Drift đang 0 bảng và 0 consumer**: không tính năng nào ở trên cần SQLite (không offline, cache dùng bộ nhớ). Hoặc viết ADR nêu plan dùng đầu tiên, hoặc gỡ `drift`/`drift_flutter` + `core/storage` + `databaseProvider` ở P10. Gỡ phụ thuộc cần bạn duyệt.
@@ -235,7 +250,8 @@ Mốc: không còn mock/dữ liệu cứng; tài liệu khớp.
 
 
 ## 7. Rủi ro
-- Chưa xác nhận bằng tài khoản thật: dạng token `set-auth-token`, bitmap encoding khớp (bit order) giữa RN và API. **Phải đọc `usePlayback.ts` + service API trước khi code bitmap.**
+- Chưa xác nhận bằng tài khoản thật: bitmap encoding khớp (bit order) giữa RN và API (token `set-auth-token` đã xác nhận ở P0.1). **Phải đọc `usePlayback.ts` + service API trước khi code bitmap.**
+- Không chạy test/emulator ở P1–P10 nên lỗi hồi quy chỉ lộ ở P11; rủi ro tích luỹ. Giảm bằng `flutter analyze` sạch sau mỗi task và giữ plan nhỏ. Đã hiện hữu: 14 lỗi analyze trong `test/` sau P1 (`dio_factory_test.dart` còn dùng `ValidationException`, test đăng nhập/widget còn bám API cũ); P1 chưa chạy thử trên emulator (phiên bền qua restart, 401 đăng xuất, `FlutterSecureStorage` trên Android 17 chưa kiểm).
 - `just_audio_background` trên Android 17 emulator: cần kiểm foreground service + `POST_NOTIFICATIONS`.
 - `Idempotency-Key` phải giữ nguyên khi retry cùng một lần nộp quiz.
 - Chỉ sync tiến độ online; không offline.
@@ -248,4 +264,4 @@ Mốc: không còn mock/dữ liệu cứng; tài liệu khớp.
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 và P0 đã xong. Tiếp: **P1 (Mạng + Auth)**, lập `/ck:plan` chi tiết cho P1, rồi làm; mỗi lần một plan, chỉ qua plan sau khi mốc plan trước đạt. Cần bạn: một tài khoản thử (hoặc đồng ý dùng `sign-up`) để xác minh nốt phản hồi sign-in và các endpoint cần phiên.
+P-1, P0 và P1 đã xong (P1 mới qua `flutter analyze`, chưa kiểm runtime). Tiếp: **P2 (Khung ứng dụng)**; chưa có plan chi tiết cho P2. Làm mỗi lần một plan, qua plan sau khi mốc plan trước đạt (`flutter analyze` sạch); chạy test và emulator một lần ở P11. Plan P1 (đã xong): `plans/261104-1800-p1-network-auth/plan.md`.
