@@ -3,15 +3,16 @@ import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
 import '../domain/quiz.dart';
-import 'quiz_colors.dart';
 
-const _optionRadius = 16.0;
-const _optionBorderWidth = 1.0;
-const _selectedBorderWidth = 2.0;
-const _optionPadding = 18.0;
-const _optionGap = 12.0;
-const _optionLineHeight = 1.6;
+const _tileMinHeight = 56.0;
+const _borderWidth = 2.0;
+const _tilePadding = EdgeInsets.symmetric(horizontal: 16, vertical: 14);
+const _iconGap = 12.0;
+const _tintAlpha = .08;
+const _textSize = 16.0;
 
+/// Duolingo choice tile: 2 px border, accent border + tint + filled radio
+/// when selected.
 class QuizOptionTile extends StatelessWidget {
   const QuizOptionTile({
     super.key,
@@ -27,14 +28,14 @@ class QuizOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final color = selected ? AppDesign.red : AppDesign.line;
+    final accent = context.accent;
     return Material(
-      color: selected ? AppDesign.tint : AppDesign.white,
+      color: selected ? accent.withValues(alpha: _tintAlpha) : AppDesign.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(_optionRadius),
+        borderRadius: BorderRadius.circular(AppDesign.radius),
         side: BorderSide(
-          color: color,
-          width: selected ? _selectedBorderWidth : _optionBorderWidth,
+          color: selected ? accent : AppDesign.line,
+          width: _borderWidth,
         ),
       ),
       clipBehavior: Clip.antiAlias,
@@ -42,28 +43,32 @@ class QuizOptionTile extends StatelessWidget {
         onTap: () => onSelect(option.id),
         child: Semantics(
           selected: selected,
-          child: Padding(
-            padding: const EdgeInsets.all(_optionPadding),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  selected
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: selected ? QuizColors.green : AppDesign.muted,
-                ),
-                const SizedBox(width: _optionGap),
-                Expanded(
-                  child: Text(
-                    l.quizOptionLine(option.label, option.text),
-                    style: TextStyle(
-                      height: _optionLineHeight,
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: _tileMinHeight),
+            child: Padding(
+              padding: _tilePadding,
+              child: Row(
+                children: [
+                  Icon(
+                    selected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: selected ? accent : AppDesign.muted,
+                  ),
+                  const SizedBox(width: _iconGap),
+                  Expanded(
+                    child: Text(
+                      l.quizOptionLine(option.label, option.text),
+                      style: TextStyle(
+                        fontSize: _textSize,
+                        fontWeight: selected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

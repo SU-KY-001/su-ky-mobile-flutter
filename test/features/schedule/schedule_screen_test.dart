@@ -133,6 +133,29 @@ void main() {
     );
   });
 
+  testWidgets('releases are grouped under one header per local day', (
+    tester,
+  ) async {
+    final repository = _Repository(
+      (_) => [
+        _release(id: 'a', scheduledAt: DateTime(2026, 1, 5, 9).toUtc()),
+        _release(id: 'b', scheduledAt: DateTime(2026, 1, 5, 18).toUtc()),
+        _release(id: 'c', scheduledAt: DateTime(2026, 1, 6, 9).toUtc()),
+      ],
+    );
+    await _pumpSchedule(tester, repository);
+    final l = _l(tester);
+
+    expect(
+      find.text(l.scheduleDayHeader(DateTime(2026, 1, 5))),
+      findsOneWidget,
+    );
+    expect(
+      find.text(l.scheduleDayHeader(DateTime(2026, 1, 6))),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('changing month requests the new month', (tester) async {
     final repository = _Repository((_) => []);
     await _pumpSchedule(tester, repository);

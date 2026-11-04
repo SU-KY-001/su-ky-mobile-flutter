@@ -10,16 +10,13 @@ import '../domain/quiz_stage.dart';
 import 'quiz_dialogs.dart';
 import 'quiz_intro_view.dart';
 import 'quiz_navigation.dart';
+import 'quiz_progress_bar.dart';
 import 'quiz_question_view.dart';
 import 'quiz_review_view.dart';
 import 'quiz_session.dart';
 import 'quiz_summary_view.dart';
 import 'quiz_view_model.dart';
 
-const _toolbarHeight = 84.0;
-const _contentPadding = 20.0;
-const _titleSize = 19.0;
-const _subtitleSize = 12.0;
 const _stateGap = 24.0;
 const _stateTextGap = 12.0;
 
@@ -64,43 +61,18 @@ class QuizScreen extends ConsumerWidget {
         backgroundColor: AppDesign.white,
         appBar: AppBar(
           backgroundColor: AppDesign.white,
-          toolbarHeight: _toolbarHeight,
           leading: IconButton(
             onPressed: leave,
             tooltip: l.close,
             icon: const Icon(Icons.close),
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                stage == QuizStage.review
-                    ? l.quizReviewTitle
-                    : stage == QuizStage.summary
-                    ? l.quizResults
-                    : l.quizTitle,
-                maxLines: 2,
-                style: const TextStyle(
-                  fontSize: _titleSize,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Text(
-                l.quizSubtitle,
-                style: const TextStyle(
-                  fontSize: _subtitleSize,
-                  color: AppDesign.muted,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              tooltip: l.quizHelp,
-              icon: const Icon(Icons.help_outline),
-              onPressed: () => showQuizHelp(context),
+          title: switch (stage) {
+            QuizStage.question when session != null => QuizProgressBar(
+              value: (session.index + 1) / session.total,
             ),
-          ],
+            QuizStage.review => Text(l.quizReviewTitle),
+            _ => null,
+          },
         ),
         body: SafeArea(
           child: Center(
@@ -122,36 +94,27 @@ class QuizScreen extends ConsumerWidget {
   }
 
   Widget _content(QuizSession session, QuizViewModel viewModel) {
+    final intro = QuizIntroView(
+      key: ValueKey(session.stage),
+      session: session,
+      viewModel: viewModel,
+      slug: slug,
+    );
     if (session.stage == QuizStage.question) {
       return QuizQuestionView(session: session, viewModel: viewModel);
     }
-    return SingleChildScrollView(
-      key: ValueKey(session.stage),
-      padding: const EdgeInsets.all(_contentPadding),
-      child: switch (session.stage) {
-        QuizStage.summary =>
-          session.result == null
-              ? QuizIntroView(
-                  session: session,
-                  viewModel: viewModel,
-                  slug: slug,
-                )
-              : QuizSummaryView(
-                  session: session,
-                  viewModel: viewModel,
-                  slug: slug,
-                ),
-        QuizStage.review =>
-          session.result == null
-              ? QuizIntroView(
-                  session: session,
-                  viewModel: viewModel,
-                  slug: slug,
-                )
-              : QuizReviewView(session: session, viewModel: viewModel),
-        _ => QuizIntroView(session: session, viewModel: viewModel, slug: slug),
-      },
-    );
+    if (session.result == null) return intro;
+    return switch (session.stage) {
+      QuizStage.summary => QuizSummaryView(
+        session: session,
+        viewModel: viewModel,
+      ),
+      QuizStage.review => QuizReviewView(
+        session: session,
+        viewModel: viewModel,
+      ),
+      _ => intro,
+    };
   }
 }
 

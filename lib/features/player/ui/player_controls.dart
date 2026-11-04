@@ -8,13 +8,12 @@ import 'package:su_ky_mobile/shared/audio/audio_time.dart';
 import 'package:su_ky_mobile/shared/audio/playback_controller.dart';
 import 'package:su_ky_mobile/shared/audio/playback_state.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
-import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
-const _playSize = 68.0;
-const _minButtonSize = Size(44, 40);
-const _restartGap = 8.0;
+const _playSize = 72.0;
+const _playIconSize = 40.0;
+const _minButtonSize = Size.square(AppDesign.tapTarget);
 
-/// Speed, seek, play/pause, sleep timer and restart.
+/// Speed, -15, play/pause (replay when finished), +15 and sleep timer.
 class PlayerControls extends ConsumerWidget {
   const PlayerControls({super.key, required this.state});
 
@@ -24,53 +23,59 @@ class PlayerControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final controller = ref.read(playbackControllerProvider.notifier);
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                minimumSize: _minButtonSize,
-                padding: EdgeInsets.zero,
-              ),
-              onPressed: () => unawaited(controller.cycleSpeed()),
-              child: Text(l.playbackSpeed(audioSpeed(state.speed))),
-            ),
-            IconButton(
-              onPressed: () =>
-                  unawaited(controller.skip(-AudioDefaults.seekStepSeconds)),
-              tooltip: l.seekBack,
-              icon: const Icon(Icons.fast_rewind_rounded),
-            ),
-            RoundPlay(
-              onTap: () => unawaited(controller.togglePlayPause()),
-              playing: state.playing,
-              size: _playSize,
-            ),
-            IconButton(
-              onPressed: () =>
-                  unawaited(controller.skip(AudioDefaults.seekStepSeconds)),
-              tooltip: l.seekForward,
-              icon: const Icon(Icons.fast_forward_rounded),
-            ),
-            IconButton(
-              onPressed: controller.toggleSleepTimer,
-              tooltip: l.sleepTimer,
-              icon: Icon(
-                state.sleepEnabled ? Icons.bedtime : Icons.bedtime_outlined,
-                color: state.sleepEnabled ? context.accent : AppDesign.muted,
-              ),
-            ),
-          ],
+        TextButton(
+          style: TextButton.styleFrom(
+            minimumSize: _minButtonSize,
+            padding: EdgeInsets.zero,
+          ),
+          onPressed: () => unawaited(controller.cycleSpeed()),
+          child: Text(l.playbackSpeed(audioSpeed(state.speed))),
         ),
-        const SizedBox(height: _restartGap),
-        TextButton.icon(
-          onPressed: () => unawaited(controller.restart()),
-          icon: const Icon(Icons.restart_alt),
-          label: Text(l.playerRestart),
+        IconButton(
+          onPressed: () =>
+              unawaited(controller.skip(-AudioDefaults.seekStepSeconds)),
+          tooltip: l.seekBack,
+          icon: const Icon(Icons.fast_rewind_rounded),
+        ),
+        IconButton.filled(
+          style: IconButton.styleFrom(
+            minimumSize: const Size.square(_playSize),
+            backgroundColor: context.accent,
+            foregroundColor: AppDesign.white,
+          ),
+          iconSize: _playIconSize,
+          tooltip: _playTooltip(l),
+          onPressed: () => unawaited(controller.togglePlayPause()),
+          icon: Icon(_playIcon),
+        ),
+        IconButton(
+          onPressed: () =>
+              unawaited(controller.skip(AudioDefaults.seekStepSeconds)),
+          tooltip: l.seekForward,
+          icon: const Icon(Icons.fast_forward_rounded),
+        ),
+        IconButton(
+          onPressed: controller.toggleSleepTimer,
+          tooltip: l.sleepTimer,
+          icon: Icon(
+            state.sleepEnabled ? Icons.bedtime : Icons.bedtime_outlined,
+            color: state.sleepEnabled ? context.accent : AppDesign.muted,
+          ),
         ),
       ],
     );
+  }
+
+  IconData get _playIcon {
+    if (state.completed) return Icons.replay_rounded;
+    return state.playing ? Icons.pause_rounded : Icons.play_arrow_rounded;
+  }
+
+  String _playTooltip(AppLocalizations l) {
+    if (state.completed) return l.playerReplay;
+    return state.playing ? l.pause : l.play;
   }
 }

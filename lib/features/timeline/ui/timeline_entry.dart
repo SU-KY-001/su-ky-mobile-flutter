@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
-import 'package:su_ky_mobile/features/timeline/ui/event_color_block.dart';
 import 'package:su_ky_mobile/features/timeline/ui/timeline_colors.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/historical_event.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
-import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 const _railWidth = 60.0;
 const _railLineWidth = 2.0;
 const _dotSize = 14.0;
 const _dotBorderWidth = 2.0;
-const _dotTop = 4.0;
+const _dotTop = 14.0;
 const _labelGap = 6.0;
 const _axisFontSize = 10.0;
 const _axisLineHeight = 1.2;
-const _coverHeight = 96.0;
-const _cardPadding = 12.0;
+const _rowMinHeight = 96.0;
+const _rowPadding = 12.0;
 const _titleGap = 4.0;
-const _chevronGap = 8.0;
-const _chevronSize = 20.0;
 const _titleMaxLines = 2;
 const _summaryMaxLines = 2;
 
@@ -27,8 +23,9 @@ const _summaryMaxLines = 2;
 /// drops it, as RN does.
 const _approximatePrefix = 'Khoảng ';
 
-/// One row of the vertical timeline: a rail with the date and a card that
-/// opens the event detail.
+/// One row of the vertical timeline: a rail with the date and a compact
+/// event row that opens the event detail. Events carry no image, so there is
+/// no thumbnail.
 class TimelineEntry extends StatelessWidget {
   const TimelineEntry({
     super.key,
@@ -54,7 +51,7 @@ class TimelineEntry extends StatelessWidget {
             last: last,
           ),
         ),
-        Expanded(child: _EventCard(event: event)),
+        Expanded(child: _EventRow(event: event)),
       ],
     ),
   );
@@ -147,65 +144,38 @@ class _Dot extends StatelessWidget {
   );
 }
 
-class _EventCard extends StatelessWidget {
-  const _EventCard({required this.event});
+class _EventRow extends StatelessWidget {
+  const _EventRow({required this.event});
 
   final HistoricalEvent event;
 
   @override
-  Widget build(BuildContext context) => Surface(
-    padding: EdgeInsets.zero,
-    child: InkWell(
-      onTap: () => context.push(AppRoutes.eventFor(event.slug)),
-      borderRadius: BorderRadius.circular(AppDesign.radius),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(AppDesign.radius),
+  Widget build(BuildContext context) => InkWell(
+    onTap: () => context.push(AppRoutes.eventFor(event.slug)),
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: _rowMinHeight),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: _rowPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              event.name,
+              maxLines: _titleMaxLines,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            child: const EventColorBlock(height: _coverHeight),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(_cardPadding),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.name,
-                        maxLines: _titleMaxLines,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.text.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: _titleGap),
-                      Text(
-                        event.summary,
-                        maxLines: _summaryMaxLines,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.text.bodySmall?.copyWith(
-                          color: AppDesign.muted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: _chevronGap),
-                const Icon(
-                  Icons.chevron_right,
-                  size: _chevronSize,
-                  color: AppDesign.muted,
-                ),
-              ],
+            const SizedBox(height: _titleGap),
+            Text(
+              event.summary,
+              maxLines: _summaryMaxLines,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.bodySmall?.copyWith(color: AppDesign.muted),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

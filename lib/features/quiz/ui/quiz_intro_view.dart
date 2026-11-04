@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
+import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
 
-import 'quiz_episode_card.dart';
-import 'quiz_info_tiles.dart';
-import 'quiz_navigation.dart';
-import 'quiz_primitives.dart';
+import 'quiz_bottom_bar.dart';
 import 'quiz_session.dart';
 import 'quiz_view_model.dart';
 
-const _cardGap = 20.0;
-const _eyebrowGap = 10.0;
-const _metricGap = 12.0;
-const _buttonGap = 12.0;
+const _coverSize = 200.0;
+const _titleSize = 22.0;
+const _sectionGap = 24.0;
+const _rowGap = 12.0;
+const _iconGap = 12.0;
 
-class QuizIntroView extends StatelessWidget {
+/// Plain start screen: episode cover and title, two facts, one Start button.
+class QuizIntroView extends ConsumerWidget {
   const QuizIntroView({
     super.key,
     required this.session,
@@ -27,58 +29,69 @@ class QuizIntroView extends StatelessWidget {
   final String slug;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final quiz = session.quiz;
+    final episode = ref.watch(episodeDetailProvider(slug)).value;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        QuizEpisodeCard(slug: slug),
-        const SizedBox(height: _cardGap),
-        QuizEyebrow(l.quizSubtitle.toUpperCase()),
-        const SizedBox(height: _eyebrowGap),
-        QuizCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              QuizHeading(l.quizHeading),
-              const SizedBox(height: _buttonGap),
-              Text(
-                l.quizIntroBody,
-                style: const TextStyle(height: 1.65, color: AppDesign.muted),
-              ),
-              const SizedBox(height: _cardGap),
-              Row(
-                children: [
-                  Expanded(
-                    child: QuizMetric(
-                      icon: Icons.quiz_outlined,
-                      title: l.quizQuestions(quiz.questions.length),
-                      subtitle: l.quizChoiceType,
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppDesign.pagePadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (episode != null) ...[
+                  Center(
+                    child: CoverArt(
+                      url: episode.seriesCoverUrl,
+                      seed: episode.seriesSlug,
+                      height: _coverSize,
+                      width: _coverSize,
                     ),
                   ),
-                  const SizedBox(width: _metricGap),
-                  Expanded(
-                    child: QuizMetric(
-                      icon: Icons.flag_outlined,
-                      title: l.quizPassScore(quiz.passScorePercent),
-                      subtitle: l.quizPassScoreLabel,
+                  const SizedBox(height: _sectionGap),
+                  Text(
+                    episode.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: _titleSize,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
+                  const SizedBox(height: _sectionGap),
                 ],
-              ),
-            ],
+                _MetaRow(
+                  icon: Icons.quiz_outlined,
+                  text: l.quizQuestions(quiz.questions.length),
+                ),
+                const SizedBox(height: _rowGap),
+                _MetaRow(
+                  icon: Icons.flag_outlined,
+                  text: l.quizPassScoreLine(quiz.passScorePercent),
+                ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: _cardGap),
-        QuizPrimaryButton(l.quizStart, viewModel.start, icon: Icons.play_arrow),
-        const SizedBox(height: _buttonGap),
-        QuizSecondaryButton(
-          l.quizBackToQuizzes,
-          () => leaveQuiz(context),
-          Icons.arrow_back,
-        ),
+        QuizBottomBar(label: l.quizStart, onPressed: viewModel.start),
       ],
     );
   }
+}
+
+class _MetaRow extends StatelessWidget {
+  const _MetaRow({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Icon(icon, color: AppDesign.muted),
+      const SizedBox(width: _iconGap),
+      Expanded(child: Text(text, style: context.text.bodyLarge)),
+    ],
+  );
 }

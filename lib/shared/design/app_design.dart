@@ -9,9 +9,11 @@ abstract final class AppDesign {
   static const tint = Color(0xFFF6EFED);
   static const navBar = Color(0xFFF1EFEF);
   static const white = Colors.white;
-  static const pagePadding = 24.0;
+  static const pagePadding = 16.0;
   static const gap = 16.0;
-  static const radius = 16.0;
+  static const radius = 12.0;
+  static const coverRadius = 8.0;
+  static const tapTarget = 48.0;
   static const maxWidth = 520.0;
 }
 

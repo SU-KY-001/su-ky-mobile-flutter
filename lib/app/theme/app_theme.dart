@@ -13,13 +13,13 @@ abstract final class AppTheme {
       surface: AppDesign.canvas,
     ),
     appBarTheme: const AppBarTheme(
-      centerTitle: true,
+      centerTitle: false,
       backgroundColor: AppDesign.canvas,
       surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(
         fontFamily: 'Inter',
         color: AppDesign.ink,
-        fontSize: 17,
+        fontSize: 20,
         fontWeight: FontWeight.w700,
       ),
     ),
@@ -69,7 +69,7 @@ abstract final class AppTheme {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      height: 78,
+      height: 64,
       backgroundColor: AppDesign.navBar,
       indicatorColor: Colors.transparent,
       labelTextStyle: WidgetStateTextStyle.resolveWith(

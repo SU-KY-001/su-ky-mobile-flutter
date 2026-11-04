@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/features/podcast/ui/podcast_banner.dart';
+import 'package:su_ky_mobile/features/podcast/ui/podcast_latest_section.dart';
+import 'package:su_ky_mobile/features/podcast/ui/podcast_series_shelf.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
-import 'package:su_ky_mobile/shared/widgets/latest_episodes_section.dart';
-import 'package:su_ky_mobile/shared/widgets/series_carousel.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
+
+const _sectionGap = 20.0;
 
 class PodcastScreen extends ConsumerWidget {
   const PodcastScreen({super.key});
@@ -17,6 +19,7 @@ class PodcastScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     final series = ref.watch(seriesListProvider(null));
     return AppPage(
+      appBar: AppBar(title: Text(l.podcastTitle)),
       child: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(seriesListProvider(null));
@@ -25,13 +28,6 @@ class PodcastScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(AppDesign.pagePadding),
           children: [
-            Text(
-              l.podcastTitle,
-              style: context.text.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: AppDesign.pagePadding),
             CatalogAsyncView(
               value: series,
               onRetry: () => ref.invalidate(seriesListProvider(null)),
@@ -42,13 +38,14 @@ class PodcastScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   PodcastBanner(series: featuredSeriesOf(items)),
+                  const SizedBox(height: _sectionGap),
                   SectionHeading(l.podcastSeriesHeading),
-                  SeriesCarousel(series: items),
+                  PodcastSeriesShelf(series: items),
                 ],
               ),
             ),
-            const SizedBox(height: 28),
-            const LatestEpisodesSection(),
+            const SizedBox(height: _sectionGap),
+            const PodcastLatestSection(),
           ],
         ),
       ),

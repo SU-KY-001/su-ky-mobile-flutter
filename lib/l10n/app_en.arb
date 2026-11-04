@@ -10,19 +10,13 @@
     }
   },
   "increment": "Increment",
-  "audioHistory": "HISTORY AUDIO",
-  "brandAudio": "SU KY AUDIO",
   "discover": "Discover",
   "search": "Search",
   "profile": "Profile",
-  "homeHeading": "Listen to our ancestors",
-  "homeSubtitle": "Discover a thousand years of history",
   "searchHint": "Find dynasties, battles, people...",
   "all": "All",
   "battles": "Great battles",
   "people": "Historical figures",
-  "continueListening": "CONTINUE LISTENING",
-  "seriesHeading": "History collections",
   "viewAll": "View all",
   "seriesTitle": "Bach Dang 938: The legendary wooden stakes",
   "seriesShort": "Victory at Bach Dang 938",
@@ -44,21 +38,15 @@
   "lyTitle": "The capital relocation of 1010",
   "lySubtitle": "The vision for Thang Long",
   "lyEra": "LY DYNASTY · 19 MIN",
-  "quote": "“Our people must know our history,\nto understand the roots of Vietnam.”",
-  "quoteAuthor": "— HO CHI MINH (1942)",
   "loginHeading": "Listen to a thousand years of spirit",
-  "loginSubtitle": "Sign in to sync your listening progress\nand save your favorite history podcasts.",
   "email": "Email",
   "password": "Password",
   "loginAction": "Sign in & keep listening",
-  "orContinue": "OR CONTINUE WITH",
-  "googleAction": "Continue with Google",
   "noAccount": "New to Su Ky?",
   "register": "Sign up for free",
   "emailHint": "your.name@gmail.com",
   "invalidCredentials": "Enter a valid email and a password of at least 8 characters.",
   "authSignUpHeading": "Create your Su Ky account",
-  "authSignUpSubtitle": "Sign up to sync your listening progress and save quizzes.",
   "authSignUpAction": "Sign up & keep listening",
   "name": "Your name",
   "nameHint": "Jane Doe",
@@ -68,7 +56,6 @@
   "authEmailTaken": "This email is already registered.",
   "authNetworkError": "Cannot reach the server. Try again.",
   "authUnknownError": "Something went wrong. Try again.",
-  "demoNotice": "UI demo; account services are not connected.",
   "notifications": "Notifications",
   "audioChannelName": "Podcast playback",
   "playerLoading": "Loading…",
@@ -86,10 +73,20 @@
       }
     }
   },
-  "playerFromSeries": "NOW PLAYING FROM SERIES",
-  "playerRestart": "Listen again",
-  "playerUpNext": "UP NEXT",
-  "narrationLabel": "Narration",
+  "playerFromSeries": "Playing from",
+  "playerUpNext": "Up next",
+  "playerAboutSeries": "About the series",
+  "playerMore": "More options",
+  "playerReplay": "Listen again",
+  "scheduleDayHeader": "{date}",
+  "@scheduleDayHeader": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "MMMMEEEEd"
+      }
+    }
+  },
   "narrationFirstPerson": "Character voice",
   "narrationThirdPerson": "Narrator",
   "loginRequiredTitle": "Sign in to listen",
@@ -97,20 +94,18 @@
   "loginRequiredLater": "Later",
   "loginRequiredAction": "Sign in",
   "noNotifications": "No new notifications.",
-  "seriesDetail": "Series details",
   "eraTag": "Year of victory 938",
   "seriesAuthor": "Prof. Dang Van Liem & the editorial team",
   "durationTotal": "2 hours 45 minutes",
   "listeners": "1.2k listeners",
   "seriesDescription": "In the winter of 938, Ngo Quyen defeated the Southern Han on the Bach Dang River, ending a millennium of northern rule.",
   "listenFromStart": "Listen from the start",
-  "episodeList": "EPISODES",
+  "episodeList": "All episodes",
   "sixTracks": "6 tracks",
   "sortEpisodes": "Order 1–6",
   "listened": "Listened",
   "remaining": "14 min left",
   "playerTitle": "Episode 2: Ngo Quyen prepares the battlefield",
-  "bachDang": "Bach Dang 938",
   "allEras": "All periods",
   "southernHan": "Southern Han resistance",
   "lyTran": "Ly–Tran dynasties",
@@ -138,16 +133,9 @@
   "seekBack": "Rewind 15 seconds",
   "seekForward": "Forward 15 seconds",
   "sleepTimer": "Sleep timer",
-  "voiceUnavailable": "Voice search is not connected yet.",
-  "initials": "HN",
   "avatarInitials": "VK",
   "rating": "4.9",
   "playerStartQuiz": "Take the quiz",
-  "seriesStartEpisodeQuiz": "Take this episode's quiz",
-  "quizTitle": "Episode quiz",
-  "quizSubtitle": "History knowledge check",
-  "quizHeading": "Review your knowledge",
-  "quizIntroBody": "Answer every question in order, then submit at the last one to see your score and explanations.",
   "quizQuestions": "{count} questions",
   "@quizQuestions": {
     "placeholders": {
@@ -156,38 +144,20 @@
       }
     }
   },
-  "quizChoiceType": "Multiple choice",
-  "quizPassScore": "{percent}%",
-  "@quizPassScore": {
+  "quizPassScoreLine": "Pass score {percent}%",
+  "@quizPassScoreLine": {
     "placeholders": {
       "percent": {
         "type": "int"
       }
     }
   },
-  "quizPassScoreLabel": "Pass score",
-  "quizStart": "Start quiz",
+  "quizStart": "Start",
   "quizRestart": "Try again",
-  "quizBackToQuizzes": "Back to quiz list",
-  "quizProgress": "QUIZ PROGRESS",
-  "quizCounter": "Question {current}/{total}",
-  "@quizCounter": {
-    "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "quizInstruction": "Choose the best answer before continuing.",
-  "quizNext": "Next question",
+  "quizNext": "Continue",
   "quizSubmit": "Submit answers",
   "quizSubmitting": "Submitting…",
   "quizSubmitFailed": "Could not submit this attempt. Your answers are kept; try again.",
-  "quizCorrect": "Correct!",
-  "quizIncorrect": "Not quite",
   "quizRightAnswer": "Correct answer",
   "quizYourAnswer": "Your answer",
   "quizOptionLine": "{label}. {text}",
@@ -202,9 +172,8 @@
     }
   },
   "quizExplanation": "Explanation",
-  "quizResults": "Quiz results",
-  "quizScore": "{correct}/{total} correct",
-  "@quizScore": {
+  "quizScoreFraction": "{correct}/{total}",
+  "@quizScoreFraction": {
     "placeholders": {
       "correct": {
         "type": "int"
@@ -214,11 +183,15 @@
       }
     }
   },
-  "quizAccuracy": "Accuracy: {percent}%",
-  "@quizAccuracy": {
+  "quizDone": "Continue",
+  "quizMetaLine": "{questions} · {plays}",
+  "@quizMetaLine": {
     "placeholders": {
-      "percent": {
-        "type": "int"
+      "questions": {
+        "type": "String"
+      },
+      "plays": {
+        "type": "String"
       }
     }
   },
@@ -267,14 +240,11 @@
   "quizExitBody": "This attempt has not been submitted, so it will not be saved.",
   "quizContinue": "Keep going",
   "quizExit": "Leave quiz",
-  "quizHelp": "Help",
-  "quizHelpBody": "Choose one answer per question, then tap Next question. On the last question, submit to see your score and explanations.",
   "quizLoadFailed": "Could not load this quiz.",
   "quizRetry": "Retry",
   "quizNotFound": "This episode has no quiz yet.",
   "quizUnavailable": "No quiz is available for this episode yet.",
-  "quizListEyebrow": "LEARN BY CHALLENGE",
-  "quizListTitle": "Pick a quiz set to start",
+  "quizListTitle": "Quizzes",
   "quizAllTopics": "All topics",
   "quizCompletedBadge": "COMPLETED",
   "quizPlays": "{count, plural, =0{No plays yet} =1{1 play} other{{count} plays}}",
@@ -288,7 +258,6 @@
   "quizListEmptyTitle": "No quizzes yet",
   "quizListEmptyMessage": "New quizzes will appear here once they are published.",
   "missionsHeaderTitle": "Weekly Missions",
-  "missionsEyebrow": "EXPLORE HISTORY",
   "missionsListTitle": "Your missions",
   "missionsTotalXp": "Total XP",
   "missionsCompletedLabel": "Missions done",
@@ -332,11 +301,16 @@
   "profileGuestMessage": "Sign in to sync your listening progress, save quizzes and earn XP.",
   "profileSignInNow": "Sign in now",
   "profileSignOut": "Sign out",
+  "profileSignUp": "Sign up",
+  "profileSignOutConfirmTitle": "Sign out?",
+  "profileSignOutConfirmMessage": "You will need to sign in again to sync your progress.",
+  "profileSignOutCancel": "Cancel",
+  "profileStatXp": "XP",
+  "profileStatMissions": "Missions done",
   "tabHistory": "History",
   "tabPodcast": "Podcast",
   "tabQuiz": "Quiz",
   "podcastTitle": "Podcast",
-  "podcastFeatured": "FEATURED",
   "podcastSeriesHeading": "History series",
   "podcastEmptyTitle": "No series yet",
   "podcastEmptyMessage": "New content will appear here once it is published.",
@@ -384,14 +358,8 @@
       }
     }
   },
-  "profileMissionsDone": "{count, plural, =0{No missions done yet} =1{1 mission done} other{{count} missions done}}",
-  "@profileMissionsDone": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
+  "profileSectionActivity": "Activity",
+  "profileSectionAccount": "Account",
   "profileRecentTitle": "Recently listened",
   "profileRecentEmpty": "No listening history yet.",
   "profileHistoryProgress": "{series} · Listened {percent}%",
@@ -421,8 +389,7 @@
       }
     }
   },
-  "timelineTitle": "Historical timeline",
-  "timelineSubtitle": "A thousand years of nation-building and defence",
+  "timelineTitle": "Timeline",
   "timelineEmptyTitle": "No events in this period yet",
   "timelineEmptyMessage": "Choose “All” to see every period.",
   "eventDetailTitle": "Event details",
@@ -450,5 +417,22 @@
       }
     }
   },
-  "eventRelatedTitle": "Related podcasts"
+  "eventRelatedTitle": "Related podcasts",
+  "seriesDescriptionMore": "Show more",
+  "seriesDescriptionLess": "Show less",
+  "missionsProgressCount": "{done}/{total}",
+  "@missionsProgressCount": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "continueRemainingLine": "{series} · {minutes} min left",
+  "@continueRemainingLine": {
+    "placeholders": {
+      "series": {"type": "String"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "clearSearch": "Clear"
 }

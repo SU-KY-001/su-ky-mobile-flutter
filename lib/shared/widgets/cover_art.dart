@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/shared/catalog/fallback_art.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
-const _coverRadius = 14.0;
+const _coverRadius = AppDesign.coverRadius;
 const _defaultHeight = 170.0;
 
 /// Remote image with a bundled fallback. [seed] (usually the slug) picks the

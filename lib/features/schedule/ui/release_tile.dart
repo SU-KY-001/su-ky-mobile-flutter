@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:su_ky_mobile/features/schedule/domain/release.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/play_gate.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
-const _calendarSize = 16.0;
-const _calendarGap = 8.0;
-const _statusGap = 4.0;
-const _playSize = 36.0;
+const _artSize = 56.0;
+const _rowPadding = EdgeInsets.symmetric(
+  horizontal: AppDesign.pagePadding,
+  vertical: 8,
+);
+const _statusGap = 2.0;
 
+/// Apple Podcasts "Upcoming" row: 56 art, title, series, status, trailing
+/// play (released) or bell (coming soon).
 class ReleaseTile extends ConsumerWidget {
   const ReleaseTile({super.key, required this.release});
 
@@ -20,60 +24,57 @@ class ReleaseTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final scheduledAt = release.scheduledAt.toLocal();
-    final date = DateFormat.yMMMd(l.localeName).add_Hm().format(scheduledAt);
-    return Surface(
+    final released = release.released;
+    return Padding(
+      padding: _rowPadding,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.event_outlined,
-            size: _calendarSize,
-            color: AppDesign.muted,
+          CoverArt(
+            seed: release.episodeSlug,
+            height: _artSize,
+            width: _artSize,
           ),
-          const SizedBox(width: _calendarGap),
+          const SizedBox(width: AppDesign.gap),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  date,
-                  style: context.text.bodySmall?.copyWith(
-                    color: AppDesign.muted,
-                  ),
-                ),
-                const SizedBox(height: _statusGap),
-                Text(
                   release.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: context.text.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: _statusGap),
                 Text(
                   release.seriesTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: context.text.bodySmall?.copyWith(
                     color: AppDesign.muted,
                   ),
                 ),
                 const SizedBox(height: _statusGap),
                 Text(
-                  release.released ? l.scheduleReleased : l.scheduleUpcoming,
+                  released ? l.scheduleReleased : l.scheduleUpcoming,
                   style: context.text.labelSmall?.copyWith(
-                    color: release.released ? context.accent : AppDesign.muted,
+                    color: released ? context.accent : AppDesign.muted,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
             ),
           ),
-          if (release.released)
-            Padding(
-              padding: const EdgeInsets.only(left: _calendarGap),
-              child: RoundPlay(
-                size: _playSize,
-                onTap: () => playFromUi(context, ref, release.episodeSlug),
-              ),
+          if (released)
+            RoundPlay(
+              size: AppDesign.tapTarget,
+              onTap: () => playFromUi(context, ref, release.episodeSlug),
+            )
+          else
+            const SizedBox.square(
+              dimension: AppDesign.tapTarget,
+              child: Icon(Icons.notifications_none, color: AppDesign.muted),
             ),
         ],
       ),

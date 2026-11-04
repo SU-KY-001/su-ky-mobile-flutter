@@ -53,13 +53,14 @@ class SectionHeading extends StatelessWidget {
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(bottom: 14),
+    padding: const EdgeInsets.only(bottom: 4),
     child: Row(
       children: [
         Expanded(
           child: Text(
             title,
-            style: context.text.titleMedium?.copyWith(
+            style: context.text.titleLarge?.copyWith(
+              fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -68,9 +69,7 @@ class SectionHeading extends StatelessWidget {
           TextButton(
             onPressed: onTap,
             style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: const Size(0, 24),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size(0, AppDesign.tapTarget),
             ),
             child: Text(action!),
           ),

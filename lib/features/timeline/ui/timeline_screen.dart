@@ -10,13 +10,10 @@ import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
 import 'package:su_ky_mobile/shared/widgets/period_pills.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
-const _titleGap = 4.0;
-const _titleLetterSpacing = -0.8;
-const _pillGap = 18.0;
-const _listGap = 20.0;
-const _bottomPadding = 40.0;
+const _listGap = 12.0;
+const _bottomPadding = 24.0;
 
-/// History tab: period pills over a vertical timeline of historical events.
+/// History tab: period chips over a vertical timeline of historical events.
 class TimelineScreen extends ConsumerWidget {
   const TimelineScreen({super.key});
 
@@ -25,22 +22,10 @@ class TimelineScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     final periodId = ref.watch(timelineViewModelProvider);
     return AppPage(
+      appBar: AppBar(title: Text(l.timelineTitle)),
       child: ListView(
         padding: const EdgeInsets.all(AppDesign.pagePadding),
         children: [
-          Text(
-            l.timelineTitle,
-            style: context.text.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-              letterSpacing: _titleLetterSpacing,
-            ),
-          ),
-          const SizedBox(height: _titleGap),
-          Text(
-            l.timelineSubtitle,
-            style: context.text.bodyMedium?.copyWith(color: AppDesign.muted),
-          ),
-          const SizedBox(height: _pillGap),
           PeriodPills(
             selected: periodId,
             onSelect: (id) =>

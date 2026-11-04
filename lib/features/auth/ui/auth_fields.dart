@@ -47,6 +47,7 @@ class AuthFields extends ConsumerWidget {
         ),
         const SizedBox(height: 10),
         Text(l.password, style: context.text.bodySmall),
+        const SizedBox(height: 6),
         TextField(
           // Keyed by mode: a mode switch clears the password in the model, so
           // the field must be rebuilt empty to stay in sync.

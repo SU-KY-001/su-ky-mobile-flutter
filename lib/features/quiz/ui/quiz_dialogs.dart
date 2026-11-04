@@ -23,20 +23,3 @@ Future<bool> confirmQuizExit(BuildContext context) async {
   );
   return leave == true;
 }
-
-Future<void> showQuizHelp(BuildContext context) {
-  final l = AppLocalizations.of(context);
-  return showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(l.quizHelp),
-      content: Text(l.quizHelpBody),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l.close),
-        ),
-      ],
-    ),
-  );
-}

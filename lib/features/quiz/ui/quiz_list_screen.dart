@@ -7,15 +7,17 @@ import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 import '../data/quiz_providers.dart';
 import '../domain/quiz.dart';
-import 'quiz_card.dart';
+import 'quiz_list_row.dart';
 import 'quiz_list_view_model.dart';
 import 'quiz_topic_chips.dart';
 
-const _eyebrowGap = 8.0;
-const _titleGap = 16.0;
-const _sectionGap = 24.0;
-const _cardsGap = 12.0;
-const _eyebrowLetterSpacing = 1.2;
+const _chipsPadding = EdgeInsets.fromLTRB(
+  AppDesign.pagePadding,
+  0,
+  AppDesign.pagePadding,
+  8,
+);
+const _titleSize = 20.0;
 
 class QuizListScreen extends ConsumerWidget {
   const QuizListScreen({super.key});
@@ -26,40 +28,33 @@ class QuizListScreen extends ConsumerWidget {
     final state = ref.watch(quizListViewModelProvider);
     final viewModel = ref.read(quizListViewModelProvider.notifier);
     final catalog = ref.watch(quizCatalogProvider(state.topicId));
-    final all = ref.watch(quizCatalogProvider(null));
-    final allCatalog = all.value;
+    final allCatalog = ref.watch(quizCatalogProvider(null)).value;
     final topics = allCatalog == null
         ? const <QuizTopic>[]
         : quizTopicsOf(allCatalog);
 
     return AppPage(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          l.quizListTitle,
+          style: const TextStyle(
+            fontSize: _titleSize,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       child: ListView(
-        padding: const EdgeInsets.all(AppDesign.pagePadding),
         children: [
-          Text(
-            l.quizListEyebrow,
-            style: context.text.labelMedium?.copyWith(
-              color: AppDesign.red,
-              fontWeight: FontWeight.w700,
-              letterSpacing: _eyebrowLetterSpacing,
+          if (topics.isNotEmpty)
+            Padding(
+              padding: _chipsPadding,
+              child: QuizTopicChips(
+                topics: topics,
+                selectedTopicId: state.topicId,
+                onSelected: viewModel.select,
+              ),
             ),
-          ),
-          const SizedBox(height: _eyebrowGap),
-          Text(
-            l.quizListTitle,
-            style: context.text.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          if (topics.isNotEmpty) ...[
-            const SizedBox(height: _titleGap),
-            QuizTopicChips(
-              topics: topics,
-              selectedTopicId: state.topicId,
-              onSelected: viewModel.select,
-            ),
-          ],
-          const SizedBox(height: _sectionGap),
           catalog.when(
             loading: () => const CatalogLoading(),
             error: (error, _) => CatalogError(
@@ -71,7 +66,7 @@ class QuizListScreen extends ConsumerWidget {
                     title: l.quizListEmptyTitle,
                     message: l.quizListEmptyMessage,
                   )
-                : _QuizCards(cards: value.items),
+                : _QuizRows(cards: value.items),
           ),
         ],
       ),
@@ -79,17 +74,17 @@ class QuizListScreen extends ConsumerWidget {
   }
 }
 
-class _QuizCards extends StatelessWidget {
-  const _QuizCards({required this.cards});
+class _QuizRows extends StatelessWidget {
+  const _QuizRows({required this.cards});
 
   final List<QuizCard> cards;
 
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      for (final card in cards) ...[
-        QuizCatalogCard(card: card),
-        const SizedBox(height: _cardsGap),
+      for (var i = 0; i < cards.length; i++) ...[
+        if (i > 0) const Divider(height: 1),
+        QuizListRow(card: cards[i]),
       ],
     ],
   );

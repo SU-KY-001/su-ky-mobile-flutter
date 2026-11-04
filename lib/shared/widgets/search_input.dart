@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 
-/// Owns only the text field controller; search behavior belongs to the ViewModel.
+/// Borderless auto-focused field for an app bar title. Owns only the text
+/// controller; search behavior belongs to the ViewModel.
 class SearchInput extends StatefulWidget {
   const SearchInput({
     super.key,
     required this.value,
     required this.hint,
     required this.onChanged,
-    required this.onVoice,
   });
   final String value, hint;
   final ValueChanged<String> onChanged;
-  final VoidCallback onVoice;
   @override
   State<SearchInput> createState() => _SearchInputState();
 }
@@ -40,27 +40,22 @@ class _SearchInputState extends State<SearchInput> {
   @override
   Widget build(BuildContext context) => TextField(
     controller: _controller,
+    autofocus: true,
     onChanged: widget.onChanged,
+    textInputAction: TextInputAction.search,
     decoration: InputDecoration(
       hintText: widget.hint,
-      prefixIcon: const Icon(Icons.search, size: 20),
-      suffixIcon: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.value.isNotEmpty)
-            IconButton(
+      border: InputBorder.none,
+      enabledBorder: InputBorder.none,
+      focusedBorder: InputBorder.none,
+      filled: false,
+      suffixIcon: widget.value.isEmpty
+          ? null
+          : IconButton(
               onPressed: () => widget.onChanged(''),
-              icon: const Icon(Icons.close, size: 18),
+              tooltip: AppLocalizations.of(context).clearSearch,
+              icon: const Icon(Icons.close),
             ),
-          IconButton(
-            onPressed: widget.onVoice,
-            icon: Icon(
-              Icons.mic_none,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
-      ),
     ),
   );
 }

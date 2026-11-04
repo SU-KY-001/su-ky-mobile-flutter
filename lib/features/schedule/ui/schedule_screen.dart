@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/schedule/data/schedule_providers.dart';
 import 'package:su_ky_mobile/features/schedule/domain/release.dart';
-import 'package:su_ky_mobile/features/schedule/ui/release_tile.dart';
+import 'package:su_ky_mobile/features/schedule/ui/schedule_day_list.dart';
 import 'package:su_ky_mobile/features/schedule/ui/schedule_view_model.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -43,13 +43,7 @@ class ScheduleScreen extends ConsumerWidget {
               onRetry: () => ref.invalidate(scheduleProvider(month)),
               isEmpty: (items) => items.isEmpty,
               emptyMessage: l.scheduleEmpty,
-              builder: (items) => ListView.separated(
-                padding: const EdgeInsets.all(AppDesign.pagePadding),
-                itemCount: items.length,
-                separatorBuilder: (_, _) =>
-                    const SizedBox(height: AppDesign.gap),
-                itemBuilder: (_, index) => ReleaseTile(release: items[index]),
-              ),
+              builder: (items) => ScheduleDayList(releases: items),
             ),
           ),
         ],
