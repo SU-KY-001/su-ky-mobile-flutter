@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe), P6 (Quiz), P7 (Nhiệm vụ tuần + XP), P8 (Hồ sơ, Lịch sử nghe, Lịch phát sóng) và P9 (Dòng thời gian + Sự kiện lịch sử) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P10–P11. Auth, catalog, phát audio, tiến độ nghe, quiz, lịch sử nghe, lịch phát sóng và timeline/sự kiện đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10**; ngoại lệ duy nhất là 5 test mới của P8 (xem mục 5). P9 không có test mới.
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe), P6 (Quiz), P7 (Nhiệm vụ tuần + XP), P8 (Hồ sơ, Lịch sử nghe, Lịch phát sóng), P9 (Dòng thời gian + Sự kiện lịch sử) và P10 (Dọn dẹp và chốt) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P11. Auth, catalog, phát audio, tiến độ nghe, quiz, lịch sử nghe, lịch phát sóng và timeline/sự kiện đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10**; ngoại lệ duy nhất là 5 test mới của P8 (xem mục 5). P9 không có test mới.
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -18,7 +18,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 | Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Lịch sử (P9), Podcast, Quiz (P6), Hồ sơ |
 | Search | placeholder (chưa thật) | **Thật (P3)**: debounce 400ms, tối thiểu 2 ký tự, khớp `title` |
 
-Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory` (nay có `AuthInterceptor`), `Result`/`AppException` (có `ApiException`), `AppLogger`, `TokenStore` + `SessionController` (P1), router, theme, l10n, connectivity. Drift có DB nhưng 0 bảng và 0 consumer (xem "Phản biện").
+Hạ tầng Flutter tái dùng được: `AppConfig`, `dio_factory` (nay có `AuthInterceptor`), `Result`/`AppException` (có `ApiException`), `AppLogger`, `TokenStore` + `SessionController` (P1), router, theme, l10n, connectivity. Drift đã gỡ ở P10 (ADR 0012): không còn DB cục bộ hay codegen; trạng thái cục bộ chỉ là token (secure storage), tiến độ nghe (SharedPreferences) và prefs.
 
 ## 3. Quy tắc nghiệp vụ phải giữ (từ API/docs)
 - Guest xem được, **không nghe**; bấm Play => login rồi quay lại đúng tập.
@@ -234,14 +234,17 @@ Chốt khi làm: domain/parser/repo/providers nằm trong `shared/catalog` (ADR 
 Không có test mới (để P11.1c: parser sự kiện, view model/screen timeline, màn chi tiết sự kiện).
 Chưa kiểm runtime: chưa chạy app/emulator nên bố cục timeline khi có nhiều sự kiện, cuộn và dữ liệu thật trên màn chưa thấy; mới thử một sự kiện có series và một sự kiện không có; dữ liệu thật 9 sự kiện nên giới hạn 50 chưa kiểm. Gom vào P11.
 
-### P10. Dọn dẹp và chốt
-Mốc: không còn mock/dữ liệu cứng; tài liệu khớp.
-| # | Task | Cỡ |
-|---|---|---|
-| 10.1 | Xoá mock còn sót: `shared/mock/mock_catalog.dart`, `weekly_missions/data/mock_missions.dart`, dữ liệu trong `audio_view_model`; test cũ không còn đúng | M |
-| 10.2 | Chạy 3 lệnh grep trong `AGENTS.md` (Verify), xử lý nốt `appName` cứng; kiểm l10n vi/en | S |
-| 10.3 | README (env, chạy), ADR còn thiếu (auth/session, audio, Drift) | S |
-| 10.4 | Chuyển phần kiểm tay emulator sang P11.4 | S |
+### P10. Dọn dẹp và chốt — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: không còn mock/dữ liệu cứng; tài liệu khớp. Plan: `plans/261105-0400-p10-cleanup/`. ADR: `docs/adr/0012-remove-drift-and-unused-codegen.md`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 10.1 | Xoá mock còn sót: `shared/mock/mock_catalog.dart`, `weekly_missions/data/mock_missions.dart`, dữ liệu trong `audio_view_model`; test cũ không còn đúng | M | Xong từ P3–P9, không còn mock trong `lib/` |
+| 10.2 | Chạy 3 lệnh grep trong `AGENTS.md` (Verify), xử lý nốt `appName` cứng; kiểm l10n vi/en | S | Xong: 3 lệnh rỗng; bỏ `AppConfig.appName`; ARB vi/en khớp 276/276 khoá gồm metadata |
+| 10.3 | README (env, chạy), ADR còn thiếu (auth/session, audio, Drift) | S | Xong: README viết lại; ADR 0012 mới; ADR 0001 cập nhật |
+| 10.4 | Chuyển phần kiểm tay emulator sang P11.4 | S | Đã chuyển sang P11.4 |
+
+Chốt khi làm: gỡ Drift (0 bảng, 0 consumer) cùng `freezed`/`freezed_annotation`/`json_annotation`/`json_serializable`/`path`/`build_runner` vì không còn codegen; xoá `core/storage/app_database.dart` và `databaseProvider`, giữ `token_store.dart`; tên app thống nhất "Sử Ký / Su Ky" trong ARB, thêm 6 khối `@metadata` còn thiếu ở `app_en.arb` (5 khối plan nêu và `@playbackSpeed`); đổi tên cấu hình VS Code thành `Su Ky - Android`. `flutter pub get` bỏ 44 gói bắc cầu, `flutter build apk --debug` qua.
+Chưa kiểm runtime: không chạy app/emulator (để P11.4); test cũ vỡ để P11.
 
 ### P11. Kiểm thử một lần (sau khi xong P1–P10)
 Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emulator toàn luồng qua. Chạy đúng một lượt này, không chạy test/emulator rải rác ở P1–P10.
@@ -256,7 +259,7 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 | 11.4 | Smoke emulator toàn luồng (`emulator-5554`, `flutter run -d emulator-5554 --dart-define-from-file=env/dev.json`): đăng nhập sai/đúng, hot restart còn phiên, đăng xuất; duyệt và tìm kiếm với tư cách khách; nghe một tập (tắt màn hình vẫn phát, điều khiển ở thông báo); resume; làm quiz và xem kết quả; nhiệm vụ tuần và XP, hồ sơ, lịch sử nghe, lịch phát hành, timeline | M |
 
 ### Phản biện (ponytail)
-- **Drift đang 0 bảng và 0 consumer**: không tính năng nào ở trên cần SQLite (không offline, cache dùng bộ nhớ). Hoặc viết ADR nêu plan dùng đầu tiên, hoặc gỡ `drift`/`drift_flutter` + `core/storage` + `databaseProvider` ở P10. Gỡ phụ thuộc cần bạn duyệt.
+- **Drift đang 0 bảng và 0 consumer**: đã gỡ ở P10 (ADR 0012) cùng `drift_flutter`/`drift_dev`, `core/storage/app_database.dart` và `databaseProvider`; không tính năng nào cần SQLite, thêm lại khi có consumer đầu tiên.
 - **Search**: RN chưa làm; ở P3.5 làm bản tối thiểu (một ô, debounce, kết quả series), không làm gợi ý/lịch sử tìm kiếm.
 - **Không đưa vào**: chia sẻ, thông báo đẩy (nút rỗng bên RN), triển lãm 3D (`/api/exhibitions`), offline, yêu thích.
 
@@ -282,4 +285,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P9 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007), P6 `plans/261105-0100-p6-quiz/` (ADR 0009), P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008), P8 `plans/261105-0200-p8-profile-history-schedule/` (ADR 0010) và P9 `plans/261105-0300-p9-timeline-events/` (ADR 0011) đã `completed`. P6 đã gọi `bump()` khi `isPassed`, nên 7.2 khép lại. P8 dùng `weeklyMissionsProvider` của P7 cho thẻ XP và `learningActivityProvider` của P5 để làm mới lịch sử. 5 test mới của P8 đã chạy riêng và xanh; P9 không có test mới; test cũ vỡ vẫn để P11. Tiếp: P10 (Dọn dẹp và chốt). Chạy test và emulator một lần ở P11.
+P-1 đến P10 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007), P6 `plans/261105-0100-p6-quiz/` (ADR 0009), P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008), P8 `plans/261105-0200-p8-profile-history-schedule/` (ADR 0010), P9 `plans/261105-0300-p9-timeline-events/` (ADR 0011) và P10 `plans/261105-0400-p10-cleanup/` (ADR 0012) đã `completed`. P6 đã gọi `bump()` khi `isPassed`, nên 7.2 khép lại. P8 dùng `weeklyMissionsProvider` của P7 cho thẻ XP và `learningActivityProvider` của P5 để làm mới lịch sử. 5 test mới của P8 đã chạy riêng và xanh; P9 không có test mới; test cũ vỡ vẫn để P11. Tiếp: P11 (Kiểm thử một lần). Chạy test và emulator một lượt ở P11.
