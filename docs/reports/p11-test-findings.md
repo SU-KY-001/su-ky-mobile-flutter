@@ -69,3 +69,16 @@ Không in mật khẩu/token. Mọi phản hồi đã chạy qua parser Flutter 
 - Nhập liệu: Gboard gợi ý clip cũ làm ô mật khẩu sai; đây là hạn chế cách tôi gõ, không phải lỗi app.
 - Tài khoản test không có nhiệm vụ tuần và lịch phát hành rỗng: chỉ thấy trạng thái rỗng, chưa thấy thanh tiến độ nhiệm vụ thật.
 - Doze / foreground service Android 17 khi để lâu.
+
+## Trạng thái sau khi sửa
+
+Cả hai bug app đã xử lý (không còn test `skip`):
+
+| Bug | Cách xử lý | Commit |
+|---|---|---|
+| BUG-01 | Sửa `progress_sync.dart` (`_markVersion`) | `270b513` |
+| BUG-02 | Ẩn nút "Quên mật khẩu"; server trả `RESET_PASSWORD_DISABLED` | `e45a73d` |
+
+Mục "Chưa xác nhận" ở trên (form đăng nhập rỗng sau khi đăng nhập đúng) là lỗi P12 BUG-01, đã sửa ở `5947a1c`; xem `docs/reports/p12-ui-state-bugs.md`.
+
+Commit P10 và P11: `b6eff0d` (dọn gói), `b413423` (test, báo cáo, screenshot).

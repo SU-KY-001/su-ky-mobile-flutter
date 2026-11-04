@@ -45,6 +45,20 @@ Sửa: nút Đăng nhập tự điều hướng bằng `router.go(returnTo ?? ho
 
 - `dart format lib test`: sạch.
 - `flutter analyze`: `No issues found!`.
-- `flutter test`: 164 passed, 2 skipped (hai test của P11 vẫn skip: BUG-01 audio sync và BUG-02 forgot-password).
+- `flutter test`: 164 passed, 2 skipped lúc commit `5947a1c`; sau các commit bên dưới: 166 passed, 0 skipped.
 - Ba lệnh grep trong `AGENTS.md` mục Verify: không in gì (grep `Color(0x` chỉ khớp `app_design.dart` / `*_colors.dart`; grep `Text('...')` không khớp; không file `lib/` nào > 250 dòng).
 - Ghi chú của P11 ("sau lần đăng nhập đúng đầu tiên, màn đăng nhập hiện lại với form rỗng") chính là BUG-01; nay đã tái hiện được bằng test và đã sửa.
+
+## Trạng thái và commit sửa lỗi
+
+Trạng thái: **BUG-01 đến BUG-10 đã sửa**. Mục "Đã rà nhưng không sửa" còn lại là quyết định có chủ ý.
+
+| Commit | Nội dung |
+|---|---|
+| `5947a1c` | Sửa BUG-01..10 và thêm test hồi quy |
+| `270b513` | Chặn hộp thoại thoát quiz mở đôi; sửa BUG-01 của P11 (mất giây nghe khi đang gửi) |
+| `e45a73d` | Ẩn "Quên mật khẩu" (BUG-02 của P11) |
+
+Giới hạn đã biết:
+- Chưa thử lại luồng đăng nhập trên emulator sau khi sửa; bằng chứng hiện chỉ là test tự động.
+- BUG-05, BUG-06 chỉ sửa code, chưa có test. BUG-09: "Làm lại" bấm đúp chưa có test. Hộp thoại thoát quiz mở đôi chưa có test.
