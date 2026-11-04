@@ -10,6 +10,7 @@ import '../../../core/network/dio_factory.dart';
 
 const _signInPath = '/api/auth/sign-in/email';
 const _signUpPath = '/api/auth/sign-up/email';
+const _updateUserPath = '/api/auth/update-user';
 const _mePath = '/api/me';
 const _signOutPath = '/api/auth/sign-out';
 const _tokenHeader = 'set-auth-token';
@@ -24,6 +25,7 @@ abstract class AuthRepository {
     String password,
   );
   Future<Result<SessionUser>> me();
+  Future<Result<void>> updateName(String name);
   Future<Result<void>> signOut();
 }
 
@@ -59,6 +61,11 @@ class ApiAuthRepository implements AuthRepository {
   Future<Result<SessionUser>> me() => _guard(() async {
     final res = await _dio.get<Object?>(_mePath);
     return _readUser(res.data);
+  });
+
+  @override
+  Future<Result<void>> updateName(String name) => _guard(() async {
+    await _dio.post<Object?>(_updateUserPath, data: {'name': name.trim()});
   });
 
   @override

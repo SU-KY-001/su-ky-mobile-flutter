@@ -6,6 +6,7 @@ import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/home/ui/home_screen.dart';
 import 'package:su_ky_mobile/features/player/ui/player_screen.dart';
 import 'package:su_ky_mobile/features/podcast/ui/podcast_screen.dart';
+import 'package:su_ky_mobile/features/profile/ui/listening_history_screen.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_list_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
@@ -69,6 +70,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.profile,
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.listeningHistory,
+        redirect: authGuard(ref),
+        builder: (context, state) => const ListeningHistoryScreen(),
       ),
       GoRoute(
         path: AppRoutes.login,

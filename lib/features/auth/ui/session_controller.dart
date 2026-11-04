@@ -71,6 +71,27 @@ class SessionController extends Notifier<SessionState> {
     await ref.read(authRepositoryProvider).signUp(name, email, password),
   );
 
+  Future<Result<void>> updateName(String name) async {
+    final repo = ref.read(authRepositoryProvider);
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return const Err(UnknownException('Empty name'));
+    if (trimmed == state.user?.name) return const Ok(null);
+    switch (await repo.updateName(trimmed)) {
+      case Err(:final error):
+        return Err(error);
+      case Ok():
+        final token = ref.read(tokenStoreProvider).current;
+        if (token == null) return const Ok(null);
+        switch (await repo.me()) {
+          case Ok(:final value):
+            await _persist(token, value);
+          case Err(:final error):
+            AppLogger.error('Profile refresh failed', error: error);
+        }
+        return const Ok(null);
+    }
+  }
+
   Future<Result<void>> signOut() => _signOutInFlight ??= _runSignOut();
 
   Future<Result<void>> _runSignOut() async {

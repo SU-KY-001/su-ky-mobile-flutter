@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
 import 'package:su_ky_mobile/core/activity/learning_activity.dart';
 import 'package:su_ky_mobile/core/auth/session_user.dart';
 import 'package:su_ky_mobile/core/auth/signed_in.dart';
+import 'package:su_ky_mobile/core/di/providers.dart';
 import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/profile/ui/history_tile.dart';
+import 'package:su_ky_mobile/features/profile/ui/profile_edit_sheet.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_group.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_history_section.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_stats.dart';
+import 'package:su_ky_mobile/features/profile/ui/profile_user_header.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/history/data/history_repository.dart';
 import 'package:su_ky_mobile/shared/history/domain/listening_history.dart';
@@ -29,9 +33,29 @@ class _FakeSession extends SessionController {
   final SessionUser? _user;
 
   int signOuts = 0;
+  String? updatedName;
+  AppException? updateError;
 
   @override
   SessionState build() => SessionState(hydrated: true, user: _user);
+
+  @override
+  Future<Result<void>> updateName(String name) async {
+    if (updateError case final error?) return Err(error);
+    updatedName = name.trim();
+    final current = state.user;
+    if (current != null) {
+      state = SessionState(
+        hydrated: true,
+        user: SessionUser(
+          id: current.id,
+          name: name.trim(),
+          email: current.email,
+        ),
+      );
+    }
+    return const Ok(null);
+  }
 
   @override
   Future<Result<void>> signOut() async {
@@ -46,9 +70,11 @@ class _HistoryRepository implements HistoryRepository {
 
   final List<Result<ListeningHistory>> _responses;
   int calls = 0;
+  int? lastLimit;
 
   @override
-  Future<Result<ListeningHistory>> recent() async {
+  Future<Result<ListeningHistory>> recent({int limit = 10}) async {
+    lastLimit = limit;
     final index = calls < _responses.length ? calls : _responses.length - 1;
     calls++;
     return _responses[index];
@@ -111,6 +137,10 @@ GoRouter _router() => GoRouter(
       builder: (_, _) => const Scaffold(body: Text('schedule stub')),
     ),
     GoRoute(
+      path: AppRoutes.listeningHistory,
+      builder: (_, _) => const Scaffold(body: Text('history stub')),
+    ),
+    GoRoute(
       path: AppRoutes.weeklyMissions,
       builder: (_, _) => const Scaffold(body: Text('missions stub')),
     ),
@@ -127,12 +157,15 @@ Future<GoRouter> _pumpProfile(
 }) async {
   await tester.binding.setSurfaceSize(const Size(390, 1600));
   addTearDown(() => tester.binding.setSurfaceSize(null));
+  SharedPreferences.setMockInitialValues({});
+  final prefs = await SharedPreferences.getInstance();
   final router = _router();
   addTearDown(router.dispose);
   await tester.pumpWidget(
     ProviderScope(
       retry: (_, _) => null,
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
         sessionControllerProvider.overrideWith(
           () => session ?? _FakeSession(user),
         ),
@@ -206,6 +239,7 @@ void main() {
     expect(find.text('Episode one'), findsOneWidget);
     expect(find.text('Episode two'), findsOneWidget);
     expect(find.text(l.profileHistoryProgress('Series A', 7)), findsOneWidget);
+    expect(find.text(l.viewAll), findsNothing);
 
     final available = find.ancestor(
       of: find.text('Episode one'),
@@ -222,6 +256,35 @@ void main() {
     expect(
       find.descendant(of: unavailable, matching: find.byIcon(Icons.play_arrow)),
       findsNothing,
+    );
+  });
+
+  testWidgets('the preview asks for five and links to the full history', (
+    tester,
+  ) async {
+    final items = [
+      for (var index = 0; index < 7; index++)
+        _entry(slug: 'episode-$index', title: 'Episode $index'),
+    ];
+    final history = _HistoryRepository([Ok(_history(items))]);
+    final router = await _pumpProfile(
+      tester,
+      user: _user,
+      history: history,
+      missions: _missions(),
+    );
+    final l = _l(tester);
+
+    expect(history.lastLimit, recentHistoryLimit);
+    expect(find.text(l.viewAll), findsOneWidget);
+
+    await tester.ensureVisible(find.text(l.viewAll));
+    await tester.tap(find.text(l.viewAll));
+    await tester.pumpAndSettle();
+
+    expect(
+      router.routerDelegate.currentConfiguration.last.matchedLocation,
+      AppRoutes.listeningHistory,
     );
   });
 
@@ -275,6 +338,54 @@ void main() {
       ),
       findsNothing,
     );
+  });
+
+  testWidgets('editing the profile saves the new name', (tester) async {
+    final session = _FakeSession(_user);
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+      session: session,
+    );
+    final l = _l(tester);
+
+    await tester.tap(find.byType(ProfileUserHeader));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfileEditSheet), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'An Nguyễn');
+    await tester.tap(find.text(l.profileEditSave));
+    await tester.pumpAndSettle();
+
+    expect(session.updatedName, 'An Nguyễn');
+    expect(find.byType(ProfileEditSheet), findsNothing);
+    expect(find.text('An Nguyễn'), findsOneWidget);
+  });
+
+  testWidgets('a failed name save keeps the sheet open with an error', (
+    tester,
+  ) async {
+    final session = _FakeSession(_user)
+      ..updateError = const NetworkException('offline');
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+      session: session,
+    );
+    final l = _l(tester);
+
+    await tester.tap(find.byType(ProfileUserHeader));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'An');
+    await tester.tap(find.text(l.profileEditSave));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileEditSheet), findsOneWidget);
+    expect(find.text(l.profileEditOffline), findsOneWidget);
   });
 
   testWidgets('a history error offers retry and reloads', (tester) async {

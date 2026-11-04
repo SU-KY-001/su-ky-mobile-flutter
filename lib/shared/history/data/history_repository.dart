@@ -13,7 +13,8 @@ const _historyStatus = 'all';
 const _zeroPercent = 0.0;
 
 abstract class HistoryRepository {
-  Future<Result<ListeningHistory>> recent();
+  /// Newest first. `limit` is capped at 50 by the API.
+  Future<Result<ListeningHistory>> recent({int limit = _historyLimit});
 }
 
 class ApiHistoryRepository implements HistoryRepository {
@@ -22,13 +23,13 @@ class ApiHistoryRepository implements HistoryRepository {
   final Dio _dio;
 
   @override
-  Future<Result<ListeningHistory>> recent() async {
+  Future<Result<ListeningHistory>> recent({int limit = _historyLimit}) async {
     try {
       final res = await _dio.get<Object?>(
         _historyPath,
-        queryParameters: const {
+        queryParameters: {
           'page': _historyPage,
-          'limit': _historyLimit,
+          'limit': limit,
           'status': _historyStatus,
         },
       );

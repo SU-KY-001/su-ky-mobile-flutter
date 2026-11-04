@@ -15,6 +15,7 @@ abstract final class AppRoutes {
   static const weeklyMissions = '/weekly-missions';
   static const schedule = '/schedule';
   static const history = '/history';
+  static const listeningHistory = '/listening-history';
   static const event = '/events/:slug';
   static const _returnToParam = 'returnTo';
   static String quizFor(String slug) => '/episodes/$slug/quiz';
