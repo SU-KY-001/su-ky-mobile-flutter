@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:material_symbols_icons/symbols.dart';
-import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_group.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_guest_prompt.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_history_section.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_missions_row.dart';
-import 'package:su_ky_mobile/features/profile/ui/profile_schedule_row.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_sign_out_row.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_stats.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_user_header.dart';
@@ -34,16 +30,7 @@ class ProfileScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     final user = ref.watch(sessionControllerProvider).user;
     return AppPage(
-      appBar: AppBar(
-        title: Text(l.profileTitle),
-        actions: [
-          IconButton(
-            onPressed: () => context.push(AppRoutes.schedule),
-            tooltip: l.profileScheduleTooltip,
-            icon: const Icon(Symbols.notifications),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(l.profileTitle)),
       child: user == null
           ? const SingleChildScrollView(
               padding: _pagePadding,
@@ -56,9 +43,7 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: _headerGap),
                 const ProfileStats(),
                 ProfileSectionLabel(l.profileSectionActivity),
-                const ProfileGroup(
-                  children: [ProfileMissionsRow(), ProfileScheduleRow()],
-                ),
+                const ProfileGroup(children: [ProfileMissionsRow()]),
                 ProfileSectionLabel(l.profileRecentTitle),
                 const ProfileHistorySection(),
                 ProfileSectionLabel(l.profileSectionAccount),

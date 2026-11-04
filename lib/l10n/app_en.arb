@@ -311,6 +311,22 @@
   },
   "missionsStatusCompleted": "Completed",
   "missionsStatusExpired": "Expired",
+  "missionsHowEpisode": "Finish {count, plural, =1{1 episode} other{{count} different episodes}} this week. Each episode counts once.",
+  "@missionsHowEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsHowQuiz": "Pass {count, plural, =1{1 quiz} other{{count} different quizzes}} this week. Each quiz counts once.",
+  "@missionsHowQuiz": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "missionsEmptyTitle": "No missions this week",
   "missionsEmptyMessage": "New missions will appear as you start learning.",
   "missionsGuestTitle": "Sign in to see your missions",
@@ -424,7 +440,6 @@
       }
     }
   },
-  "profileScheduleTooltip": "Release schedule",
   "scheduleTitle": "Release schedule",
   "scheduleEmpty": "No releases scheduled this month.",
   "scheduleReleased": "Released",

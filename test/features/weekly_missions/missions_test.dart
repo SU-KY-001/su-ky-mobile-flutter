@@ -136,6 +136,8 @@ void main() {
         status: MissionStatus.inProgress,
       );
       expect(over.progress, 1.0);
+      expect(over.shownCount, 2);
+      expect(zero.shownCount, 0);
       expect(zero.progress, 0.0);
     });
 
@@ -244,6 +246,8 @@ void main() {
       expect(find.text('Hoàn thành 3 tập'), findsOneWidget);
       expect(find.text('Đậu 1 quiz'), findsOneWidget);
       expect(find.text(l(tester).missionsListTitle), findsOneWidget);
+      expect(find.text(l(tester).missionsHowEpisode(3)), findsOneWidget);
+      expect(find.text(l(tester).missionsHowQuiz(1)), findsOneWidget);
     });
 
     testWidgets('a guest sees the sign-in prompt', (tester) async {

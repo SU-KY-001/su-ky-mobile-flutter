@@ -437,23 +437,6 @@ void main() {
     expect(find.text('After'), findsOneWidget);
   });
 
-  testWidgets('the bell opens the release schedule', (tester) async {
-    final router = await _pumpProfile(
-      tester,
-      user: _user,
-      history: _HistoryRepository([Ok(_history(const []))]),
-      missions: _missions(),
-    );
-
-    await tester.tap(find.byTooltip(_l(tester).profileScheduleTooltip));
-    await tester.pumpAndSettle();
-
-    expect(
-      router.routerDelegate.currentConfiguration.last.matchedLocation,
-      AppRoutes.schedule,
-    );
-  });
-
   testWidgets('the missions row opens weekly missions', (tester) async {
     final router = await _pumpProfile(
       tester,
@@ -468,23 +451,6 @@ void main() {
     expect(
       router.routerDelegate.currentConfiguration.last.matchedLocation,
       AppRoutes.weeklyMissions,
-    );
-  });
-
-  testWidgets('the schedule row opens the release schedule', (tester) async {
-    final router = await _pumpProfile(
-      tester,
-      user: _user,
-      history: _HistoryRepository([Ok(_history(const []))]),
-      missions: _missions(),
-    );
-
-    await tester.tap(find.text(_l(tester).scheduleTitle));
-    await tester.pumpAndSettle();
-
-    expect(
-      router.routerDelegate.currentConfiguration.last.matchedLocation,
-      AppRoutes.schedule,
     );
   });
 

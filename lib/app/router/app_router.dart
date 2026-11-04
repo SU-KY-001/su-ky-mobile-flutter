@@ -10,7 +10,7 @@ import 'package:su_ky_mobile/features/profile/ui/listening_history_screen.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_list_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
-import 'package:su_ky_mobile/features/schedule/ui/schedule_screen.dart';
+// import 'package:su_ky_mobile/features/schedule/ui/schedule_screen.dart';
 import 'package:su_ky_mobile/features/search/ui/search_screen.dart';
 import 'package:su_ky_mobile/features/series/ui/series_screen.dart';
 import 'package:su_ky_mobile/features/timeline/ui/event_detail_screen.dart';
@@ -106,10 +106,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.weeklyMissions,
         builder: (context, state) => const WeeklyMissionsScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.schedule,
-        builder: (context, state) => const ScheduleScreen(),
-      ),
+      // Release schedule is hidden: no screen links to it. Uncomment this route,
+      // the import above, and re-add the profile bell / "Lịch phát sóng" row to restore.
+      // GoRoute(
+      //   path: AppRoutes.schedule,
+      //   builder: (context, state) => const ScheduleScreen(),
+      // ),
     ],
   );
   ref.onDispose(() {

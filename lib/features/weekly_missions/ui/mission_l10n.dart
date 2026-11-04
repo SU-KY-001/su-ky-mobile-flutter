@@ -9,6 +9,13 @@ extension MissionPresentation on WeeklyMission {
     MissionActivity.completeEpisode => Symbols.headphones,
     MissionActivity.passQuiz => Symbols.emoji_events,
   };
+
+  /// What the user must do, derived from type and target: the server only
+  /// sends a short title, which does not say how to finish the mission.
+  String howTo(AppLocalizations l) => switch (activity) {
+    MissionActivity.completeEpisode => l.missionsHowEpisode(targetCount),
+    MissionActivity.passQuiz => l.missionsHowQuiz(targetCount),
+  };
 }
 
 extension MissionStatusPresentation on MissionStatus {

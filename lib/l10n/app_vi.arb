@@ -311,6 +311,22 @@
   },
   "missionsStatusCompleted": "Hoàn thành",
   "missionsStatusExpired": "Hết hạn",
+  "missionsHowEpisode": "{count, plural, =1{Nghe xong 1 tập trong tuần này.} other{Nghe xong {count} tập khác nhau trong tuần này.}} Mỗi tập chỉ tính một lần.",
+  "@missionsHowEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsHowQuiz": "{count, plural, =1{Vượt qua 1 bài quiz trong tuần này.} other{Vượt qua {count} bài quiz khác nhau trong tuần này.}} Mỗi quiz chỉ tính một lần.",
+  "@missionsHowQuiz": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "missionsEmptyTitle": "Chưa có nhiệm vụ tuần này",
   "missionsEmptyMessage": "Nhiệm vụ mới sẽ xuất hiện khi bạn bắt đầu học.",
   "missionsGuestTitle": "Đăng nhập để xem nhiệm vụ",
@@ -424,7 +440,6 @@
       }
     }
   },
-  "profileScheduleTooltip": "Lịch phát sóng",
   "scheduleTitle": "Lịch phát sóng",
   "scheduleEmpty": "Chưa có lịch phát trong tháng này.",
   "scheduleReleased": "Đã phát hành",

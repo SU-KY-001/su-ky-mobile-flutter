@@ -22,6 +22,11 @@ final class WeeklyMission {
   final int xpReward;
   final MissionStatus status;
 
+  /// The server keeps counting after the target is met (3 episodes on a
+  /// 1-episode mission); the UI shows the capped value so it never reads "3/1".
+  int get shownCount =>
+      progressCount > targetCount ? targetCount : progressCount;
+
   /// Fraction in `[0, 1]`; a zero target means no measurable progress.
   double get progress {
     if (targetCount == 0) return 0;

@@ -65,6 +65,13 @@ class MissionTile extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  const SizedBox(height: 2),
+                  Text(
+                    mission.howTo(l),
+                    style: context.text.bodySmall?.copyWith(
+                      color: AppDesign.muted,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -77,7 +84,7 @@ class MissionTile extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         l.missionsProgressRatio(
-                          mission.progressCount,
+                          mission.shownCount,
                           mission.targetCount,
                         ),
                         style: context.text.labelMedium?.copyWith(
