@@ -49,7 +49,7 @@ Nguồn: report mục P8 + 3 scout (API, RN `AccountScreens.tsx`, code Flutter) 
 - Tập `isCompleted` nhưng `percent < 100` có thể xảy ra (đếm theo narration khác): hiển thị theo `percent`, không suy ra từ `isCompleted`.
 - Test cũ của repo đang vỡ (P11); test mới của plan này phải tự biên dịch và chạy được riêng (`flutter test <file>`).
 
-## Đã kiểm với dữ liệu thật (2026-11-05, đăng nhập `voduchuy@gmail.com` role `user`, chỉ GET)
+## Đã kiểm với dữ liệu thật (2026-11-05, đăng nhập tài khoản role `user` trong `env/accounts.local.json`, chỉ GET)
 - Sign-in 200, có header `set-auth-token`.
 - `listening-history?status=all`: 200, có item thật (ví dụ "Khởi nghĩa Lam Sơn", `percent` 7.142857…, `lastPositionMs` 12502, `available: true`, series "Việt Nam thời phong kiến"). Đúng schema; `percent` thập phân xác nhận → phải làm tròn. `status=completed`: `items: []`, `total: 0`.
 - `weekly-missions`: 200 nhưng `items: []`, `totalXp: 0` cho tài khoản này (tuần bắt đầu `2026-11-01T17:00Z` = thứ Hai giờ VN). Thẻ XP phải hiển thị tốt khi 0 XP và 0 nhiệm vụ (không coi là lỗi/ẩn).
