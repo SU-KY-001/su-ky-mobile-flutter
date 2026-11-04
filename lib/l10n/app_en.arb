@@ -152,6 +152,26 @@
       }
     }
   },
+  "quizPassNeededLine": "Get at least {needed}/{total} right",
+  "@quizPassNeededLine": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDurationLine": "About {minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@quizDurationLine": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "quizIntroHint": "After submitting, you can review every answer with a detailed explanation.",
   "quizStart": "Start",
   "quizRestart": "Try again",
   "quizNext": "Continue",

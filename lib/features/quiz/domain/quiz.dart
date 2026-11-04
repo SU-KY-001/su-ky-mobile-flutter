@@ -1,3 +1,9 @@
+import 'dart:math' as math;
+
+const _percentBase = 100;
+const _secondsPerQuestion = 30;
+const _secondsPerMinute = 60;
+
 /// One quiz entry of the public catalog (`GET /api/quizzes`).
 final class QuizCard {
   const QuizCard({
@@ -78,6 +84,17 @@ final class Quiz {
   final String episodeId;
   final int passScorePercent;
   final List<QuizQuestion> questions;
+
+  /// Fewest correct answers that reach [passScorePercent] (rounded up).
+  int get requiredCorrect =>
+      (questions.length * passScorePercent + _percentBase - 1) ~/ _percentBase;
+
+  /// Rough time to answer, never below one minute.
+  int get estimatedMinutes => math.max(
+    1,
+    (questions.length * _secondsPerQuestion + _secondsPerMinute - 1) ~/
+        _secondsPerMinute,
+  );
 
   QuizQuestion? questionById(String id) {
     for (final question in questions) {

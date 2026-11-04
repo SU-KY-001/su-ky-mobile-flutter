@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:su_ky_mobile/features/quiz/data/quiz_providers.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -15,7 +16,7 @@ const _sectionGap = 24.0;
 const _rowGap = 12.0;
 const _iconGap = 12.0;
 
-/// Plain start screen: episode cover and title, two facts, one Start button.
+/// Start screen: cover, title, pass rules, estimated time, a hint, Start.
 class QuizIntroView extends ConsumerWidget {
   const QuizIntroView({
     super.key,
@@ -32,7 +33,14 @@ class QuizIntroView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     final quiz = session.quiz;
+    final card = ref
+        .watch(quizCatalogProvider(null))
+        .value
+        ?.items
+        .where((c) => c.episodeSlug == slug)
+        .firstOrNull;
     final episode = ref.watch(episodeDetailProvider(slug)).value;
+    final title = card?.title ?? episode?.title;
     return Column(
       children: [
         Expanded(
@@ -41,18 +49,18 @@ class QuizIntroView extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (episode != null) ...[
+                if (title != null) ...[
                   Center(
                     child: CoverArt(
-                      url: episode.seriesCoverUrl,
-                      seed: episode.seriesSlug,
+                      url: card?.posterUrl,
+                      seed: slug,
                       height: _coverSize,
                       width: _coverSize,
                     ),
                   ),
                   const SizedBox(height: _sectionGap),
                   Text(
-                    episode.title,
+                    title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: _titleSize,
@@ -69,6 +77,26 @@ class QuizIntroView extends ConsumerWidget {
                 _MetaRow(
                   icon: Icons.flag_outlined,
                   text: l.quizPassScoreLine(quiz.passScorePercent),
+                ),
+                const SizedBox(height: _rowGap),
+                _MetaRow(
+                  icon: Icons.check_circle_outline,
+                  text: l.quizPassNeededLine(
+                    quiz.requiredCorrect,
+                    quiz.questions.length,
+                  ),
+                ),
+                const SizedBox(height: _rowGap),
+                _MetaRow(
+                  icon: Icons.timer_outlined,
+                  text: l.quizDurationLine(quiz.estimatedMinutes),
+                ),
+                const SizedBox(height: _sectionGap),
+                Text(
+                  l.quizIntroHint,
+                  style: context.text.bodyMedium?.copyWith(
+                    color: AppDesign.muted,
+                  ),
                 ),
               ],
             ),

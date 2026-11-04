@@ -152,6 +152,26 @@
       }
     }
   },
+  "quizPassNeededLine": "Cần đúng ít nhất {needed}/{total} câu",
+  "@quizPassNeededLine": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDurationLine": "Khoảng {minutes, plural, other{{minutes} phút}}",
+  "@quizDurationLine": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "quizIntroHint": "Sau khi nộp bài, bạn có thể xem lại đáp án và lời giải chi tiết.",
   "quizStart": "Bắt đầu",
   "quizRestart": "Làm lại quiz",
   "quizNext": "Tiếp tục",
