@@ -60,5 +60,5 @@ Trạng thái: **BUG-01 đến BUG-10 đã sửa**. Mục "Đã rà nhưng khôn
 | `e45a73d` | Ẩn "Quên mật khẩu" (BUG-02 của P11) |
 
 Giới hạn đã biết:
-- Chưa thử lại luồng đăng nhập trên emulator sau khi sửa; bằng chứng hiện chỉ là test tự động.
+- Đã thử lại trên emulator (xem `docs/reports/p11-screenshots/README.md`, mục "Kiểm lại"): đăng nhập từ Hồ sơ và từ nút Phát đều rời form và về đúng màn hình; không còn lỗi form hiện lại. Mới thử hai luồng đó, một lần mỗi luồng; chưa thử BUG-04 (đổi chế độ đăng nhập/đăng ký), BUG-07..10 trên máy.
 - BUG-05, BUG-06 chỉ sửa code, chưa có test. BUG-09: "Làm lại" bấm đúp chưa có test. Hộp thoại thoát quiz mở đôi chưa có test.

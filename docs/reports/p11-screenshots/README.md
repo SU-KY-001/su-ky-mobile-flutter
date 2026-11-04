@@ -36,3 +36,16 @@ Tài khoản `user` dùng cho các ảnh đã đăng nhập (email hiện trong 
 ## Chưa làm được trên emulator
 - Hot restart giữ phiên; kéo thông báo xuống kiểm điều khiển phát; tắt/bật màn hình khi đang phát; đóng app mở lại kiểm resume; nộp quiz và xem kết quả/giải thích (quiz đã nộp một lần ở bước API, nên không nộp lại); tab Podcast mục "Tập mới phát hành" cuộn xuống; tìm kiếm có từ khoá.
 - Lần đăng nhập đúng đầu tiên: sau khi submit, màn đăng nhập hiện lại (form rỗng) dù hồ sơ báo đã đăng nhập. Chỉ thấy một lần, thử lại 2 lần không dựng lại được (nhập liệu qua bàn phím ảo không ổn định), ảnh gốc đã xoá. **Chưa xác nhận**, ghi ở report.
+
+## Kiểm lại sau khi sửa lỗi (commit `5947a1c`, `270b513`, `e45a73d`)
+Bản chạy: hot restart từ working tree sau các commit trên. Ảnh 54-68. Đăng nhập bằng `adb input text`; ảnh form đã điền bị xoá vì Android hiện ký tự cuối của mật khẩu.
+
+| Ảnh | Bước | Kỳ vọng | Tôi thấy | Nghi ngờ |
+|---|---|---|---|---|
+| 54-55 | Hot restart khi đang đăng nhập | Phiên còn | Hồ sơ vẫn đăng nhập (20 XP, lịch sử) | không |
+| 56 | Đăng xuất | Về hồ sơ khách | Thấy | không |
+| 57 | Mở form đăng nhập | Không còn "Quên mật khẩu" | Chỉ còn nhãn "Mật khẩu"; có "Tiếp tục với Google" | Nút Google vẫn chỉ hiện thông báo demo |
+| 59 | Đăng nhập đúng từ Hồ sơ | Rời form, về Hồ sơ đã đăng nhập | Thấy, form không còn | không (lỗi P12 BUG-01 không tái hiện) |
+| 60-62 | Khách bấm Phát ở chi tiết series | Hộp thoại cần đăng nhập, sang form | Thấy | không |
+| 66 | Đăng nhập đúng từ luồng Phát | Về lại trang chi tiết series | Thấy | không (P12 BUG-03) |
+| 67-68 | Bấm Phát sau khi đăng nhập, rồi tạm dừng | Phát được | Player hiện, nút tạm dừng | không |
