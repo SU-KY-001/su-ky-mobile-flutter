@@ -10,8 +10,6 @@ final class HistoryEntry {
     required this.available,
     required this.narrationId,
     required this.percent,
-    required this.isCompleted,
-    required this.lastListenedAt,
   });
 
   final String episodeSlug;
@@ -24,20 +22,13 @@ final class HistoryEntry {
 
   /// Rounded percentage in `[0, 100]`.
   final int percent;
-  final bool isCompleted;
-
-  /// Always UTC.
-  final DateTime lastListenedAt;
 
   /// Fraction in `[0, 1]` for a progress bar.
   double get progress => percent / historyPercentMax;
 }
 
 final class ListeningHistory {
-  const ListeningHistory({required this.items, required this.total});
+  const ListeningHistory({required this.items});
 
   final List<HistoryEntry> items;
-
-  /// Total entries the server holds, not just [items].
-  final int total;
 }

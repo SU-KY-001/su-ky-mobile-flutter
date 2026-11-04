@@ -43,13 +43,11 @@ String _entry({
   bool available = true,
   String narrationId = '0f8fad5b-d9cb-469f-a165-70867728950e',
   num percent = 7.142857,
-  bool isCompleted = false,
-  String lastListenedAt = '2026-11-03T10:20:30.000Z',
 }) =>
     '{"episode":{"slug":"$slug","title":"$title","available":$available,'
     '"series":{"slug":"series-slug","title":"$series"}},'
-    '"lastListenedAt":"$lastListenedAt","lastNarrationId":"$narrationId",'
-    '"lastPositionMs":12502,"percent":$percent,"isCompleted":$isCompleted}';
+    '"lastNarrationId":"$narrationId",'
+    '"lastPositionMs":12502,"percent":$percent}';
 
 String _body(String items) =>
     '{"items":[$items],"page":1,"limit":10,"total":1}';
@@ -67,8 +65,6 @@ void main() {
     final history = (result as Ok<ListeningHistory>).value;
     expect(history.items.map((item) => item.percent), [82, 100, 0]);
     expect(history.items.first.progress, closeTo(0.82, 0.001));
-    expect(history.total, 1);
-    expect(history.items.first.lastListenedAt.isUtc, isTrue);
     expect(history.items.first.available, isTrue);
     expect(
       history.items.first.narrationId,
@@ -124,6 +120,5 @@ void main() {
 
     final history = (result as Ok<ListeningHistory>).value;
     expect(history.items, isEmpty);
-    expect(history.total, 0);
   });
 }

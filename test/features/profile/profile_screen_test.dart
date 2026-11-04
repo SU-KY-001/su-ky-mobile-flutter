@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
+import 'package:su_ky_mobile/core/activity/learning_activity.dart';
 import 'package:su_ky_mobile/core/auth/session_user.dart';
 import 'package:su_ky_mobile/core/auth/signed_in.dart';
 import 'package:su_ky_mobile/core/error/app_exception.dart';
@@ -86,12 +87,10 @@ HistoryEntry _entry({
   available: available,
   narrationId: '0f8fad5b-d9cb-469f-a165-70867728950e',
   percent: percent,
-  isCompleted: false,
-  lastListenedAt: DateTime.utc(2026, 11, 3),
 );
 
 ListeningHistory _history(List<HistoryEntry> items) =>
-    ListeningHistory(items: items, total: items.length);
+    ListeningHistory(items: items);
 
 GoRouter _router() => GoRouter(
   initialLocation: AppRoutes.profile,
@@ -198,11 +197,11 @@ void main() {
       matching: find.byType(HistoryTile),
     );
     expect(
-      find.descendant(of: available, matching: find.byType(TextButton)),
+      find.descendant(of: available, matching: find.byIcon(Icons.play_arrow)),
       findsOneWidget,
     );
     expect(
-      find.descendant(of: unavailable, matching: find.byType(TextButton)),
+      find.descendant(of: unavailable, matching: find.byIcon(Icons.play_arrow)),
       findsNothing,
     );
   });
@@ -252,6 +251,28 @@ void main() {
 
     expect(history.calls, 2);
     expect(find.text('Loaded after retry'), findsOneWidget);
+  });
+
+  testWidgets('finishing an activity reloads the history', (tester) async {
+    final history = _HistoryRepository([
+      Ok(_history([_entry(title: 'Before')])),
+      Ok(_history([_entry(title: 'After', percent: 100)])),
+    ]);
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: history,
+      missions: _missions(),
+    );
+    expect(find.text('Before'), findsOneWidget);
+
+    ProviderScope.containerOf(tester.element(find.byType(ProfileScreen)))
+        .read(learningActivityProvider.notifier)
+        .bump();
+    await tester.pumpAndSettle();
+
+    expect(history.calls, 2);
+    expect(find.text('After'), findsOneWidget);
   });
 
   testWidgets('the bell opens the release schedule', (tester) async {

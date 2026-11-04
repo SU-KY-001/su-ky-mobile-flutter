@@ -19,9 +19,14 @@ opens a public month-by-month release schedule. Data comes from the real API:
   cross-feature import, which `AGENTS.md` forbids.
 - **`percent` is a decimal percentage.** The API can send `7.142857…`; the
   parser clamps it to `[0, 100]` and rounds it once, so every widget shows the
-  same integer. `isCompleted` is not used to derive the percentage (a
-  different narration can complete the episode) — the bar always follows
-  `percent`.
+  same integer. The API's `isCompleted`, `lastListenedAt` and `total` are not
+  parsed: nothing reads them, and a bad value would drop a good row.
+- **Known limit: stale after a partial listen.** The history refreshes only
+  when `learningActivityProvider` bumps (episode finished, quiz passed). A
+  partly listened episode shows its old percent until Retry or app restart.
+  RN behaves the same way.
+- **No text label on the row.** The whole row plays; a play icon marks it. A
+  finished episode restarts from 0, so a "continue" label would be wrong.
 - **Continue listening uses the playback endpoint's position.** The tile
   calls `playFromUi(..., narrationId: lastNarrationId)`; P5's resume logic
   reads `progress.positionMs` from `/narrations/{id}/playback`. The

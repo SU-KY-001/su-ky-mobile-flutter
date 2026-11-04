@@ -41,11 +41,23 @@ class HistoryTile extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.episodeTitle,
-                  style: context.text.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        entry.episodeTitle,
+                        style: context.text.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    if (play != null)
+                      Icon(
+                        Icons.play_arrow,
+                        size: _playIconSize,
+                        color: context.accent,
+                      ),
+                  ],
                 ),
                 const SizedBox(height: _lineGap),
                 Text(
@@ -64,15 +76,6 @@ class HistoryTile extends ConsumerWidget {
                     color: context.accent,
                   ),
                 ),
-                if (play != null)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton.icon(
-                      onPressed: play,
-                      icon: const Icon(Icons.play_arrow, size: _playIconSize),
-                      label: Text(l.continueListening),
-                    ),
-                  ),
               ],
             ),
           ),

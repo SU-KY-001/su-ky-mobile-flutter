@@ -67,7 +67,7 @@ class ApiHistoryRepository implements HistoryRepository {
         );
       }
     }
-    return ListeningHistory(items: items, total: _int(json, 'total'));
+    return ListeningHistory(items: items);
   }
 
   HistoryEntry _entry(Object? value) {
@@ -81,8 +81,6 @@ class ApiHistoryRepository implements HistoryRepository {
       available: _bool(episode, 'available'),
       narrationId: _string(json, 'lastNarrationId'),
       percent: _percent(json, 'percent'),
-      isCompleted: _bool(json, 'isCompleted'),
-      lastListenedAt: _date(json, 'lastListenedAt').toUtc(),
     );
   }
 
@@ -112,21 +110,9 @@ class ApiHistoryRepository implements HistoryRepository {
     throw FormatException('Field "$key" must be a non-empty string');
   }
 
-  int _int(Map<String, Object?> json, String key) {
-    final value = json[key];
-    if (value is int && value >= 0) return value;
-    throw FormatException('Field "$key" must be an int >= 0');
-  }
-
   bool _bool(Map<String, Object?> json, String key) {
     final value = json[key];
     if (value is bool) return value;
     throw FormatException('Field "$key" must be a bool');
-  }
-
-  DateTime _date(Map<String, Object?> json, String key) {
-    final date = DateTime.tryParse(_string(json, key));
-    if (date == null) throw FormatException('Field "$key" must be a date');
-    return date;
   }
 }
