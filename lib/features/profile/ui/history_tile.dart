@@ -28,6 +28,7 @@ class HistoryTile extends ConsumerWidget {
             ref,
             entry.episodeSlug,
             narrationId: entry.narrationId,
+            autoplay: false,
           )
         : null;
     return Opacity(

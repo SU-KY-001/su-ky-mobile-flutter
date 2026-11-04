@@ -38,13 +38,20 @@ class EpisodeListTile extends ConsumerWidget {
     final durationMs = narration?.durationMs;
     final publishedAt = episode.publishedAt;
     final description = episode.description;
-    void open() {
+    // The row opens the player paused; only the play button starts audio.
+    void open({required bool autoplay}) {
       if (narration == null) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l.episodeNoAudioNotice)));
         return;
       }
-      playFromUi(context, ref, episode.slug, narrationId: narration.id);
+      playFromUi(
+        context,
+        ref,
+        episode.slug,
+        narrationId: narration.id,
+        autoplay: autoplay,
+      );
     }
 
     final meta = [
@@ -56,7 +63,7 @@ class EpisodeListTile extends ConsumerWidget {
     return Opacity(
       opacity: narration == null ? _unavailableOpacity : 1,
       child: InkWell(
-        onTap: open,
+        onTap: () => open(autoplay: false),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: _rowPadding),
           child: Row(
@@ -106,7 +113,11 @@ class EpisodeListTile extends ConsumerWidget {
                 ),
               ),
               if (narration != null)
-                RoundPlay(onTap: open, size: _playSize, filled: false),
+                RoundPlay(
+                  onTap: () => open(autoplay: true),
+                  size: _playSize,
+                  filled: false,
+                ),
             ],
           ),
         ),

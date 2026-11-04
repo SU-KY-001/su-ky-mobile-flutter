@@ -24,13 +24,20 @@ class LatestEpisodeTile extends ConsumerWidget {
     final episode = latest.episode;
     final narration = episode.playable;
     final durationMs = narration?.durationMs;
-    void open() {
+    // The row opens the player paused; only the play button starts audio.
+    void open({required bool autoplay}) {
       if (narration == null) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l.episodeNoAudioNotice)));
         return;
       }
-      playFromUi(context, ref, episode.slug, narrationId: narration.id);
+      playFromUi(
+        context,
+        ref,
+        episode.slug,
+        narrationId: narration.id,
+        autoplay: autoplay,
+      );
     }
 
     final subtitle = [
@@ -39,7 +46,7 @@ class LatestEpisodeTile extends ConsumerWidget {
         audioTime(durationMs ~/ Duration.millisecondsPerSecond),
     ].join(_metaSeparator);
     return InkWell(
-      onTap: open,
+      onTap: () => open(autoplay: false),
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: _rowHeight),
         child: Row(
@@ -75,7 +82,7 @@ class LatestEpisodeTile extends ConsumerWidget {
               ),
             ),
             IconButton(
-              onPressed: open,
+              onPressed: () => open(autoplay: true),
               tooltip: l.play,
               icon: const Icon(Symbols.play_circle),
               iconSize: _playIconSize,
