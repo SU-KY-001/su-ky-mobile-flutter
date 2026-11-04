@@ -40,7 +40,10 @@ class QuizScreen extends ConsumerWidget {
 
     Future<void> leave() async {
       if (active) {
-        if (!await confirmQuizExit(context) || !context.mounted) return;
+        final confirmed = await viewModel.confirmExit(
+          () => confirmQuizExit(context),
+        );
+        if (!confirmed || !context.mounted) return;
         viewModel.abandon();
         await WidgetsBinding.instance.endOfFrame;
         if (!context.mounted) return;

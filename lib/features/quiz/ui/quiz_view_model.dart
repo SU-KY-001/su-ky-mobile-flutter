@@ -18,6 +18,19 @@ class QuizViewModel extends AsyncNotifier<QuizSession> {
 
   final String slug;
 
+  bool _confirmingExit = false;
+
+  /// Runs [ask] unless an exit confirmation is already open (double tap on X).
+  Future<bool> confirmExit(Future<bool> Function() ask) async {
+    if (_confirmingExit) return false;
+    _confirmingExit = true;
+    try {
+      return await ask();
+    } finally {
+      _confirmingExit = false;
+    }
+  }
+
   @override
   Future<QuizSession> build() async {
     final quiz = await ref.watch(episodeQuizProvider(slug).future);

@@ -31,7 +31,7 @@ Sửa: nút Đăng nhập tự điều hướng bằng `router.go(returnTo ?? ho
 
 ## Đã rà nhưng không sửa (và lý do)
 
-- `lib/features/quiz/ui/quiz_screen.dart:63-79` - nút X gọi `leave()`; bấm đúp rất nhanh có thể mở hai hộp thoại xác nhận. Cần cờ "đang thoát" trong State của màn; tác động thấp và không làm sai dữ liệu, nên ghi nhận.
+- `lib/features/quiz/ui/quiz_screen.dart` - nút X bấm đúp mở hai hộp thoại xác nhận: **đã sửa** bằng `QuizViewModel.confirmExit` (bỏ qua khi một hộp thoại đang mở). Chưa có test riêng.
 - `lib/features/quiz/ui/quiz_screen.dart:56` - `PopScope(canPop: false)` khi đang làm bài / đang xem lại là chủ ý (chặn back cứng, buộc xác nhận / quay về kết quả).
 - `lib/features/podcast/ui/podcast_screen.dart:21-24` - `RefreshIndicator.onRefresh` chỉ `invalidate` rồi trả về ngay, nên vòng xoay kéo-để-làm-mới tắt trước khi dữ liệu về. Dữ liệu vẫn được tải lại và mỗi khối có loading/error riêng; đây là lỗi hiển thị nhỏ, sửa sẽ phải `await` future và nuốt lỗi (trái quy ước "không nuốt lỗi"), nên giữ nguyên.
 - `lib/features/profile/ui/profile_screen.dart:49` - Đăng xuất không có trạng thái bận/hộp thoại xác nhận. Đã chặn request trùng ở controller (BUG-07); phản hồi thị giác là quyết định sản phẩm.

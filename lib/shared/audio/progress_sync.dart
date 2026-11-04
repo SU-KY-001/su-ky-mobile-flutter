@@ -32,6 +32,7 @@ class ProgressSync {
   Duration _lastPosition = Duration.zero;
   int _generation = 0;
   bool _dirty = false;
+  int _markVersion = 0;
   bool _saving = false;
   Future<void>? _inFlight;
   bool _disabled = false;
@@ -82,6 +83,7 @@ class ProgressSync {
       bitmap.mark(second);
     }
     _dirty = true;
+    _markVersion++;
   }
 
   /// A seek breaks the position chain: jumped-over seconds are not marked.
@@ -101,6 +103,7 @@ class ProgressSync {
     final bitmap = _bitmap;
     if (info == null || bitmap == null) return;
     final generation = _generation;
+    final sentVersion = _markVersion;
     _saving = true;
     try {
       final result = await repository.updateProgress(
@@ -112,7 +115,9 @@ class ProgressSync {
       if (generation != _generation) return;
       switch (result) {
         case Ok(:final value):
-          _dirty = false;
+          // Seconds marked while this request was in flight are not in the
+          // bitmap it sent: keep them pending for the next flush.
+          _dirty = _markVersion != sentVersion;
           final completion = value.completion;
           if (completion != null) onCompleted(completion);
         case Err(:final error):

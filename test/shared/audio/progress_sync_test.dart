@@ -341,19 +341,15 @@ void main() {
       expect(base64Decode(repo.sent.last.bitmap).every((b) => b == 0), isTrue);
     });
 
-    test(
-      'end() sends seconds played while a send was in flight',
-      skip: 'BUG-01, xem docs/reports/p11-test-findings.md',
-      () async {
-        play([0, 1]);
-        final first = sync.flush();
-        play([2, 3]);
-        await sync.end();
-        await first;
-        expect(repo.sent.length, 2);
-        expect(base64Decode(repo.sent.last.bitmap).first, 0x07);
-      },
-    );
+    test('end() sends seconds played while a send was in flight', () async {
+      play([0, 1]);
+      final first = sync.flush();
+      play([2, 3]);
+      await sync.end();
+      await first;
+      expect(repo.sent.length, 2);
+      expect(base64Decode(repo.sent.last.bitmap).first, 0x07);
+    });
 
     test('rearm lets a finished episode be played again', () async {
       play([0, 1]);
