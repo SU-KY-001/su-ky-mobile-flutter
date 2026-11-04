@@ -4,15 +4,15 @@ import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/play_gate.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/history/domain/listening_history.dart';
-import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
 
-const _fullOpacity = 1.0;
 const _unavailableOpacity = 0.55;
-const _contentPadding = EdgeInsets.all(AppDesign.gap);
-const _progressHeight = 6.0;
-const _lineGap = 8.0;
-const _playIconSize = 18.0;
+const _thumb = 56.0;
+const _progressHeight = 2.0;
+const _rowPadding = EdgeInsets.symmetric(vertical: 8);
+const _gap = 12.0;
 
+/// Spotify "Recently played" row: art, title, series, progress line, play.
 class HistoryTile extends ConsumerWidget {
   const HistoryTile({super.key, required this.entry});
 
@@ -30,54 +30,55 @@ class HistoryTile extends ConsumerWidget {
           )
         : null;
     return Opacity(
-      opacity: entry.available ? _fullOpacity : _unavailableOpacity,
-      child: Surface(
-        padding: EdgeInsets.zero,
-        child: InkWell(
-          onTap: play,
-          borderRadius: BorderRadius.circular(AppDesign.radius),
-          child: Padding(
-            padding: _contentPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      opacity: entry.available ? 1 : _unavailableOpacity,
+      child: InkWell(
+        onTap: play,
+        child: Padding(
+          padding: _rowPadding,
+          child: Row(
+            children: [
+              CoverArt(seed: entry.episodeSlug, height: _thumb, width: _thumb),
+              const SizedBox(width: _gap),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        entry.episodeTitle,
-                        style: context.text.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                    Text(
+                      entry.episodeTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    if (play != null)
-                      Icon(
-                        Icons.play_arrow,
-                        size: _playIconSize,
-                        color: context.accent,
+                    Text(
+                      l.profileHistoryProgress(
+                        entry.seriesTitle,
+                        entry.percent,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.bodySmall?.copyWith(
+                        color: AppDesign.muted,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    LinearProgressIndicator(
+                      value: entry.progress,
+                      minHeight: _progressHeight,
+                      backgroundColor: AppDesign.line,
+                      color: context.accent,
+                    ),
                   ],
                 ),
-                const SizedBox(height: _lineGap),
-                Text(
-                  l.profileHistoryProgress(entry.seriesTitle, entry.percent),
-                  style: context.text.bodySmall?.copyWith(
-                    color: AppDesign.muted,
-                  ),
-                ),
-                const SizedBox(height: _lineGap),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(_progressHeight),
-                  child: LinearProgressIndicator(
-                    value: entry.progress,
-                    minHeight: _progressHeight,
-                    backgroundColor: AppDesign.line,
-                    color: context.accent,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              SizedBox.square(
+                dimension: AppDesign.tapTarget,
+                child: play == null
+                    ? null
+                    : Icon(Icons.play_arrow, color: context.accent),
+              ),
+            ],
           ),
         ),
       ),

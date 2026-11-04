@@ -191,15 +191,15 @@ void main() {
   });
 
   group('shell', () {
-    _test('five tabs switch routes', (tester) async {
+    _test('four tabs switch routes', (tester) async {
       final (_, c) = await _launch(tester);
       final l = _l(tester);
       expect(_location(c), '/');
+      expect(find.byType(NavigationDestination), findsNWidgets(4));
       for (final (label, path) in [
         (l.tabHistory, '/history'),
         (l.tabPodcast, '/podcast'),
         (l.tabQuiz, '/quizzes'),
-        (l.profile, '/profile'),
         (l.discover, '/'),
       ]) {
         await tester.tap(
@@ -211,6 +211,25 @@ void main() {
         await tester.pumpAndSettle();
         expect(_location(c), path, reason: label);
       }
+    });
+
+    _test('profile is not a tab and opens from the home avatar', (
+      tester,
+    ) async {
+      final (_, c) = await _launch(tester);
+      expect(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text(_l(tester).profile),
+        ),
+        findsNothing,
+      );
+
+      await tester.tap(find.byTooltip(_l(tester).profileTitle));
+      await tester.pumpAndSettle();
+
+      expect(_location(c), AppRoutes.profile);
+      expect(find.byType(NavigationBar), findsNothing);
     });
   });
 
@@ -320,6 +339,13 @@ void main() {
       final signOut = find.text(l.profileSignOut);
       await tester.ensureVisible(signOut);
       await tester.tap(signOut);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text(l.profileSignOut),
+        ),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.text(l.profileSignInNow));
       await tester.pumpAndSettle();

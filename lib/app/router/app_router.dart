@@ -47,10 +47,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       path: AppRoutes.quizzes,
       builder: (context, state) => const QuizListScreen(),
     ),
-    AppTab.profile: GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => const ProfileScreen(),
-    ),
   };
   final tabs = tabRoutes.keys.toList();
 
@@ -69,6 +65,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.search,
         builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: AppRoutes.login,

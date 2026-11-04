@@ -11,9 +11,10 @@ import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/profile/ui/history_tile.dart';
+import 'package:su_ky_mobile/features/profile/ui/profile_group.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_history_section.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
-import 'package:su_ky_mobile/features/profile/ui/profile_xp_card.dart';
+import 'package:su_ky_mobile/features/profile/ui/profile_stats.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/history/data/history_repository.dart';
 import 'package:su_ky_mobile/shared/history/domain/listening_history.dart';
@@ -27,8 +28,17 @@ class _FakeSession extends SessionController {
 
   final SessionUser? _user;
 
+  int signOuts = 0;
+
   @override
   SessionState build() => SessionState(hydrated: true, user: _user);
+
+  @override
+  Future<Result<void>> signOut() async {
+    signOuts++;
+    state = const SessionState(hydrated: true);
+    return const Ok(null);
+  }
 }
 
 class _HistoryRepository implements HistoryRepository {
@@ -113,6 +123,7 @@ Future<GoRouter> _pumpProfile(
   required SessionUser? user,
   required _HistoryRepository history,
   required WeeklyMissions missions,
+  _FakeSession? session,
 }) async {
   await tester.binding.setSurfaceSize(const Size(390, 1600));
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -122,7 +133,9 @@ Future<GoRouter> _pumpProfile(
     ProviderScope(
       retry: (_, _) => null,
       overrides: [
-        sessionControllerProvider.overrideWith(() => _FakeSession(user)),
+        sessionControllerProvider.overrideWith(
+          () => session ?? _FakeSession(user),
+        ),
         signedInProvider.overrideWithValue(user != null),
         historyRepositoryProvider.overrideWithValue(history),
         weeklyMissionsRepositoryProvider.overrideWithValue(
@@ -157,10 +170,16 @@ void main() {
 
     expect(history.calls, 0);
     expect(find.byType(ProfileHistorySection), findsNothing);
-    expect(find.byType(ProfileXpCard), findsNothing);
+    expect(find.byType(ProfileStats), findsNothing);
+    final l = _l(tester);
+    expect(find.text(l.profileSignInNow), findsOneWidget);
+    expect(find.text(l.profileSignUp), findsOneWidget);
+    expect(find.text(l.profileSignOut), findsNothing);
   });
 
-  testWidgets('a signed-in user sees recent history and XP', (tester) async {
+  testWidgets('a signed-in user sees recent history, stats and XP', (
+    tester,
+  ) async {
     final history = _HistoryRepository([
       Ok(
         _history([
@@ -183,7 +202,7 @@ void main() {
     final l = _l(tester);
 
     expect(find.text(l.profileXpTotal(120)), findsOneWidget);
-    expect(find.text(l.profileMissionsDone(1)), findsOneWidget);
+    expect(find.text(l.profileStatMissions), findsOneWidget);
     expect(find.text('Episode one'), findsOneWidget);
     expect(find.text('Episode two'), findsOneWidget);
     expect(find.text(l.profileHistoryProgress('Series A', 7)), findsOneWidget);
@@ -217,7 +236,7 @@ void main() {
     expect(find.text(_l(tester).profileRecentEmpty), findsOneWidget);
   });
 
-  testWidgets('zero XP and no missions still show the XP card', (tester) async {
+  testWidgets('zero XP and no missions still show the stats', (tester) async {
     await _pumpProfile(
       tester,
       user: _user,
@@ -227,7 +246,35 @@ void main() {
     final l = _l(tester);
 
     expect(find.text(l.profileXpTotal(0)), findsOneWidget);
-    expect(find.text(l.profileMissionsDone(0)), findsOneWidget);
+    expect(find.text(l.profileStatXp), findsOneWidget);
+    expect(find.text(l.profileStatMissions), findsOneWidget);
+  });
+
+  testWidgets('rows are grouped under section labels', (tester) async {
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+    );
+    final l = _l(tester);
+
+    expect(find.text(l.profileSectionActivity), findsOneWidget);
+    expect(find.text(l.profileRecentTitle), findsOneWidget);
+    expect(find.text(l.profileSectionAccount), findsOneWidget);
+    expect(find.byType(ProfileGroup), findsNWidgets(2));
+
+    final accountGroup = find.ancestor(
+      of: find.text(l.profileSignOut),
+      matching: find.byType(ProfileGroup),
+    );
+    expect(
+      find.descendant(
+        of: accountGroup,
+        matching: find.text(l.missionsHeaderTitle),
+      ),
+      findsNothing,
+    );
   });
 
   testWidgets('a history error offers retry and reloads', (tester) async {
@@ -292,7 +339,7 @@ void main() {
     );
   });
 
-  testWidgets('the XP card opens weekly missions', (tester) async {
+  testWidgets('the missions row opens weekly missions', (tester) async {
     final router = await _pumpProfile(
       tester,
       user: _user,
@@ -300,12 +347,77 @@ void main() {
       missions: _missions(totalXp: 120),
     );
 
-    await tester.tap(find.text(_l(tester).profileXpTotal(120)));
+    await tester.tap(find.text(_l(tester).missionsHeaderTitle));
     await tester.pumpAndSettle();
 
     expect(
       router.routerDelegate.currentConfiguration.last.matchedLocation,
       AppRoutes.weeklyMissions,
     );
+  });
+
+  testWidgets('the schedule row opens the release schedule', (tester) async {
+    final router = await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+    );
+
+    await tester.tap(find.text(_l(tester).scheduleTitle));
+    await tester.pumpAndSettle();
+
+    expect(
+      router.routerDelegate.currentConfiguration.last.matchedLocation,
+      AppRoutes.schedule,
+    );
+  });
+
+  testWidgets('signing out asks first and cancel keeps the session', (
+    tester,
+  ) async {
+    final session = _FakeSession(_user);
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+      session: session,
+    );
+    final l = _l(tester);
+
+    await tester.tap(find.text(l.profileSignOut));
+    await tester.pumpAndSettle();
+    expect(find.text(l.profileSignOutConfirmTitle), findsOneWidget);
+
+    await tester.tap(find.text(l.profileSignOutCancel));
+    await tester.pumpAndSettle();
+    expect(session.signOuts, 0);
+    expect(find.text(l.profileSignOut), findsOneWidget);
+  });
+
+  testWidgets('confirming sign-out ends the session', (tester) async {
+    final session = _FakeSession(_user);
+    await _pumpProfile(
+      tester,
+      user: _user,
+      history: _HistoryRepository([Ok(_history(const []))]),
+      missions: _missions(),
+      session: session,
+    );
+    final l = _l(tester);
+
+    await tester.tap(find.text(l.profileSignOut));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.text(l.profileSignOut),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(session.signOuts, 1);
+    expect(find.text(l.profileSignInNow), findsOneWidget);
   });
 }

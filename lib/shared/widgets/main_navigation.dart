@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 
-/// Bottom-bar destinations, in display order of the RN app.
+/// Bottom-bar destinations, in display order of the RN app. Profile is not a
+/// destination: it opens from the avatar in the top-right corner.
 enum AppTab {
   discover(Icons.explore_outlined),
   history(Icons.menu_book_outlined),
   podcast(Icons.mic_none),
-  quiz(Icons.emoji_events_outlined),
-  profile(Icons.account_circle_outlined);
+  quiz(Icons.emoji_events_outlined);
 
   const AppTab(this.icon);
   final IconData icon;
@@ -17,7 +17,6 @@ enum AppTab {
     history => l.tabHistory,
     podcast => l.tabPodcast,
     quiz => l.tabQuiz,
-    profile => l.profile,
   };
 }
 
