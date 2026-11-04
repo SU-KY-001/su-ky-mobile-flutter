@@ -12,8 +12,8 @@ Series detail and Search, so it lives in `lib/shared/catalog/` (`domain/`,
   retryable from non-retryable failures.
 - `ProviderScope(retry: appRetry)`: Riverpod 3 retries every failing provider up
   to 10 times by default. We retry only retryable `AppException`s, at most twice.
-- `ref.cacheFor(60s)` keeps `autoDispose` catalog providers alive for 60 seconds,
-  the RN query client `staleTime`.
+- `ref.cacheFor(CatalogDefaults.staleTime)` keeps `autoDispose` catalog providers
+  alive for 10 minutes (the RN query client uses 60 s; content changes rarely).
 - The API has no episode list endpoint. "Latest episodes" scans the first 6
   series (`GET /api/series/{slug}` in parallel), keeps episodes with playable
   audio, sorts by `publishedAt` and takes 6, exactly like RN `latestEpisodes`.

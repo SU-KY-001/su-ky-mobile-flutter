@@ -10,8 +10,9 @@ abstract final class CatalogDefaults {
   static const latestSeriesScanCount = 6;
   static const latestEpisodesCount = 6;
 
-  /// Matches the RN query client `staleTime`.
-  static const staleTime = Duration(seconds: 60);
+  /// How long catalog responses stay cached. Longer than the RN query client's
+  /// 60 s: series and episodes change only when a moderator publishes.
+  static const staleTime = Duration(minutes: 10);
 
   /// Banner series of the RN Podcast tab (`PodcastScreens.tsx`). Falls back to
   /// the first series when the environment does not have it.
