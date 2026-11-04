@@ -4,7 +4,7 @@ import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 /// Bottom-bar destinations, in display order of the RN app. Profile is not a
 /// destination: it opens from the avatar in the top-right corner.
 enum AppTab {
-  discover(Icons.explore_outlined),
+  discover(Icons.home_outlined),
   history(Icons.menu_book_outlined),
   podcast(Icons.mic_none),
   quiz(Icons.emoji_events_outlined);
@@ -36,6 +36,7 @@ class MainNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return NavigationBar(
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
       selectedIndex: tabs.indexOf(selected),
       onDestinationSelected: (value) => onSelect(tabs[value]),
       destinations: [

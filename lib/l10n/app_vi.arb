@@ -478,12 +478,8 @@
       "total": {"type": "int"}
     }
   },
-  "continueRemainingLine": "{series} · còn {minutes} phút",
-  "@continueRemainingLine": {
-    "placeholders": {
-      "series": {"type": "String"},
-      "minutes": {"type": "int"}
-    }
-  },
+  "homeEventsTitle": "Sự kiện lịch sử",
+  "homeEventsEmpty": "Chưa có sự kiện nào.",
+  "homePeriodsTitle": "Khám phá theo thời kỳ",
   "clearSearch": "Xóa"
 }

@@ -23,6 +23,7 @@ import 'package:su_ky_mobile/shared/catalog/domain/historical_event.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/historical_period.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/paged.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
+import 'package:su_ky_mobile/shared/widgets/main_navigation.dart';
 
 import '../support/fake_audio_player.dart';
 import '../support/stub_http.dart';
@@ -193,23 +194,22 @@ void main() {
   group('shell', () {
     _test('four tabs switch routes', (tester) async {
       final (_, c) = await _launch(tester);
-      final l = _l(tester);
       expect(_location(c), '/');
       expect(find.byType(NavigationDestination), findsNWidgets(4));
-      for (final (label, path) in [
-        (l.tabHistory, '/history'),
-        (l.tabPodcast, '/podcast'),
-        (l.tabQuiz, '/quizzes'),
-        (l.discover, '/'),
+      for (final (icon, path) in [
+        (AppTab.history.icon, '/history'),
+        (AppTab.podcast.icon, '/podcast'),
+        (AppTab.quiz.icon, '/quizzes'),
+        (AppTab.discover.icon, '/'),
       ]) {
         await tester.tap(
           find.descendant(
             of: find.byType(NavigationBar),
-            matching: find.text(label),
+            matching: find.byIcon(icon),
           ),
         );
         await tester.pumpAndSettle();
-        expect(_location(c), path, reason: label);
+        expect(_location(c), path, reason: '$icon');
       }
     });
 

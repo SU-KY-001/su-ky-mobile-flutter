@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
+const _navBarHeight = 72.0;
+const _navIconSize = 32.0;
+
 abstract final class AppTheme {
   static final light = ThemeData(
     useMaterial3: true,
@@ -69,7 +72,7 @@ abstract final class AppTheme {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      height: 64,
+      height: _navBarHeight,
       backgroundColor: AppDesign.navBar,
       indicatorColor: Colors.transparent,
       labelTextStyle: WidgetStateTextStyle.resolveWith(
@@ -82,6 +85,7 @@ abstract final class AppTheme {
       ),
       iconTheme: WidgetStateProperty.resolveWith(
         (states) => IconThemeData(
+          size: _navIconSize,
           color: states.contains(WidgetState.selected)
               ? AppDesign.red
               : AppDesign.muted,

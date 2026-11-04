@@ -7,7 +7,7 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 /// "All" plus one chip per historical period. A failed or empty period list
 /// leaves just "All": the list below still works.
 ///
-/// Shared by Home and the Timeline tab, each with its own selection state.
+/// Used by the Timeline tab; its selection lives in `timelineViewModelProvider`.
 class PeriodPills extends ConsumerWidget {
   const PeriodPills({
     super.key,

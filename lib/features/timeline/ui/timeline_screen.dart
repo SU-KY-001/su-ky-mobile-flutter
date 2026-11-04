@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:su_ky_mobile/features/timeline/ui/timeline_entry.dart';
-import 'package:su_ky_mobile/features/timeline/ui/timeline_view_model.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/historical_event.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/timeline/timeline_period.dart';
 import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
 import 'package:su_ky_mobile/shared/widgets/period_pills.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';

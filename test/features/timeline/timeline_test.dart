@@ -9,7 +9,6 @@ import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/features/timeline/ui/event_detail_screen.dart';
 import 'package:su_ky_mobile/features/timeline/ui/timeline_screen.dart';
-import 'package:su_ky_mobile/features/timeline/ui/timeline_view_model.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_repository.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode.dart';
@@ -18,6 +17,7 @@ import 'package:su_ky_mobile/shared/catalog/domain/historical_event.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/historical_period.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/paged.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
+import 'package:su_ky_mobile/shared/timeline/timeline_period.dart';
 
 HistoricalEvent _event(
   String slug, {

@@ -478,12 +478,8 @@
       "total": {"type": "int"}
     }
   },
-  "continueRemainingLine": "{series} · {minutes} min left",
-  "@continueRemainingLine": {
-    "placeholders": {
-      "series": {"type": "String"},
-      "minutes": {"type": "int"}
-    }
-  },
+  "homeEventsTitle": "Historical events",
+  "homeEventsEmpty": "No events yet.",
+  "homePeriodsTitle": "Explore by period",
   "clearSearch": "Clear"
 }
