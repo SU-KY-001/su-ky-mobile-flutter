@@ -10,25 +10,33 @@ import 'package:su_ky_mobile/shared/audio/playback_state.dart';
 
 class _FakePlayback extends PlaybackController {
   int plays = 0;
+  bool? lastAutoplay;
 
   @override
   PlaybackState build() => const PlaybackState();
 
   @override
-  Future<PlayOutcome> playEpisode(String slug, {String? narrationId}) async {
+  Future<PlayOutcome> playEpisode(
+    String slug, {
+    String? narrationId,
+    bool autoplay = true,
+  }) async {
     plays++;
+    lastAutoplay = autoplay;
     return PlayOutcome.started;
   }
 }
 
 class _PlayProbe extends ConsumerWidget {
-  const _PlayProbe();
+  const _PlayProbe({this.autoplay = true});
+
+  final bool autoplay;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
     body: Center(
       child: TextButton(
-        onPressed: () => playFromUi(context, ref, 'ep-1'),
+        onPressed: () => playFromUi(context, ref, 'ep-1', autoplay: autoplay),
         child: const Text('play'),
       ),
     ),
@@ -43,7 +51,10 @@ Future<(GoRouter, _FakePlayback)> _pump(
   final router = GoRouter(
     initialLocation: initialLocation,
     routes: [
-      GoRoute(path: AppRoutes.podcast, builder: (_, _) => const _PlayProbe()),
+      GoRoute(
+        path: AppRoutes.podcast,
+        builder: (_, _) => const _PlayProbe(autoplay: false),
+      ),
       GoRoute(path: AppRoutes.player, builder: (_, _) => const _PlayProbe()),
     ],
   );
@@ -77,6 +88,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(playback.plays, 1);
+    expect(playback.lastAutoplay, isFalse);
     expect(_stackSize(router), 2);
     expect(
       router.routerDelegate.currentConfiguration.last.matchedLocation,

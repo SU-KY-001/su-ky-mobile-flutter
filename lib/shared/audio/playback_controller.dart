@@ -69,11 +69,17 @@ class PlaybackController extends Notifier<PlaybackState> {
     return const PlaybackState();
   }
 
-  /// Plays [slug]. A guest gets [PlayOutcome.needsLogin] and the request is
-  /// kept so it can resume after sign-in.
-  Future<PlayOutcome> playEpisode(String slug, {String? narrationId}) async {
+  /// Loads [slug] and, when [autoplay] is true, starts it. With [autoplay]
+  /// false the episode is only prepared (paused) until the user presses
+  /// Play. A guest gets [PlayOutcome.needsLogin] and the request is kept so
+  /// it can resume after sign-in.
+  Future<PlayOutcome> playEpisode(
+    String slug, {
+    String? narrationId,
+    bool autoplay = true,
+  }) async {
     if (!ref.read(signedInProvider)) {
-      _pending = _PendingPlay(slug, narrationId);
+      _pending = _PendingPlay(slug, narrationId, autoplay: autoplay);
       return PlayOutcome.needsLogin;
     }
     _pending = null;
@@ -81,7 +87,7 @@ class PlaybackController extends Notifier<PlaybackState> {
       request: PlayRequest(slug: slug, narrationId: narrationId),
     );
     if (_isLoaded(this, slug, narrationId)) {
-      await _resume();
+      if (autoplay) await _resume();
       return PlayOutcome.started;
     }
     final token = ++_loadToken;
@@ -114,7 +120,7 @@ class PlaybackController extends Notifier<PlaybackState> {
       detail,
       narration,
       token,
-      autoplay: true,
+      autoplay: autoplay,
     );
     return _settle(this, token, result);
   }

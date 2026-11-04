@@ -2,10 +2,12 @@ part of 'playback_controller.dart';
 
 /// A guest's Play request, replayed once they sign in (within a TTL).
 final class _PendingPlay {
-  _PendingPlay(this.slug, this.narrationId) : requestedAt = DateTime.now();
+  _PendingPlay(this.slug, this.narrationId, {required this.autoplay})
+    : requestedAt = DateTime.now();
 
   final String slug;
   final String? narrationId;
+  final bool autoplay;
   final DateTime requestedAt;
 }
 
@@ -84,7 +86,13 @@ void _onSignedInChanged(PlaybackController c, bool? previous, bool signedIn) {
         DateTime.now().difference(pending.requestedAt) <=
         AudioDefaults.pendingPlayTtl;
     if (fresh) {
-      unawaited(c.playEpisode(pending.slug, narrationId: pending.narrationId));
+      unawaited(
+        c.playEpisode(
+          pending.slug,
+          narrationId: pending.narrationId,
+          autoplay: pending.autoplay,
+        ),
+      );
     }
     return;
   }

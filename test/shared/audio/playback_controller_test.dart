@@ -224,6 +224,31 @@ void main() {
     );
 
     test(
+      'opening without autoplay loads the episode paused until Play is pressed',
+      () async {
+        final (c, player, _) = await _setup();
+        await _ctrl(c).playEpisode('ep-1', autoplay: false);
+        final s = c.read(playbackControllerProvider);
+        expect(s.status, PlaybackStatus.ready);
+        expect(s.playing, isFalse);
+        expect(player.plays, 0);
+
+        await _ctrl(c).togglePlayPause();
+        expect(player.plays, 1);
+      },
+    );
+
+    test(
+      're-opening the loaded episode without autoplay does not resume it',
+      () async {
+        final (c, player, _) = await _setup();
+        await _ctrl(c).playEpisode('ep-1', autoplay: false);
+        await _ctrl(c).playEpisode('ep-1', autoplay: false);
+        expect(player.plays, 0);
+      },
+    );
+
+    test(
       'playing the loaded episode again resumes without reloading',
       () async {
         final (c, player, repo) = await _setup();
