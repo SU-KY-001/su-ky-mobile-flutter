@@ -26,7 +26,11 @@ class QuizViewModel extends AsyncNotifier<QuizSession> {
 
   void start() {
     final session = state.value;
-    if (session == null || session.submitting) return;
+    if (session == null ||
+        session.submitting ||
+        session.stage != QuizStage.introduction) {
+      return;
+    }
     unawaited(ref.read(playbackControllerProvider.notifier).pause());
     state = AsyncData(
       session.copyWith(
@@ -90,7 +94,8 @@ class QuizViewModel extends AsyncNotifier<QuizSession> {
         );
     if (!ref.mounted) return;
     final current = state.value;
-    if (current == null) return;
+    // The quiz was abandoned or left while the request was in flight.
+    if (current == null || current.stage != QuizStage.question) return;
     switch (result) {
       case Ok(:final value):
         _logMissingAnswers(current.quiz, value);
@@ -115,7 +120,7 @@ class QuizViewModel extends AsyncNotifier<QuizSession> {
   /// A new attempt gets a new key; the failed one must never be reused.
   void retake() {
     final session = state.value;
-    if (session == null) return;
+    if (session == null || session.stage != QuizStage.summary) return;
     state = AsyncData(
       QuizSession(
         quiz: session.quiz,

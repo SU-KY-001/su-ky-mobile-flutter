@@ -16,6 +16,7 @@ class LoginScreen extends ConsumerWidget {
 
   /// Already validated by `AppRoutes.safeReturnTo`.
   final String? returnTo;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
@@ -95,19 +96,17 @@ class LoginScreen extends ConsumerWidget {
             AuthFields(onForgotPassword: notice),
             const SizedBox(height: 18),
             FilledButton.icon(
+              // Success replaces the stack with the destination: the session
+              // change refreshes the router, and a pushed login page cannot be
+              // popped after that refresh, so pop/pushReplacement are not safe.
+              // The router is captured before the await: this widget may be
+              // disposed while the request is in flight.
               onPressed: form.submitting
                   ? null
                   : () async {
-                      final ok = await vm.submit();
-                      if (!ok || !context.mounted) return;
-                      final target = returnTo;
-                      if (target == null) {
-                        context.popOrGo(AppRoutes.home);
-                      } else if (context.canPop()) {
-                        context.pushReplacement(target);
-                      } else {
-                        context.go(target);
-                      }
+                      final router = GoRouter.of(context);
+                      if (!await vm.submit()) return;
+                      router.go(returnTo ?? AppRoutes.home);
                     },
               icon: form.submitting
                   ? const SizedBox.square(

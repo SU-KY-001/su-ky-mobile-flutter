@@ -24,6 +24,7 @@ class AuthFields extends ConsumerWidget {
           Text(l.name, style: context.text.bodySmall),
           const SizedBox(height: 6),
           TextField(
+            key: const ValueKey('auth.field.name'),
             onChanged: vm.name,
             textCapitalization: TextCapitalization.words,
             autofillHints: const [AutofillHints.name],
@@ -37,6 +38,7 @@ class AuthFields extends ConsumerWidget {
         Text(l.email, style: context.text.bodySmall),
         const SizedBox(height: 6),
         TextField(
+          key: const ValueKey('auth.field.email'),
           onChanged: vm.email,
           keyboardType: TextInputType.emailAddress,
           autofillHints: const [AutofillHints.email],
@@ -61,6 +63,9 @@ class AuthFields extends ConsumerWidget {
           ],
         ),
         TextField(
+          // Keyed by mode: a mode switch clears the password in the model, so
+          // the field must be rebuilt empty to stay in sync.
+          key: ValueKey('auth.field.password.${form.mode.name}'),
           onChanged: vm.password,
           obscureText: form.obscured,
           decoration: InputDecoration(

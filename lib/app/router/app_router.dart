@@ -72,6 +72,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.login,
+        redirect: loginGuard(ref),
         builder: (context, state) =>
             LoginScreen(returnTo: AppRoutes.returnToOf(state.uri)),
       ),

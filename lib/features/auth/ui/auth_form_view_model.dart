@@ -63,8 +63,16 @@ class AuthFormViewModel extends Notifier<AuthFormState> {
   @override
   AuthFormState build() => const AuthFormState();
 
-  void setMode(AuthMode mode) =>
-      state = state.copyWith(mode: mode, password: '', clearError: true);
+  void setMode(AuthMode mode) {
+    if (state.submitting) return;
+    state = state.copyWith(
+      mode: mode,
+      name: '',
+      password: '',
+      clearError: true,
+    );
+  }
+
   void name(String v) => state = state.copyWith(name: v, clearError: true);
   void email(String v) => state = state.copyWith(email: v, clearError: true);
   void password(String v) =>
@@ -94,6 +102,9 @@ class AuthFormViewModel extends Notifier<AuthFormState> {
     final result = state.mode == AuthMode.signIn
         ? await session.signIn(state.email, state.password)
         : await session.signUp(state.name, state.email, state.password);
+    // The screen (and this autoDispose notifier) may be gone if the user left
+    // while the request was in flight; writing state then would throw.
+    if (!ref.mounted) return false;
     switch (result) {
       case Ok():
         state = state.copyWith(submitting: false);

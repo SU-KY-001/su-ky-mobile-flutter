@@ -39,7 +39,8 @@ class ProfileGuestCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDesign.pagePadding),
           FilledButton(
-            onPressed: () => context.push(AppRoutes.login),
+            onPressed: () =>
+                context.push(AppRoutes.loginFor(AppRoutes.profile)),
             child: Text(l.profileSignInNow),
           ),
         ],

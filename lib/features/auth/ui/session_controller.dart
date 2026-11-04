@@ -20,6 +20,9 @@ class SessionState {
 
 /// App-wide session. Not autoDispose: it must outlive every screen.
 class SessionController extends Notifier<SessionState> {
+  /// A second tap on Sign out joins the request already running.
+  Future<Result<void>>? _signOutInFlight;
+
   @override
   SessionState build() {
     final tokens = ref.read(tokenStoreProvider);
@@ -68,13 +71,19 @@ class SessionController extends Notifier<SessionState> {
     await ref.read(authRepositoryProvider).signUp(name, email, password),
   );
 
-  Future<Result<void>> signOut() async {
-    final result = await ref.read(authRepositoryProvider).signOut();
-    if (result case Err(:final error)) {
-      AppLogger.error('Sign-out request failed', error: error);
+  Future<Result<void>> signOut() => _signOutInFlight ??= _runSignOut();
+
+  Future<Result<void>> _runSignOut() async {
+    try {
+      final result = await ref.read(authRepositoryProvider).signOut();
+      if (result case Err(:final error)) {
+        AppLogger.error('Sign-out request failed', error: error);
+      }
+      await ref.read(tokenStoreProvider).clear();
+      return result;
+    } finally {
+      _signOutInFlight = null;
     }
-    await ref.read(tokenStoreProvider).clear();
-    return result;
   }
 
   Future<Result<void>> _establish(Result<AuthSession> result) async {

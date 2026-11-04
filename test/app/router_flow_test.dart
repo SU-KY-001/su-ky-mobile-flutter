@@ -303,6 +303,35 @@ void main() {
       await tester.pumpAndSettle();
       expect(_location(c), AppRoutes.profile);
     });
+    _test('the login form is empty on a later visit', (tester) async {
+      final (_, c) = await _launch(tester);
+      final l = _l(tester);
+
+      c.read(routerProvider).go(AppRoutes.profile);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.profileSignInNow));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(0), 'an@example.com');
+      await tester.enterText(find.byType(TextField).at(1), 'pw12345678');
+      await tester.tap(find.byType(FilledButton).first);
+      await tester.pumpAndSettle();
+      expect(_location(c), AppRoutes.profile);
+
+      final signOut = find.text(l.profileSignOut);
+      await tester.ensureVisible(signOut);
+      await tester.tap(signOut);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l.profileSignInNow));
+      await tester.pumpAndSettle();
+
+      expect(_location(c), AppRoutes.login);
+      final fields = tester.widgetList<EditableText>(find.byType(EditableText));
+      expect(
+        fields.map((field) => field.controller.text),
+        everyElement(isEmpty),
+      );
+    });
+
     // BUG-02: skipped, see docs/reports/p11-test-findings.md
     _test('forgot-password does not pretend the UI is a demo', (tester) async {
       final (_, c) = await _launch(tester);

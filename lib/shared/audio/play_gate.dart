@@ -18,9 +18,13 @@ Future<void> playFromUi(
   String? narrationId,
 }) async {
   final controller = ref.read(playbackControllerProvider.notifier);
+  final route = GoRouterState.of(context);
   if (ref.read(signedInProvider)) {
     unawaited(controller.playEpisode(slug, narrationId: narrationId));
-    unawaited(context.push(AppRoutes.player));
+    // The player's own "up next" card must not stack a second player page.
+    if (route.matchedLocation != AppRoutes.player) {
+      unawaited(context.push(AppRoutes.player));
+    }
     return;
   }
   await controller.playEpisode(slug, narrationId: narrationId);
@@ -34,5 +38,5 @@ Future<void> playFromUi(
     return;
   }
   if (!context.mounted) return;
-  unawaited(context.push(AppRoutes.login));
+  unawaited(context.push(AppRoutes.loginFor(route.uri.toString())));
 }
