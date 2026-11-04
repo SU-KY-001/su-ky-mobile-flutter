@@ -20,12 +20,29 @@ final class NetworkException extends AppException {
   bool get isRetryable => true;
 }
 
-/// Input or server rejected the request (validation, 4xx). Do not retry.
-final class ValidationException extends AppException {
-  const ValidationException(super.message, {super.cause});
+/// Server rejected the request (4xx). [errorCode] is the API's machine code
+/// (`error_code` or `code`); callers branch on it, never on [message].
+final class ApiException extends AppException {
+  const ApiException(
+    super.message, {
+    required this.statusCode,
+    this.errorCode,
+    super.cause,
+  });
+
+  final int statusCode;
+  final String? errorCode;
+
   @override
-  bool get isRetryable => false;
+  bool get isRetryable => retryableErrorCodes.contains(errorCode);
 }
+
+/// API codes that are safe to retry with the same request.
+const retryableErrorCodes = {
+  'RATE_LIMITED',
+  'IDEMPOTENCY_REQUEST_IN_PROGRESS',
+  'MEDIA_PROVIDER_UNAVAILABLE',
+};
 
 /// Local storage failure.
 final class StorageException extends AppException {

@@ -1,116 +1,114 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:su_ky_mobile/features/auth/ui/login_screen.dart';
+import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/home/ui/home_screen.dart';
 import 'package:su_ky_mobile/features/player/ui/player_screen.dart';
+import 'package:su_ky_mobile/features/podcast/ui/podcast_screen.dart';
+import 'package:su_ky_mobile/features/profile/ui/profile_screen.dart';
+import 'package:su_ky_mobile/features/quiz/ui/quiz_list_screen.dart';
 import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
+import 'package:su_ky_mobile/features/schedule/ui/schedule_screen.dart';
 import 'package:su_ky_mobile/features/search/ui/search_screen.dart';
 import 'package:su_ky_mobile/features/series/ui/series_screen.dart';
-import 'package:su_ky_mobile/features/weekly_missions/ui/honours_screen.dart';
-import 'package:su_ky_mobile/features/weekly_missions/ui/mission_detail_screen.dart';
+import 'package:su_ky_mobile/features/timeline/ui/event_detail_screen.dart';
+import 'package:su_ky_mobile/features/timeline/ui/timeline_screen.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_screen.dart';
-import 'package:su_ky_mobile/shared/audio/audio_view_model.dart';
+import 'package:su_ky_mobile/shared/widgets/main_navigation.dart';
 
 import 'app_routes.dart';
+import 'app_shell.dart';
+import 'auth_guard.dart';
 
-abstract final class AppRouter {
-  static GoRouter create() => GoRouter(
+/// The router lives for the whole app: never `watch` state here, it would
+/// rebuild the router and reset navigation. Session changes re-run redirects
+/// through `refreshListenable` instead.
+final routerProvider = Provider<GoRouter>((ref) {
+  final sessionChanged = ValueNotifier<int>(0);
+  ref.listen(sessionControllerProvider, (_, _) => sessionChanged.value++);
+
+  // Single source of truth for tab branches and the tab bar: a plan that adds
+  // a tab adds one entry here. Map order is branch order is bar order.
+  final tabRoutes = <AppTab, GoRoute>{
+    AppTab.discover: GoRoute(
+      path: AppRoutes.home,
+      builder: (context, state) => const HomeScreen(),
+    ),
+    AppTab.history: GoRoute(
+      path: AppRoutes.history,
+      builder: (context, state) => const TimelineScreen(),
+    ),
+    AppTab.podcast: GoRoute(
+      path: AppRoutes.podcast,
+      builder: (context, state) => const PodcastScreen(),
+    ),
+    AppTab.quiz: GoRoute(
+      path: AppRoutes.quizzes,
+      builder: (context, state) => const QuizListScreen(),
+    ),
+    AppTab.profile: GoRoute(
+      path: AppRoutes.profile,
+      builder: (context, state) => const ProfileScreen(),
+    ),
+  };
+  final tabs = tabRoutes.keys.toList();
+
+  final router = GoRouter(
     initialLocation: AppRoutes.home,
+    refreshListenable: sessionChanged,
     routes: [
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => HomeScreen(
-          onSearch: () => context.go(AppRoutes.search),
-          onSeries: () => context.push(AppRoutes.series),
-          onPlayer: () => context.push(AppRoutes.player),
-          onProfile: () => context.push(AppRoutes.login),
-        ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, shell) =>
+            AppShell(navigationShell: shell, tabs: tabs),
+        branches: [
+          for (final route in tabRoutes.values)
+            StatefulShellBranch(routes: [route]),
+        ],
       ),
       GoRoute(
         path: AppRoutes.search,
-        builder: (context, state) => SearchScreen(
-          onHome: () => context.go(AppRoutes.home),
-          onProfile: () => context.push(AppRoutes.login),
-          onSeries: () => context.push(AppRoutes.series),
-          onPlayer: () => context.push(AppRoutes.player),
-        ),
+        builder: (context, state) => const SearchScreen(),
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => LoginScreen(
-          onClose: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.home),
-          onContinue: () => context.go(AppRoutes.home),
-        ),
+        redirect: loginGuard(ref),
+        builder: (context, state) =>
+            LoginScreen(returnTo: AppRoutes.returnToOf(state.uri)),
       ),
       GoRoute(
         path: AppRoutes.series,
-        builder: (context, state) => SeriesScreen(
-          onQuiz: (episode) => context.push(AppRoutes.quizFor(episode)),
-          onBack: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.home),
-          onPlayer: () => context.push(AppRoutes.player),
-        ),
+        builder: (context, state) =>
+            SeriesScreen(slug: state.pathParameters['slug'] ?? ''),
+      ),
+      GoRoute(
+        path: AppRoutes.event,
+        builder: (context, state) =>
+            EventDetailScreen(slug: state.pathParameters['slug'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.player,
-        builder: (context, state) => PlayerScreen(
-          onQuiz: (episode) => context.push(AppRoutes.quizFor(episode)),
-          onBack: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.home),
-          onSeries: () => context.push(AppRoutes.series),
-        ),
+        builder: (context, state) => const PlayerScreen(),
       ),
       GoRoute(
         path: AppRoutes.quiz,
-        builder: (context, state) => QuizScreen(
-          episode: int.tryParse(state.pathParameters['episode'] ?? '') ?? -1,
-          onClose: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.player),
-          onEpisode: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.player),
-        ),
-      ),
-
-      GoRoute(
-        path: AppRoutes.missionDetail,
-        builder: (context, state) => MissionDetailScreen(
-          onBack: () => context.canPop()
-              ? context.pop()
-              : context.go(AppRoutes.weeklyMissions),
-          onHonours: () => context.push(AppRoutes.honours),
-          onProfile: () => context.push(AppRoutes.login),
-          onListen: () {
-            ProviderScope.containerOf(context)
-                .read(audioViewModelProvider.notifier)
-                .playEpisode(MissionDetailScreen.recommendedEpisode);
-            context.push(AppRoutes.player);
-          },
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.honours,
-        builder: (context, state) => HonoursScreen(
-          onBack: () => context.canPop()
-              ? context.pop()
-              : context.go(AppRoutes.weeklyMissions),
-          onDiscover: () => context.go(AppRoutes.home),
-          onProfile: () => context.push(AppRoutes.login),
-        ),
+        redirect: authGuard(ref),
+        builder: (context, state) =>
+            QuizScreen(slug: state.pathParameters['slug'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.weeklyMissions,
-        builder: (context, state) => WeeklyMissionsScreen(
-          onMissionDetail: () => context.push(AppRoutes.missionDetail),
-          onHonours: () => context.push(AppRoutes.honours),
-          onBack: () =>
-              context.canPop() ? context.pop() : context.go(AppRoutes.home),
-          onHome: () => context.go(AppRoutes.home),
-          onSearch: () => context.go(AppRoutes.search),
-          onLibrary: () => context.go(AppRoutes.weeklyMissions),
-          onProfile: () => context.push(AppRoutes.login),
-        ),
+        builder: (context, state) => const WeeklyMissionsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.schedule,
+        builder: (context, state) => const ScheduleScreen(),
       ),
     ],
   );
-}
+  ref.onDispose(() {
+    router.dispose();
+    sessionChanged.dispose();
+  });
+  return router;
+});

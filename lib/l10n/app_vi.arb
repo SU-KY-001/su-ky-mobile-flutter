@@ -1,6 +1,6 @@
 {
   "@@locale": "vi",
-  "appName": "Sử Kế",
+  "appName": "Sử Ký",
   "taps": "Số lần nhấn: {count}",
   "@taps": {
     "placeholders": {
@@ -11,7 +11,7 @@
   },
   "increment": "Tăng",
   "audioHistory": "AUDIO LỊCH SỬ",
-  "brandAudio": "SỬ KẾ AUDIO",
+  "brandAudio": "SỬ KÝ AUDIO",
   "discover": "Khám phá",
   "search": "Tìm kiếm",
   "profile": "Cá nhân",
@@ -22,14 +22,11 @@
   "battles": "Trận chiến vang dội",
   "people": "Danh nhân đất Việt",
   "continueListening": "ĐANG NGHE DỞ",
-  "resumeTitle": "Bạch Đằng 938: Chuẩn bị trận địa cọc",
-  "resumeSubtitle": "Kỳ Nhà Ngô · Tập 2",
-  "seriesHeading": "Đại tác Sử Kế",
+  "seriesHeading": "Đại tác Sử Ký",
   "viewAll": "Xem tất cả",
   "seriesTitle": "Bạch Đằng 938: Ngút trời cọc gỗ ngàn thu",
   "seriesShort": "Đại thắng Bạch Đằng 938",
   "secondSeries": "Hào khí Đông A: Ba lần thắng Nguyên Mông",
-  "author": "GS. Đặng Văn Liêm",
   "secondAuthor": "Ban Nghiên cứu Sử Việt",
   "warHistory": "Chiến sử",
   "tranDynasty": "Kỳ Nhà Trần",
@@ -53,16 +50,52 @@
   "loginSubtitle": "Đăng nhập để đồng bộ tiến trình nghe và\nlưu lại các podcast lịch sử yêu thích.",
   "email": "Email",
   "password": "Mật khẩu",
-  "forgotPassword": "Quên mật khẩu?",
   "loginAction": "Đăng nhập & Tiếp tục nghe",
   "orContinue": "HOẶC TIẾP TỤC VỚI",
   "googleAction": "Tiếp tục với Google",
-  "noAccount": "Chưa có tài khoản Sử Kế?",
+  "noAccount": "Chưa có tài khoản Sử Ký?",
   "register": "Đăng ký miễn phí",
   "emailHint": "nguyen.van.a@gmail.com",
-  "invalidCredentials": "Nhập email hợp lệ và mật khẩu tối thiểu 6 ký tự.",
+  "invalidCredentials": "Nhập email hợp lệ và mật khẩu từ 8 ký tự.",
+  "authSignUpHeading": "Tạo tài khoản Sử Ký",
+  "authSignUpSubtitle": "Đăng ký để đồng bộ tiến trình nghe và lưu bộ câu hỏi.",
+  "authSignUpAction": "Đăng ký & Tiếp tục nghe",
+  "name": "Tên của bạn",
+  "nameHint": "Nguyễn Văn A",
+  "haveAccount": "Đã có tài khoản?",
+  "signIn": "Đăng nhập",
+  "authWrongCredentials": "Sai email hoặc mật khẩu.",
+  "authEmailTaken": "Email này đã được đăng ký.",
+  "authNetworkError": "Không kết nối được máy chủ. Thử lại sau.",
+  "authUnknownError": "Có lỗi xảy ra. Thử lại sau.",
   "demoNotice": "Bản giao diện minh họa, chưa kết nối dịch vụ tài khoản.",
   "notifications": "Thông báo",
+  "audioChannelName": "Phát podcast",
+  "playerLoading": "Đang tải…",
+  "playerUnavailable": "Tập này chưa có bản thu sẵn sàng.",
+  "playerNetworkError": "Không thể tải âm thanh từ máy chủ.",
+  "playerPlaybackError": "Không phát được âm thanh. Thử lại.",
+  "playerRetry": "Thử lại",
+  "playerEmpty": "Chưa chọn tập nào để nghe.",
+  "playerEmptyAction": "Chọn tập trong Podcast",
+  "playerSeriesLine": "Sử Ký · {series}",
+  "@playerSeriesLine": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      }
+    }
+  },
+  "playerFromSeries": "ĐANG PHÁT TỪ SERIES",
+  "playerRestart": "Nghe lại",
+  "playerUpNext": "TIẾP THEO",
+  "narrationLabel": "Góc kể",
+  "narrationFirstPerson": "Lời kể nhân vật",
+  "narrationThirdPerson": "Người dẫn chuyện",
+  "loginRequiredTitle": "Cần đăng nhập để nghe",
+  "loginRequiredMessage": "Đăng nhập để nghe đầy đủ câu chuyện và lưu tiến trình cá nhân.",
+  "loginRequiredLater": "Để sau",
+  "loginRequiredAction": "Đăng nhập",
   "noNotifications": "Chưa có thông báo mới.",
   "seriesDetail": "Chi tiết Series",
   "eraTag": "Đại Thắng Niên Kỷ 938",
@@ -76,21 +109,8 @@
   "sortEpisodes": "Thứ tự 1–6",
   "listened": "Đã nghe",
   "remaining": "Còn 14 phút",
-  "episode1": "Tập 1: Bối cảnh lịch sử",
-  "episode2": "Tập 2: Bày binh bố trận",
-  "episode3": "Tập 3: Thủy chiến quyết định",
-  "episode4": "Tập 4: Nghệ thuật quân sự & địa lý",
-  "episode5": "Tập 5: Ý nghĩa chấm dứt Bắc thuộc",
-  "episode6": "Tập 6: Ngoại truyện – Hậu thế ghi ơn",
-  "playingCollection": "ĐANG PHÁT TUYỂN TẬP",
-  "collectionTitle": "Bạch Đằng 938 Giang Sơn",
   "playerTitle": "Tập 2: Ngô Quyền chuẩn bị trận địa",
   "bachDang": "Bạch Đằng 938",
-  "tideRising": "THỦY TRIỀU DÂNG",
-  "nextEpisode": "TIẾP THEO · TẬP 3",
-  "nextTitle": "Thủy triều rút & Trận phục kích",
-  "detail": "Chi tiết",
-  "timeline": "NIÊN ĐẠI LỊCH SỬ",
   "allEras": "Tất cả thời kỳ",
   "southernHan": "Kháng chiến Nam Hán",
   "lyTran": "Thời Lý – Trần",
@@ -110,8 +130,6 @@
   "explorePrompt": "Chưa tìm thấy niên đại mong muốn?",
   "exploreDescription": "Tra cứu bản đồ niên biểu tương tác 4000 năm lịch sử",
   "emptyResults": "Không tìm thấy nội dung. Thử từ khóa khác nhé.",
-  "save": "Lưu yêu thích",
-  "download": "Tải xuống",
   "share": "Chia sẻ",
   "play": "Phát",
   "pause": "Tạm dừng",
@@ -120,15 +138,16 @@
   "seekBack": "Lùi 15 giây",
   "seekForward": "Tiến 15 giây",
   "sleepTimer": "Hẹn giờ ngủ",
-  "timerOn": "Đã đặt hẹn giờ ngủ 15 phút.",
   "voiceUnavailable": "Tìm kiếm bằng giọng nói chưa được kết nối.",
   "initials": "HN",
   "avatarInitials": "VK",
   "rating": "4.9",
+  "playerStartQuiz": "Làm quiz",
+  "seriesStartEpisodeQuiz": "Làm quiz tập này",
   "quizTitle": "Ôn tập Quiz",
   "quizSubtitle": "Khảo thí lịch sử",
   "quizHeading": "Ôn lại kiến thức",
-  "quizIntro": "Củng cố hiểu biết về trận địa cọc, thủy triều và chiến thuật của Ngô Quyền trong chiến thắng Bạch Đằng năm 938.",
+  "quizIntroBody": "Trả lời lần lượt từng câu rồi nộp bài ở câu cuối để xem điểm và lời giải.",
   "quizQuestions": "{count} câu hỏi",
   "@quizQuestions": {
     "placeholders": {
@@ -137,22 +156,19 @@
       }
     }
   },
-  "quizEstimate": "Khoảng {count} phút",
-  "@quizEstimate": {
+  "quizChoiceType": "Trắc nghiệm",
+  "quizPassScore": "{percent}%",
+  "@quizPassScore": {
     "placeholders": {
-      "count": {
+      "percent": {
         "type": "int"
       }
     }
   },
-  "quizChoiceType": "Trắc nghiệm",
-  "quizEstimated": "Thời gian ước tính",
-  "quizPrevious": "Kết quả lần trước",
-  "quizTip": "Mẹo ôn tập",
-  "quizTipBody": "Chú ý mối liên hệ giữa bãi cọc, con nước và thời điểm phản công.",
+  "quizPassScoreLabel": "Điểm đạt",
   "quizStart": "Bắt đầu quiz",
   "quizRestart": "Làm lại quiz",
-  "quizReturnEpisode": "Quay về tập nghe",
+  "quizBackToQuizzes": "Về danh sách quiz",
   "quizProgress": "TIẾN ĐỘ BÀI LÀM",
   "quizCounter": "Câu {current}/{total}",
   "@quizCounter": {
@@ -165,17 +181,27 @@
       }
     }
   },
-  "quizCategory": "Chiến lược thủy chiến",
   "quizInstruction": "Chọn một phương án chính xác nhất trước khi tiếp tục.",
-  "quizCheck": "Kiểm tra đáp án",
   "quizNext": "Câu tiếp theo",
-  "quizFinish": "Xem kết quả",
+  "quizSubmit": "Nộp bài",
+  "quizSubmitting": "Đang nộp bài…",
+  "quizSubmitFailed": "Chưa nộp được bài. Đáp án của bạn vẫn được giữ, hãy thử lại.",
   "quizCorrect": "Chính xác!",
   "quizIncorrect": "Chưa chính xác",
   "quizRightAnswer": "Đáp án chính xác",
   "quizYourAnswer": "Đáp án bạn chọn",
+  "quizOptionLine": "{label}. {text}",
+  "@quizOptionLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
   "quizExplanation": "Lời giải chi tiết",
-  "quizSource": "Nội dung ôn tập mẫu · Bạch Đằng 938",
   "quizResults": "Kết quả ôn tập",
   "quizScore": "{correct}/{total} câu đúng",
   "@quizScore": {
@@ -196,24 +222,19 @@
       }
     }
   },
-  "quizExcellent": "Rất xuất sắc!",
-  "quizEncourage": "Tiếp tục khám phá nhé!",
-  "quizResultBody": "Xem lại lời giải để ghi nhớ những kiến thức quan trọng của tập nghe.",
-  "quizStatistics": "Thống kê chi tiết",
-  "quizElapsed": "Thời gian hoàn thành",
-  "quizDuration": "{minutes} phút {seconds} giây",
-  "@quizDuration": {
+  "quizPassed": "Đã vượt qua",
+  "quizFailed": "Chưa đạt điểm qua",
+  "quizXpLine": "+{xp} XP · Tổng {total} XP",
+  "@quizXpLine": {
     "placeholders": {
-      "minutes": {
+      "xp": {
         "type": "int"
       },
-      "seconds": {
+      "total": {
         "type": "int"
       }
     }
   },
-  "quizRightCount": "Số câu đúng",
-  "quizWrongCount": "Số câu cần lưu ý",
   "quizReview": "Xem lại chi tiết đáp án",
   "quizReviewTitle": "Khảo thí lịch sử & Lời giải",
   "quizFilterAll": "Tất cả ({count})",
@@ -243,100 +264,191 @@
   "quizNoMatches": "Không có câu hỏi trong mục này.",
   "quizBackResults": "Quay lại màn hình kết quả",
   "quizExitTitle": "Thoát bài đang làm?",
-  "quizExitBody": "Tiến trình lượt làm này sẽ không được lưu. Kết quả đã hoàn thành trước đó vẫn được giữ lại.",
+  "quizExitBody": "Lượt làm này chưa được nộp nên sẽ không được lưu.",
   "quizContinue": "Tiếp tục làm",
   "quizExit": "Thoát quiz",
   "quizHelp": "Hướng dẫn",
-  "quizHelpBody": "Chọn một đáp án, bấm kiểm tra rồi đọc lời giải. Mỗi câu chỉ được kiểm tra một lần. Kết quả được lưu trên thiết bị này.",
-  "quizStorageError": "Không thể đọc hoặc lưu lịch sử trên thiết bị. Bạn vẫn có thể làm và xem kết quả lượt này.",
-  "quizRetrySave": "Thử lưu lại",
-  "quizSaving": "Đang lưu kết quả…",
-  "quizLoadError": "Không thể tải quiz.",
+  "quizHelpBody": "Chọn một đáp án cho mỗi câu rồi bấm Câu tiếp. Ở câu cuối, bấm Nộp bài để chấm điểm và xem lời giải.",
+  "quizLoadFailed": "Không tải được quiz này.",
   "quizRetry": "Thử lại",
+  "quizNotFound": "Tập này chưa có quiz.",
   "quizUnavailable": "Tập này chưa có bộ câu hỏi ôn tập.",
-  "quizEntry": "Ôn tập với Quiz",
-  "quizLocalNote": "Kết quả chỉ lưu trên thiết bị · Chưa đồng bộ tài khoản",
-  "quizQuestion1": "Cọc gỗ trong trận địa Bạch Đằng được chuẩn bị như thế nào?",
-  "quizOptions1": "Vót nhọn và bịt sắt ở đầu | Để nổi tự do trên mặt nước | Xếp thành cầu qua sông | Đặt trên thuyền vận tải",
-  "quizExplanation1": "Ngô Quyền cho chuẩn bị những cọc gỗ lớn, vót nhọn và bịt sắt, đóng xuống lòng sông để tạo trận địa đánh thuyền giặc.",
-  "quizQuestion2": "Ngô Quyền đã lợi dụng đặc điểm tự nhiên nào của sông Bạch Đằng để xây dựng bãi cọc ngầm?",
-  "quizOptions2": "Dòng chảy một chiều quanh năm | Sự thay đổi mực nước khi triều lên và rút | Lòng sông đóng băng vào mùa đông | Những vách núi dựng giữa sông",
-  "quizExplanation2": "Khi triều lên, nước che khuất bãi cọc. Khi triều rút, bãi cọc trở thành chướng ngại khiến thuyền địch mắc kẹt và bị phá hủy trong cuộc phản công.",
-  "quizQuestion3": "Ai trực tiếp chỉ huy thủy quân Nam Hán tiến vào sông Bạch Đằng năm 938?",
-  "quizOptions3": "Lưu Cung | Kiều Công Tiễn | Lưu Hoằng Tháo | Trần Ích Tắc",
-  "quizExplanation3": "Lưu Hoằng Tháo, con của vua Nam Hán Lưu Cung, trực tiếp chỉ huy đạo thủy quân xâm lược và thất bại trong trận Bạch Đằng.",
-  "quizQuestion4": "Quân ta nhử thuyền giặc vượt qua bãi cọc vào thời điểm nào?",
-  "quizOptions4": "Khi nước triều dâng che lấp cọc | Khi nước rút để lộ toàn bộ cọc | Sau khi tháo bỏ bãi cọc | Khi thuyền giặc đã rút lui",
-  "quizExplanation4": "Quân ta dùng thuyền nhẹ nhử địch khi triều lên. Khi nước rút, quân ta phản công, đẩy thuyền địch vào thế bị bãi cọc cản trở.",
-  "quizQuestion5": "Ý nghĩa nổi bật của chiến thắng Bạch Đằng năm 938 là gì?",
-  "quizOptions5": "Mở đầu triều Trần | Dời đô về Thăng Long | Kết thúc kháng chiến chống Minh | Mở ra thời kỳ độc lập tự chủ lâu dài",
-  "quizExplanation5": "Chiến thắng Bạch Đằng năm 938 đánh bại cuộc xâm lược của Nam Hán, là bước ngoặt mở ra thời kỳ độc lập tự chủ lâu dài của dân tộc.",
-  "quizQuestion6": "Yếu tố nào thể hiện sự chủ động chuẩn bị của Ngô Quyền?",
-  "quizOptions6": "Chỉ chờ địch tiến đến rồi ứng phó | Kết hợp khảo sát địa hình, thủy triều và bố trí trận địa | Dựa hoàn toàn vào số lượng thuyền | Bỏ phòng thủ đường sông",
-  "quizExplanation6": "Việc kết hợp địa hình sông nước, quy luật thủy triều, bãi cọc và kế nghi binh giúp quân ta chủ động chọn cách đánh phù hợp.",
-  "missionDetailTitle": "Tập Podcast Chi Tiết",
-  "missionChallenge": "THỬ THÁCH LẮNG NGHE",
-  "missionPoints": "✦ +70 điểm",
-  "missionJourney": "Hành trình chưa dừng lại",
-  "missionJourneyDescription": "Mỗi câu chuyện là một mảnh ghép của lịch sử dân tộc. Hãy lắng nghe trọn vẹn hào khí tiền nhân.",
-  "missionChronicle": "Biên niên sử ngàn năm",
-  "missionChronicleSubtitle": "Lắng nghe để thấu suốt cội nguồn",
-  "missionProgressLabel": "Tiến độ tuần này",
-  "missionProgressValue": "1/3 tập hoàn thành",
-  "missionProgressHint": "Cần hoàn thành thêm 2 tập nữa để nhận ấn thưởng.",
-  "missionConditions": "Điều kiện hoàn thành",
-  "missionRulesLabel": "Quy chuẩn học thuật",
-  "missionStepOne": "Bước 01: Chọn một tập podcast",
-  "missionStepOneDescription": "Chọn bất kỳ một tập thuộc chuyên đề lịch sử hoặc nhân vật hào kiệt.",
-  "missionStepTwo": "Bước 02: Nghe ít nhất 80% thời lượng",
-  "missionStepTwoDescription": "Hệ thống sẽ tự động đối soát và ghi nhận dấu tri thức khi đủ thời lượng.",
-  "missionStepThree": "Bước 03: Hoàn thành 3 tập tuần này",
-  "missionStepThreeDescription": "Hạn chót ấn định vào lúc 23:59 Chủ Nhật hằng tuần.",
-  "missionDone": "Đã xong",
-  "missionActive": "Đang thực hiện",
-  "missionLocked": "Chờ mở",
-  "missionNext": "Gợi ý tiếp theo",
-  "missionRecommended": "Khuyên dùng",
-  "missionEpisodeMeta": "Tập 3 · Sử Việt · 34 phút",
-  "missionEpisodeTitle": "Bạch Đằng 938: Trận thủy chiến quyết định",
-  "missionEpisodeDescription": "Hoàng Tháo đền mạng, vạn thớt thuyền chìm",
-  "missionNarrator": "GS. Đặng Văn Liêm",
-  "missionListen": "Nghe ngay",
-  "missionSeal": "Ấn chương Sử Ký",
-  "missionSealDescription": "Hoàn thành tuần lễ để ghi danh bảng vàng học thuật.",
-  "missionContinue": "Tiếp tục nhiệm vụ",
-  "missionRewardFootnote": "Điểm thưởng sẽ tự động cộng vào Bảng thành tích sau khi hoàn thành.",
-  "honoursTitle": "Bảng Vinh Danh",
-  "honoursWeek": "TUẦN 42 · 2024 · MẪU",
-  "honoursFeat": "KỲ TÍCH",
-  "honoursCongratulations": "Xuất sắc! Bạn đã hoàn thành tuần này",
-  "honoursDescription": "Một hành trình khám phá lịch sử đầy ý nghĩa đã được ghi dấu vào Biên Niên Sử cá nhân.",
-  "honoursTasksValue": "5/5",
-  "honoursTasks": "Nhiệm vụ hoàn thành",
-  "honoursPointsValue": "+400",
-  "honoursPoints": "Điểm sử tích tích lũy",
-  "honoursDaysValue": "5 ngày",
-  "honoursDays": "Duy trì thói quen",
-  "honoursBadgeNew": "HUY HIỆU MỚI KHAI MỞ",
-  "honoursBadgeTitle": "Người Giữ Sử",
-  "honoursBadgeDescription": "Dành tặng học giả hoàn thành trọn vẹn toàn bộ 5/5 điển tích khảo cứu trong tuần.",
-  "honoursBadgePreview": "Bản xem trước bộ sưu tập sử tích",
-  "honoursBadgeLevel": "Cấp 01",
-  "honoursMilestones": "Dấu ấn hành trình",
-  "honoursWeekDetail": "Chi tiết tuần 42",
-  "honoursEpisodes": "5 tập podcast hoàn thành",
-  "honoursEpisodesDescription": "Bạch Đằng, Mê Linh & Thăng Long",
-  "honoursEpisodesStatus": "100%",
-  "honoursMinutes": "150 phút lắng nghe",
-  "honoursMinutesDescription": "Trung bình 30 phút mỗi ngày",
-  "honoursMinutesStatus": "Mục tiêu đạt",
-  "honoursQuiz": "5 câu hỏi sử học",
-  "honoursQuizDescription": "Vượt qua thử thách khảo cứu triều đại",
-  "honoursQuizStatus": "5/5 Đúng",
-  "honoursQuote": "“Sử để ghi việc được mất, khuyên răn muôn đời, soi sáng hiện tại.” — Ngô Sĩ Liên",
-  "honoursDiscover": "Quay về Khám phá",
-  "honoursCollection": "Xem bộ sưu tập huy hiệu",
-  "missionSampleNotice": "Dữ liệu minh họa. Tiến độ, điểm và huy hiệu chưa đồng bộ với tài khoản.",
-  "missionStepTwoNumber": "02",
-  "missionStepThreeNumber": "03"
+  "quizListEyebrow": "HỌC BẰNG THỬ THÁCH",
+  "quizListTitle": "Chọn một bộ quiz để bắt đầu",
+  "quizAllTopics": "Tất cả chủ đề",
+  "quizCompletedBadge": "ĐÃ HOÀN THÀNH",
+  "quizPlays": "{count, plural, =0{Chưa có lượt chơi} other{{count} lượt chơi}}",
+  "@quizPlays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizListEmptyTitle": "Chưa có quiz nào",
+  "quizListEmptyMessage": "Quiz mới sẽ xuất hiện ở đây khi được phát hành.",
+  "missionsHeaderTitle": "Nhiệm Vụ Tuần",
+  "missionsEyebrow": "KHÁM PHÁ LỊCH SỬ",
+  "missionsListTitle": "Nhiệm vụ của bạn",
+  "missionsTotalXp": "Tổng XP",
+  "missionsCompletedLabel": "Nhiệm vụ xong",
+  "missionsWeekEnd": "Hết hạn {date}",
+  "@missionsWeekEnd": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "missionsProgressRatio": "{current}/{target}",
+  "@missionsProgressRatio": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsXpReward": "+{xp} XP",
+  "@missionsXpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatusCompleted": "Hoàn thành",
+  "missionsStatusExpired": "Hết hạn",
+  "missionsEmptyTitle": "Chưa có nhiệm vụ tuần này",
+  "missionsEmptyMessage": "Nhiệm vụ mới sẽ xuất hiện khi bạn bắt đầu học.",
+  "missionsGuestTitle": "Đăng nhập để xem nhiệm vụ",
+  "missionsGuestMessage": "Nhiệm vụ tuần và XP được đồng bộ với tài khoản của bạn.",
+  "weeklyMissions": "Nhiệm vụ tuần",
+  "profileTitle": "Hồ sơ cá nhân",
+  "profileGuestTitle": "Chưa đăng nhập",
+  "profileGuestMessage": "Đăng nhập để đồng bộ tiến trình nghe, lưu quiz và tích luỹ XP.",
+  "profileSignInNow": "Đăng nhập ngay",
+  "profileSignOut": "Đăng xuất",
+  "tabHistory": "Lịch sử",
+  "tabPodcast": "Podcast",
+  "tabQuiz": "Quiz",
+  "podcastTitle": "Podcast",
+  "podcastFeatured": "NỔI BẬT",
+  "podcastSeriesHeading": "Series lịch sử",
+  "podcastEmptyTitle": "Chưa có series nào",
+  "podcastEmptyMessage": "Nội dung mới sẽ xuất hiện ở đây khi được phát hành.",
+  "catalogErrorNetwork": "Không kết nối được máy chủ.",
+  "catalogErrorGeneric": "Không tải được nội dung.",
+  "catalogRetry": "Thử lại",
+  "episodeMinutes": "{minutes} phút",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesEpisodeCount": "{count, plural, =1{1 tập} other{{count} tập}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNotFound": "Không tìm thấy series này.",
+  "seriesBackToPodcast": "Về Podcast",
+  "seriesNoAudio": "Series này chưa có tập nào có audio.",
+  "seriesPlayFirst": "Phát tập có audio",
+  "episodeNoAudio": "Chưa có audio",
+  "episodeNoAudioNotice": "Tập này chưa có audio để nghe.",
+  "homeAllPeriods": "Tất cả",
+  "homeSeriesEmpty": "Chưa có series cho thời kỳ này.",
+  "searchMinCharsHint": "Nhập ít nhất 2 ký tự để tìm kiếm.",
+  "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileMissionsDone": "{count, plural, =0{Chưa có nhiệm vụ nào đã xong} other{{count} nhiệm vụ đã xong}}",
+  "@profileMissionsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileRecentTitle": "Đã nghe gần đây",
+  "profileRecentEmpty": "Chưa có lịch sử nghe.",
+  "profileHistoryProgress": "{series} · Đã nghe {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "profileScheduleTooltip": "Lịch phát sóng",
+  "scheduleTitle": "Lịch phát sóng",
+  "scheduleEmpty": "Chưa có lịch phát trong tháng này.",
+  "scheduleReleased": "Đã phát hành",
+  "scheduleUpcoming": "Sắp ra mắt",
+  "schedulePrevMonth": "Tháng trước",
+  "scheduleNextMonth": "Tháng sau",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
+  },
+  "timelineTitle": "Dòng thời gian lịch sử",
+  "timelineSubtitle": "Dấu mốc nghìn năm dựng nước và giữ nước",
+  "timelineEmptyTitle": "Chưa có sự kiện trong thời kỳ này",
+  "timelineEmptyMessage": "Chọn “Tất cả” để xem mọi thời kỳ.",
+  "eventDetailTitle": "Chi tiết sự kiện",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Nguồn tư liệu lịch sử",
+  "eventSourceFallbackAuthor": "Tài liệu lịch sử",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Podcast liên quan"
 }

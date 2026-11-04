@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "Su Ke",
+  "appName": "Su Ky",
   "taps": "Taps: {count}",
   "@taps": {
     "placeholders": {
@@ -11,7 +11,7 @@
   },
   "increment": "Increment",
   "audioHistory": "HISTORY AUDIO",
-  "brandAudio": "SU KE AUDIO",
+  "brandAudio": "SU KY AUDIO",
   "discover": "Discover",
   "search": "Search",
   "profile": "Profile",
@@ -22,14 +22,11 @@
   "battles": "Great battles",
   "people": "Historical figures",
   "continueListening": "CONTINUE LISTENING",
-  "resumeTitle": "Bach Dang 938: Preparing the stakes",
-  "resumeSubtitle": "Ngo dynasty · Episode 2",
   "seriesHeading": "History collections",
   "viewAll": "View all",
   "seriesTitle": "Bach Dang 938: The legendary wooden stakes",
   "seriesShort": "Victory at Bach Dang 938",
   "secondSeries": "Dong A: Three victories over the Mongols",
-  "author": "Prof. Dang Van Liem",
   "secondAuthor": "Vietnam History Research",
   "warHistory": "Military history",
   "tranDynasty": "Tran dynasty",
@@ -53,16 +50,52 @@
   "loginSubtitle": "Sign in to sync your listening progress\nand save your favorite history podcasts.",
   "email": "Email",
   "password": "Password",
-  "forgotPassword": "Forgot password?",
   "loginAction": "Sign in & keep listening",
   "orContinue": "OR CONTINUE WITH",
   "googleAction": "Continue with Google",
-  "noAccount": "New to Su Ke?",
+  "noAccount": "New to Su Ky?",
   "register": "Sign up for free",
   "emailHint": "your.name@gmail.com",
-  "invalidCredentials": "Enter a valid email and a password of at least 6 characters.",
+  "invalidCredentials": "Enter a valid email and a password of at least 8 characters.",
+  "authSignUpHeading": "Create your Su Ky account",
+  "authSignUpSubtitle": "Sign up to sync your listening progress and save quizzes.",
+  "authSignUpAction": "Sign up & keep listening",
+  "name": "Your name",
+  "nameHint": "Jane Doe",
+  "haveAccount": "Already have an account?",
+  "signIn": "Sign in",
+  "authWrongCredentials": "Wrong email or password.",
+  "authEmailTaken": "This email is already registered.",
+  "authNetworkError": "Cannot reach the server. Try again.",
+  "authUnknownError": "Something went wrong. Try again.",
   "demoNotice": "UI demo; account services are not connected.",
   "notifications": "Notifications",
+  "audioChannelName": "Podcast playback",
+  "playerLoading": "Loading…",
+  "playerUnavailable": "This episode has no recording ready yet.",
+  "playerNetworkError": "Could not load the audio from the server.",
+  "playerPlaybackError": "Could not play the audio. Try again.",
+  "playerRetry": "Retry",
+  "playerEmpty": "No episode selected yet.",
+  "playerEmptyAction": "Pick an episode in Podcast",
+  "playerSeriesLine": "Su Ky · {series}",
+  "@playerSeriesLine": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      }
+    }
+  },
+  "playerFromSeries": "NOW PLAYING FROM SERIES",
+  "playerRestart": "Listen again",
+  "playerUpNext": "UP NEXT",
+  "narrationLabel": "Narration",
+  "narrationFirstPerson": "Character voice",
+  "narrationThirdPerson": "Narrator",
+  "loginRequiredTitle": "Sign in to listen",
+  "loginRequiredMessage": "Sign in to hear the full story and save your listening progress.",
+  "loginRequiredLater": "Later",
+  "loginRequiredAction": "Sign in",
   "noNotifications": "No new notifications.",
   "seriesDetail": "Series details",
   "eraTag": "Year of victory 938",
@@ -76,21 +109,8 @@
   "sortEpisodes": "Order 1–6",
   "listened": "Listened",
   "remaining": "14 min left",
-  "episode1": "Episode 1: Historical context",
-  "episode2": "Episode 2: Preparing the battlefield",
-  "episode3": "Episode 3: The decisive naval battle",
-  "episode4": "Episode 4: Military strategy & geography",
-  "episode5": "Episode 5: The end of northern rule",
-  "episode6": "Episode 6: Epilogue & legacy",
-  "playingCollection": "PLAYING COLLECTION",
-  "collectionTitle": "Bach Dang 938",
   "playerTitle": "Episode 2: Ngo Quyen prepares the battlefield",
   "bachDang": "Bach Dang 938",
-  "tideRising": "THE TIDE RISES",
-  "nextEpisode": "UP NEXT · EPISODE 3",
-  "nextTitle": "The ebb tide & the ambush",
-  "detail": "Details",
-  "timeline": "HISTORICAL PERIOD",
   "allEras": "All periods",
   "southernHan": "Southern Han resistance",
   "lyTran": "Ly–Tran dynasties",
@@ -110,8 +130,6 @@
   "explorePrompt": "Looking for another period?",
   "exploreDescription": "Explore an interactive timeline of 4,000 years of history",
   "emptyResults": "No results. Try another search.",
-  "save": "Save favorite",
-  "download": "Download",
   "share": "Share",
   "play": "Play",
   "pause": "Pause",
@@ -120,15 +138,16 @@
   "seekBack": "Rewind 15 seconds",
   "seekForward": "Forward 15 seconds",
   "sleepTimer": "Sleep timer",
-  "timerOn": "Sleep timer set for 15 minutes.",
   "voiceUnavailable": "Voice search is not connected yet.",
   "initials": "HN",
   "avatarInitials": "VK",
   "rating": "4.9",
+  "playerStartQuiz": "Take the quiz",
+  "seriesStartEpisodeQuiz": "Take this episode's quiz",
   "quizTitle": "Episode quiz",
   "quizSubtitle": "History knowledge check",
   "quizHeading": "Review your knowledge",
-  "quizIntro": "Review the stakes, tides and tactics behind Ngo Quyen’s victory at Bach Dang in 938.",
+  "quizIntroBody": "Answer every question in order, then submit at the last one to see your score and explanations.",
   "quizQuestions": "{count} questions",
   "@quizQuestions": {
     "placeholders": {
@@ -137,22 +156,19 @@
       }
     }
   },
-  "quizEstimate": "About {count} minutes",
-  "@quizEstimate": {
+  "quizChoiceType": "Multiple choice",
+  "quizPassScore": "{percent}%",
+  "@quizPassScore": {
     "placeholders": {
-      "count": {
+      "percent": {
         "type": "int"
       }
     }
   },
-  "quizChoiceType": "Multiple choice",
-  "quizEstimated": "Estimated time",
-  "quizPrevious": "Previous result",
-  "quizTip": "Study tip",
-  "quizTipBody": "Focus on how the stakes, tides and timing of the counterattack work together.",
+  "quizPassScoreLabel": "Pass score",
   "quizStart": "Start quiz",
   "quizRestart": "Try again",
-  "quizReturnEpisode": "Back to episode",
+  "quizBackToQuizzes": "Back to quiz list",
   "quizProgress": "QUIZ PROGRESS",
   "quizCounter": "Question {current}/{total}",
   "@quizCounter": {
@@ -165,17 +181,27 @@
       }
     }
   },
-  "quizCategory": "Naval strategy",
   "quizInstruction": "Choose the best answer before continuing.",
-  "quizCheck": "Check answer",
   "quizNext": "Next question",
-  "quizFinish": "See results",
+  "quizSubmit": "Submit answers",
+  "quizSubmitting": "Submitting…",
+  "quizSubmitFailed": "Could not submit this attempt. Your answers are kept; try again.",
   "quizCorrect": "Correct!",
   "quizIncorrect": "Not quite",
   "quizRightAnswer": "Correct answer",
   "quizYourAnswer": "Your answer",
+  "quizOptionLine": "{label}. {text}",
+  "@quizOptionLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
   "quizExplanation": "Explanation",
-  "quizSource": "Sample learning content · Bach Dang 938",
   "quizResults": "Quiz results",
   "quizScore": "{correct}/{total} correct",
   "@quizScore": {
@@ -196,26 +222,21 @@
       }
     }
   },
-  "quizExcellent": "Excellent work!",
-  "quizEncourage": "Keep exploring!",
-  "quizResultBody": "Review the explanations to remember the key ideas from this episode.",
-  "quizStatistics": "Detailed statistics",
-  "quizElapsed": "Time taken",
-  "quizDuration": "{minutes} min {seconds} sec",
-  "@quizDuration": {
+  "quizPassed": "Passed",
+  "quizFailed": "Not passed yet",
+  "quizXpLine": "+{xp} XP · Total {total} XP",
+  "@quizXpLine": {
     "placeholders": {
-      "minutes": {
+      "xp": {
         "type": "int"
       },
-      "seconds": {
+      "total": {
         "type": "int"
       }
     }
   },
-  "quizRightCount": "Correct answers",
-  "quizWrongCount": "Questions to review",
   "quizReview": "Review answers",
-  "quizReviewTitle": "History quiz & explanations",
+  "quizReviewTitle": "Quiz & explanations",
   "quizFilterAll": "All ({count})",
   "@quizFilterAll": {
     "placeholders": {
@@ -243,100 +264,191 @@
   "quizNoMatches": "No questions in this category.",
   "quizBackResults": "Back to results",
   "quizExitTitle": "Leave this quiz?",
-  "quizExitBody": "This attempt’s progress will be discarded. Previous completed results will be kept.",
+  "quizExitBody": "This attempt has not been submitted, so it will not be saved.",
   "quizContinue": "Keep going",
   "quizExit": "Leave quiz",
   "quizHelp": "Help",
-  "quizHelpBody": "Select an option, check it and read the explanation. Each question can only be checked once. Results are saved on this device.",
-  "quizStorageError": "Could not read or save local history. You can still take the quiz and review this attempt.",
-  "quizRetrySave": "Retry save",
-  "quizSaving": "Saving result…",
-  "quizLoadError": "Could not load quiz.",
+  "quizHelpBody": "Choose one answer per question, then tap Next question. On the last question, submit to see your score and explanations.",
+  "quizLoadFailed": "Could not load this quiz.",
   "quizRetry": "Retry",
+  "quizNotFound": "This episode has no quiz yet.",
   "quizUnavailable": "No quiz is available for this episode yet.",
-  "quizEntry": "Review with a quiz",
-  "quizLocalNote": "Saved on this device only · No account sync",
-  "quizQuestion1": "How were the wooden stakes at Bach Dang prepared?",
-  "quizOptions1": "Sharpened and iron-tipped | Left floating freely | Arranged as a bridge | Placed on transport boats",
-  "quizExplanation1": "Ngo Quyen had large wooden stakes sharpened, tipped with iron and driven into the riverbed to damage enemy ships.",
-  "quizQuestion2": "Which natural feature of the Bach Dang River did Ngo Quyen exploit for the hidden stakes?",
-  "quizOptions2": "A constant one-way current | The changing water level of the tides | Winter ice on the river | Cliffs in the middle of the river",
-  "quizExplanation2": "High tide concealed the stakes. As the tide fell, they trapped and damaged the enemy ships during the counterattack.",
-  "quizQuestion3": "Who commanded the Southern Han fleet entering the Bach Dang River in 938?",
-  "quizOptions3": "Liu Gong | Kieu Cong Tien | Liu Hongcao | Tran Ich Tac",
-  "quizExplanation3": "Liu Hongcao, son of the Southern Han ruler Liu Gong, led the invading fleet and was defeated at Bach Dang.",
-  "quizQuestion4": "When did Ngo Quyen’s forces lure enemy ships past the stakes?",
-  "quizOptions4": "When high tide covered the stakes | When low tide exposed all stakes | After removing the stakes | After the enemy had retreated",
-  "quizExplanation4": "Light boats lured the fleet in at high tide. The counterattack began as the tide fell and the stakes obstructed the enemy ships.",
-  "quizQuestion5": "What was a major significance of the victory at Bach Dang in 938?",
-  "quizOptions5": "The beginning of the Tran dynasty | Moving the capital to Thang Long | Ending the resistance against the Ming | Beginning a lasting era of independence",
-  "quizExplanation5": "The victory defeated the Southern Han invasion and marked a turning point toward a lasting era of independence.",
-  "quizQuestion6": "Which action shows Ngo Quyen’s careful preparation?",
-  "quizOptions6": "Waiting without a plan | Studying terrain and tides and preparing the battlefield | Relying only on fleet size | Abandoning river defenses",
-  "quizExplanation6": "Combining the river terrain, tidal patterns, stake field and feigned retreat allowed Ngo Quyen to control how the battle unfolded.",
-  "missionDetailTitle": "Podcast details",
-  "missionChallenge": "LISTENING CHALLENGE",
-  "missionPoints": "✦ +70 points",
-  "missionJourney": "The journey continues",
-  "missionJourneyDescription": "Every story is a piece of our history. Listen to the voices of the past.",
-  "missionChronicle": "A thousand-year chronicle",
-  "missionChronicleSubtitle": "Listen to understand our origins",
-  "missionProgressLabel": "This week’s progress",
-  "missionProgressValue": "1/3 episodes completed",
-  "missionProgressHint": "Complete 2 more episodes to earn the reward.",
-  "missionConditions": "Completion requirements",
-  "missionRulesLabel": "Listening guidelines",
-  "missionStepOne": "Step 01: Choose a podcast",
-  "missionStepOneDescription": "Choose an episode about a historical event or figure.",
-  "missionStepTwo": "Step 02: Listen to at least 80%",
-  "missionStepTwoDescription": "Listening progress is recorded once the required duration is reached.",
-  "missionStepThree": "Step 03: Finish 3 episodes this week",
-  "missionStepThreeDescription": "The deadline is 23:59 every Sunday.",
-  "missionDone": "Done",
-  "missionActive": "In progress",
-  "missionLocked": "Locked",
-  "missionNext": "Up next",
-  "missionRecommended": "Recommended",
-  "missionEpisodeMeta": "Episode 3 · Vietnamese history · 34 min",
-  "missionEpisodeTitle": "Bach Dang 938: The decisive naval battle",
-  "missionEpisodeDescription": "The defeat of Liu Hongcao and his invading fleet",
-  "missionNarrator": "Prof. Dang Van Liem",
-  "missionListen": "Listen now",
-  "missionSeal": "History seal",
-  "missionSealDescription": "Complete the week to earn a place on the honour board.",
-  "missionContinue": "Continue mission",
-  "missionRewardFootnote": "Reward points are added to your achievements after completion.",
-  "honoursTitle": "Honour board",
-  "honoursWeek": "WEEK 42 · 2024 · SAMPLE",
-  "honoursFeat": "MILESTONE",
-  "honoursCongratulations": "Outstanding! Your week is complete",
-  "honoursDescription": "A meaningful journey through history, recorded in your personal chronicle.",
-  "honoursTasksValue": "5/5",
-  "honoursTasks": "Missions completed",
-  "honoursPointsValue": "+400",
-  "honoursPoints": "History points earned",
-  "honoursDaysValue": "5 days",
-  "honoursDays": "Listening streak",
-  "honoursBadgeNew": "NEW BADGE UNLOCKED",
-  "honoursBadgeTitle": "Keeper of History",
-  "honoursBadgeDescription": "Awarded for completing all five historical explorations in a week.",
-  "honoursBadgePreview": "History collection preview",
-  "honoursBadgeLevel": "Level 01",
-  "honoursMilestones": "Journey milestones",
-  "honoursWeekDetail": "Week 42 details",
-  "honoursEpisodes": "5 podcast episodes completed",
-  "honoursEpisodesDescription": "Bach Dang, Me Linh & Thang Long",
-  "honoursEpisodesStatus": "100%",
-  "honoursMinutes": "150 minutes of listening",
-  "honoursMinutesDescription": "An average of 30 minutes per day",
-  "honoursMinutesStatus": "Goal reached",
-  "honoursQuiz": "5 history questions",
-  "honoursQuizDescription": "Complete the dynasty research challenge",
-  "honoursQuizStatus": "5/5 correct",
-  "honoursQuote": "“History records gains and losses, counsels future generations, and illuminates the present.” — Ngo Si Lien",
-  "honoursDiscover": "Back to Discover",
-  "honoursCollection": "View badge collection",
-  "missionSampleNotice": "Sample data. Progress, points and badges are not synced to an account.",
-  "missionStepTwoNumber": "02",
-  "missionStepThreeNumber": "03"
+  "quizListEyebrow": "LEARN BY CHALLENGE",
+  "quizListTitle": "Pick a quiz set to start",
+  "quizAllTopics": "All topics",
+  "quizCompletedBadge": "COMPLETED",
+  "quizPlays": "{count, plural, =0{No plays yet} =1{1 play} other{{count} plays}}",
+  "@quizPlays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizListEmptyTitle": "No quizzes yet",
+  "quizListEmptyMessage": "New quizzes will appear here once they are published.",
+  "missionsHeaderTitle": "Weekly Missions",
+  "missionsEyebrow": "EXPLORE HISTORY",
+  "missionsListTitle": "Your missions",
+  "missionsTotalXp": "Total XP",
+  "missionsCompletedLabel": "Missions done",
+  "missionsWeekEnd": "Ends {date}",
+  "@missionsWeekEnd": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "missionsProgressRatio": "{current}/{target}",
+  "@missionsProgressRatio": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsXpReward": "+{xp} XP",
+  "@missionsXpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatusCompleted": "Completed",
+  "missionsStatusExpired": "Expired",
+  "missionsEmptyTitle": "No missions this week",
+  "missionsEmptyMessage": "New missions will appear as you start learning.",
+  "missionsGuestTitle": "Sign in to see your missions",
+  "missionsGuestMessage": "Weekly missions and XP sync with your account.",
+  "weeklyMissions": "Weekly missions",
+  "profileTitle": "Profile",
+  "profileGuestTitle": "Not signed in",
+  "profileGuestMessage": "Sign in to sync your listening progress, save quizzes and earn XP.",
+  "profileSignInNow": "Sign in now",
+  "profileSignOut": "Sign out",
+  "tabHistory": "History",
+  "tabPodcast": "Podcast",
+  "tabQuiz": "Quiz",
+  "podcastTitle": "Podcast",
+  "podcastFeatured": "FEATURED",
+  "podcastSeriesHeading": "History series",
+  "podcastEmptyTitle": "No series yet",
+  "podcastEmptyMessage": "New content will appear here once it is published.",
+  "catalogErrorNetwork": "Cannot reach the server.",
+  "catalogErrorGeneric": "Could not load the content.",
+  "catalogRetry": "Try again",
+  "episodeMinutes": "{minutes} min",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesEpisodeCount": "{count, plural, =1{1 episode} other{{count} episodes}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNotFound": "This series was not found.",
+  "seriesBackToPodcast": "Back to Podcast",
+  "seriesNoAudio": "This series has no episode with audio yet.",
+  "seriesPlayFirst": "Play first episode with audio",
+  "episodeNoAudio": "No audio yet",
+  "episodeNoAudioNotice": "This episode has no audio to play yet.",
+  "homeAllPeriods": "All",
+  "homeSeriesEmpty": "No series for this period yet.",
+  "searchMinCharsHint": "Type at least 2 characters to search.",
+  "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileMissionsDone": "{count, plural, =0{No missions done yet} =1{1 mission done} other{{count} missions done}}",
+  "@profileMissionsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileRecentTitle": "Recently listened",
+  "profileRecentEmpty": "No listening history yet.",
+  "profileHistoryProgress": "{series} · Listened {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "profileScheduleTooltip": "Release schedule",
+  "scheduleTitle": "Release schedule",
+  "scheduleEmpty": "No releases scheduled this month.",
+  "scheduleReleased": "Released",
+  "scheduleUpcoming": "Coming soon",
+  "schedulePrevMonth": "Previous month",
+  "scheduleNextMonth": "Next month",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
+  },
+  "timelineTitle": "Historical timeline",
+  "timelineSubtitle": "A thousand years of nation-building and defence",
+  "timelineEmptyTitle": "No events in this period yet",
+  "timelineEmptyMessage": "Choose “All” to see every period.",
+  "eventDetailTitle": "Event details",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Historical sources",
+  "eventSourceFallbackAuthor": "Historical document",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Related podcasts"
 }

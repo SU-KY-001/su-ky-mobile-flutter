@@ -16,7 +16,7 @@ Create `domain/`/`data/` only when the feature has them (reference feature
   loading/error/data explicitly (`AsyncValue`). Use `autoDispose` by default.
 - Repository: single source of truth; returns `Result<T>`; maps DTO -> domain;
   hides services. Abstract class in `domain/` or `data/`, so tests fake it.
-- Service: wraps one external source (HTTP, sqflite); no business rules.
+- Service: wraps one external source (HTTP, storage); no business rules.
 - No cross-feature imports of `ui/` or `data/`. Shared code -> `core/` or
   `shared/`.
 - Tests: `test/features/<feature>/...` — ViewModel unit tests with

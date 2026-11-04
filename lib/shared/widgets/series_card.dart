@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
+import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
+import 'package:su_ky_mobile/shared/widgets/cover_art.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
+
+const _coverHeight = 126.0;
+const _largeCoverHeight = 155.0;
 
 class SeriesCard extends StatelessWidget {
   const SeriesCard({
     super.key,
+    required this.series,
     required this.onTap,
-    this.secondary = false,
     this.large = false,
   });
+
+  final SeriesSummary series;
   final VoidCallback onTap;
-  final bool secondary;
   final bool large;
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppDesign.radius),
       child: Surface(
         padding: EdgeInsets.zero,
         child: Column(
@@ -27,8 +34,9 @@ class SeriesCard extends StatelessWidget {
             Stack(
               children: [
                 CoverArt(
-                  path: secondary ? AppDesign.secondCover : AppDesign.cover,
-                  height: large ? 155 : 126,
+                  url: series.coverUrl,
+                  seed: series.slug,
+                  height: large ? _largeCoverHeight : _coverHeight,
                 ),
                 Positioned(
                   left: 10,
@@ -43,7 +51,7 @@ class SeriesCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      secondary ? l.eightEpisodes : l.sixEpisodes,
+                      l.seriesEpisodeCount(series.episodeCount),
                       style: const TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ),
@@ -55,21 +63,8 @@ class SeriesCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (large)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Text(
-                        l.resistanceTag,
-                        style: context.text.labelSmall?.copyWith(
-                          color: context.accent,
-                          letterSpacing: .6,
-                        ),
-                      ),
-                    ),
                   Text(
-                    secondary
-                        ? l.secondSeries
-                        : (large ? l.seriesShort : l.seriesTitle),
+                    series.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style:
@@ -78,41 +73,17 @@ class SeriesCard extends StatelessWidget {
                                 : context.text.labelLarge)
                             ?.copyWith(fontWeight: FontWeight.w700),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    large
-                        ? l.searchDescription
-                        : (secondary ? l.secondAuthor : l.author),
-                    maxLines: large ? 2 : 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.text.bodySmall?.copyWith(
-                      color: AppDesign.muted,
-                    ),
-                  ),
-                  const Divider(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          secondary ? l.tranDynasty : l.warHistory,
-                          style: context.text.labelSmall?.copyWith(
-                            color: AppDesign.muted,
-                          ),
-                        ),
+                  if (series.description != null) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      series.description!,
+                      maxLines: large ? 3 : 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.bodySmall?.copyWith(
+                        color: AppDesign.muted,
                       ),
-                      if (large)
-                        Text(l.detail, style: TextStyle(color: context.accent))
-                      else ...[
-                        Icon(Icons.star, size: 12, color: context.accent),
-                        Text(
-                          l.rating,
-                          style: context.text.labelSmall?.copyWith(
-                            color: context.accent,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
             ),

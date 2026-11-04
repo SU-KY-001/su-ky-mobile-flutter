@@ -1,53 +1,40 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
+import 'package:su_ky_mobile/shared/catalog/domain/series.dart';
 
-class SearchState {
-  const SearchState({
-    this.query = '',
-    this.era = 0,
-    this.recent = const [0, 1, 2],
-  });
-  final String query;
-  final int era;
-  final List<int> recent;
-}
+const searchDebounce = Duration(milliseconds: 400);
+const searchMinChars = 2;
 
-class SearchViewModel extends Notifier<AsyncValue<SearchState>> {
+/// What the user typed. Debouncing and the server call live in
+/// [searchResultsProvider] so typing stays instant.
+class SearchViewModel extends Notifier<String> {
   @override
-  AsyncValue<SearchState> build() => const AsyncData(SearchState());
-  void query(String text) => state = AsyncData(
-    SearchState(
-      query: text,
-      era: state.requireValue.era,
-      recent: state.requireValue.recent,
-    ),
-  );
-  void era(int index) => state = AsyncData(
-    SearchState(
-      query: state.requireValue.query,
-      era: index,
-      recent: state.requireValue.recent,
-    ),
-  );
-  void clearHistory() => state = AsyncData(
-    SearchState(
-      query: state.requireValue.query,
-      era: state.requireValue.era,
-      recent: const [],
-    ),
-  );
-  void removeRecent(int index) => state = AsyncData(
-    SearchState(
-      query: state.requireValue.query,
-      era: state.requireValue.era,
-      recent: state.requireValue.recent.where((item) => item != index).toList(),
-    ),
-  );
-  bool matches(String title) => title.toLowerCase().contains(
-    state.requireValue.query.trim().toLowerCase(),
-  );
+  String build() => '';
+
+  void query(String text) => state = text;
 }
 
 final searchViewModelProvider =
-    NotifierProvider.autoDispose<SearchViewModel, AsyncValue<SearchState>>(
-      SearchViewModel.new,
-    );
+    NotifierProvider.autoDispose<SearchViewModel, String>(SearchViewModel.new);
+
+/// Results for the current query, or null while the query is too short.
+/// Each keystroke disposes the previous run, so only the last query after the
+/// debounce window reaches the API and stale responses are dropped.
+final searchResultsProvider = FutureProvider.autoDispose<List<SeriesSummary>?>((
+  ref,
+) async {
+  final query = ref.watch(searchViewModelProvider).trim();
+  if (query.length < searchMinChars) return null;
+  var cancelled = false;
+  ref.onDispose(() => cancelled = true);
+  await Future<void>.delayed(searchDebounce);
+  if (cancelled) throw const _SupersededQuery();
+  return ref.watch(seriesSearchProvider(query).future);
+});
+
+/// Thrown into a disposed provider run; nothing observes it.
+class _SupersededQuery implements Exception {
+  const _SupersededQuery();
+}

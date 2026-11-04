@@ -49,7 +49,7 @@ abstract final class AppTheme {
         (states) => TextStyle(
           fontFamily: 'Inter',
           color: states.contains(WidgetState.selected)
-              ? Colors.white
+              ? AppDesign.white
               : AppDesign.ink,
           fontSize: 12,
         ),
@@ -70,7 +70,7 @@ abstract final class AppTheme {
     ),
     navigationBarTheme: NavigationBarThemeData(
       height: 78,
-      backgroundColor: const Color(0xFFF1EFEF),
+      backgroundColor: AppDesign.navBar,
       indicatorColor: Colors.transparent,
       labelTextStyle: WidgetStateTextStyle.resolveWith(
         (states) => TextStyle(

@@ -1,14 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeViewModel extends Notifier<AsyncValue<int>> {
+/// Selected historical period id; null means "all periods".
+class HomeViewModel extends Notifier<String?> {
   @override
-  AsyncValue<int> build() => const AsyncData(0);
-  void selectCategory(int index) {
-    if (index >= 0 && index < 3) state = AsyncData(index);
-  }
+  String? build() => null;
+
+  void select(String? periodId) => state = periodId;
 }
 
 final homeViewModelProvider =
-    NotifierProvider.autoDispose<HomeViewModel, AsyncValue<int>>(
-      HomeViewModel.new,
-    );
+    NotifierProvider.autoDispose<HomeViewModel, String?>(HomeViewModel.new);

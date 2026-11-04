@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/auth/ui/session_controller.dart';
 import '../l10n/gen/app_localizations.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
@@ -15,13 +16,11 @@ class App extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<App> {
-  // Created once: rebuilding the router would reset navigation state.
-  final _router = AppRouter.create();
-
   @override
-  void dispose() {
-    _router.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    // read, not watch: hydration must not rebuild MaterialApp.
+    ref.read(sessionControllerProvider);
   }
 
   @override
@@ -32,7 +31,7 @@ class _AppState extends ConsumerState<App> {
       locale: const Locale('vi'),
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      routerConfig: _router,
+      routerConfig: ref.watch(routerProvider),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:su_ky_mobile/app/router/app_routes.dart';
+import 'package:su_ky_mobile/features/auth/ui/auth_colors.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
-import 'login_view_model.dart';
+import 'auth_fields.dart';
+import 'auth_form_view_model.dart';
+import 'auth_mode_footer.dart';
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({
-    super.key,
-    required this.onClose,
-    required this.onContinue,
-  });
-  final VoidCallback onClose, onContinue;
+  const LoginScreen({super.key, this.returnTo});
+
+  /// Already validated by `AppRoutes.safeReturnTo`.
+  final String? returnTo;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final form = ref.watch(loginViewModelProvider).requireValue;
-    final vm = ref.read(loginViewModelProvider.notifier);
+    final form = ref.watch(authFormViewModelProvider);
+    final signUp = form.mode == AuthMode.signUp;
+    final vm = ref.read(authFormViewModelProvider.notifier);
     void notice() =>
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l.demoNotice)));
@@ -30,7 +35,7 @@ class LoginScreen extends ConsumerWidget {
             Row(
               children: [
                 IconButton.outlined(
-                  onPressed: onClose,
+                  onPressed: () => context.popOrGo(AppRoutes.home),
                   tooltip: l.close,
                   icon: const Icon(Icons.close),
                 ),
@@ -71,7 +76,7 @@ class LoginScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 22),
             Text(
-              l.loginHeading,
+              signUp ? l.authSignUpHeading : l.loginHeading,
               textAlign: TextAlign.center,
               style: context.text.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w800,
@@ -80,7 +85,7 @@ class LoginScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              l.loginSubtitle,
+              signUp ? l.authSignUpSubtitle : l.loginSubtitle,
               textAlign: TextAlign.center,
               style: context.text.bodyMedium?.copyWith(
                 color: AppDesign.muted,
@@ -88,57 +93,28 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 32),
-            Text(l.email, style: context.text.bodySmall),
-            const SizedBox(height: 6),
-            TextField(
-              onChanged: vm.email,
-              keyboardType: TextInputType.emailAddress,
-              autofillHints: const [AutofillHints.email],
-              decoration: InputDecoration(
-                hintText: l.emailHint,
-                prefixIcon: const Icon(Icons.mail_outline, size: 19),
-                errorText: form.invalid ? l.invalidCredentials : null,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Text(l.password, style: context.text.bodySmall),
-                const Spacer(),
-                TextButton(
-                  onPressed: notice,
-                  child: Text(
-                    l.forgotPassword,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ),
-              ],
-            ),
-            TextField(
-              onChanged: vm.password,
-              obscureText: form.obscured,
-              decoration: InputDecoration(
-                hintText: '••••••••',
-                prefixIcon: const Icon(Icons.lock_outline, size: 19),
-                suffixIcon: IconButton(
-                  onPressed: vm.toggleVisibility,
-                  tooltip: l.password,
-                  icon: Icon(
-                    form.obscured
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                    size: 19,
-                  ),
-                ),
-              ),
-            ),
+            const AuthFields(),
             const SizedBox(height: 18),
             FilledButton.icon(
-              onPressed: () {
-                if (vm.submit()) onContinue();
-              },
-              icon: const Icon(Icons.play_arrow_rounded),
-              label: Text(l.loginAction),
+              // Success replaces the stack with the destination: the session
+              // change refreshes the router, and a pushed login page cannot be
+              // popped after that refresh, so pop/pushReplacement are not safe.
+              // The router is captured before the await: this widget may be
+              // disposed while the request is in flight.
+              onPressed: form.submitting
+                  ? null
+                  : () async {
+                      final router = GoRouter.of(context);
+                      if (!await vm.submit()) return;
+                      router.go(returnTo ?? AppRoutes.home);
+                    },
+              icon: form.submitting
+                  ? const SizedBox.square(
+                      dimension: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.play_arrow_rounded),
+              label: Text(signUp ? l.authSignUpAction : l.loginAction),
             ),
             const SizedBox(height: 28),
             Row(
@@ -173,7 +149,7 @@ class LoginScreen extends ConsumerWidget {
                   fontFamily: 'Inter',
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF4285F4),
+                  color: AuthColors.googleBlue,
                 ),
               ),
               label: Text(
@@ -183,22 +159,7 @@ class LoginScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 74),
             const Divider(),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(
-                  l.noAccount,
-                  style: context.text.bodySmall?.copyWith(
-                    color: AppDesign.muted,
-                  ),
-                ),
-                TextButton(
-                  onPressed: notice,
-                  child: Text(l.register, style: const TextStyle(fontSize: 12)),
-                ),
-              ],
-            ),
+            const AuthModeFooter(),
           ],
         ),
       ),

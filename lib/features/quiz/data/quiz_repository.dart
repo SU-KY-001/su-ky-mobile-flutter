@@ -1,86 +1,114 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:su_ky_mobile/core/error/app_exception.dart';
-import 'package:su_ky_mobile/core/error/result.dart';
-import 'package:su_ky_mobile/core/logging/app_logger.dart';
 
+import '../../../core/di/providers.dart';
+import '../../../core/error/app_exception.dart';
+import '../../../core/error/result.dart';
+import '../../../core/logging/app_logger.dart';
+import '../../../core/network/dio_factory.dart';
+import '../../../shared/catalog/catalog_constants.dart';
 import '../domain/quiz.dart';
+import 'quiz_constants.dart';
+import 'quiz_parser.dart';
 
 abstract class QuizRepository {
-  Future<Result<QuizAttempt?>> latest();
-  Future<Result<void>> save(QuizAttempt attempt);
+  Future<Result<QuizCatalog>> catalog({
+    String? topicId,
+    int limit = QuizDefaults.catalogLimit,
+  });
+
+  Future<Result<Quiz>> episodeQuiz(String slug);
+
+  /// [idempotencyKey] is generated once per attempt by the view model and kept
+  /// across retries of the same submission.
+  Future<Result<QuizResult>> submit({
+    required String quizId,
+    required String idempotencyKey,
+    required List<QuizAnswer> answers,
+  });
 }
 
-/// Local demo history; deliberately independent of the mock login identity.
-class LocalQuizRepository implements QuizRepository {
-  static const _timeout = Duration(seconds: 10);
-  static const _key = 'quiz.${QuizDefinition.id}.latest';
+class ApiQuizRepository implements QuizRepository {
+  ApiQuizRepository(this._dio);
+
+  final Dio _dio;
 
   @override
-  Future<Result<QuizAttempt?>> latest() async {
-    try {
-      final prefs = await SharedPreferences.getInstance().timeout(_timeout);
-      final raw = prefs.getString(_key);
-      if (raw == null) return const Ok(null);
-      final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic>) throw const FormatException();
-      final answers = decoded['answers'];
-      final seconds = decoded['seconds'];
-      final date = decoded['finishedAt'];
-      if (answers is! List ||
-          answers.length != QuizDefinition.questions.length ||
-          answers.any((a) => a is! int || a < 0 || a > 3) ||
-          seconds is! int ||
-          seconds < 0 ||
-          date is! String) {
-        throw const FormatException('Invalid quiz attempt');
-      }
-      return Ok(
-        QuizAttempt(
-          answers: answers.cast<int>(),
-          finishedAt: DateTime.parse(date),
-          elapsedSeconds: seconds,
+  Future<Result<QuizCatalog>> catalog({
+    String? topicId,
+    int limit = QuizDefaults.catalogLimit,
+  }) => _guard('Quiz catalog', () async {
+    final res = await _dio.get<Object?>(
+      QuizDefaults.quizzesPath,
+      queryParameters: {
+        'page': QuizDefaults.catalogPage,
+        'limit': limit,
+        'topicId': ?topicId,
+      },
+    );
+    return QuizParser.catalog(res.data);
+  });
+
+  @override
+  Future<Result<Quiz>> episodeQuiz(String slug) {
+    if (!isValidSlug(slug)) {
+      return Future.value(
+        Err(
+          ApiException(
+            'Invalid episode slug',
+            statusCode: QuizDefaults.notFoundStatus,
+            errorCode: QuizDefaults.notFoundCode,
+          ),
         ),
       );
-    } catch (error, stack) {
-      AppLogger.error(
-        'Cannot read quiz history',
-        error: error,
-        stackTrace: stack,
-      );
-      return Err(StorageException('Cannot read quiz history', cause: error));
     }
+    return _guard('Episode quiz', () async {
+      final res = await _dio.get<Object?>(
+        '${QuizDefaults.episodesPath}/$slug/quiz',
+      );
+      return QuizParser.quiz(res.data);
+    });
   }
 
   @override
-  Future<Result<void>> save(QuizAttempt attempt) async {
+  Future<Result<QuizResult>> submit({
+    required String quizId,
+    required String idempotencyKey,
+    required List<QuizAnswer> answers,
+  }) => _guard('Quiz submit', () async {
+    final res = await _dio.post<Object?>(
+      '${QuizDefaults.quizzesPath}/$quizId/attempts',
+      options: Options(
+        headers: {QuizDefaults.idempotencyHeader: idempotencyKey},
+      ),
+      data: {
+        'answers': [
+          for (final answer in answers)
+            {'questionId': answer.questionId, 'optionId': answer.optionId},
+        ],
+      },
+    );
+    return QuizParser.result(res.data);
+  });
+
+  Future<Result<T>> _guard<T>(String what, Future<T> Function() call) async {
     try {
-      final prefs = await SharedPreferences.getInstance().timeout(_timeout);
-      final success = await prefs
-          .setString(
-            _key,
-            jsonEncode({
-              'answers': attempt.answers,
-              'seconds': attempt.elapsedSeconds,
-              'finishedAt': attempt.finishedAt.toIso8601String(),
-            }),
-          )
-          .timeout(_timeout);
-      if (!success) throw StateError('Preference write rejected');
-      return const Ok(null);
-    } catch (error, stack) {
-      AppLogger.error(
-        'Cannot save quiz result',
-        error: error,
-        stackTrace: stack,
-      );
-      return Err(StorageException('Cannot save quiz result', cause: error));
+      return Ok(await call());
+    } on DioException catch (e) {
+      final error = e.error;
+      return Err(error is AppException ? error : mapDioException(e));
+    } on AppException catch (e) {
+      return Err(e);
+    } on FormatException catch (e, stack) {
+      AppLogger.error('$what: unexpected payload', error: e, stackTrace: stack);
+      return Err(UnknownException('$what: unexpected payload', cause: e));
+    } catch (e, stack) {
+      AppLogger.error('$what failed', error: e, stackTrace: stack);
+      return Err(UnknownException('$what failed', cause: e));
     }
   }
 }
 
 final quizRepositoryProvider = Provider<QuizRepository>(
-  (ref) => LocalQuizRepository(),
+  (ref) => ApiQuizRepository(ref.watch(dioProvider)),
 );

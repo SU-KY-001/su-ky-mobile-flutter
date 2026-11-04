@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/app_config.dart';
 import '../network/dio_factory.dart';
-import '../storage/app_database.dart';
+import '../storage/token_store.dart';
 
 /// Overridden in `main` (and tests) with real values.
 final appConfigProvider = Provider<AppConfig>(
@@ -19,7 +19,10 @@ final sharedPreferencesProvider = Provider<SharedPreferences>(
 );
 
 final dioProvider = Provider<Dio>((ref) {
-  final dio = createDio(ref.watch(appConfigProvider));
+  final dio = createDio(
+    ref.watch(appConfigProvider),
+    tokens: ref.watch(tokenStoreProvider),
+  );
   ref.onDispose(dio.close);
   return dio;
 });
@@ -29,10 +32,10 @@ final secureStorageProvider = Provider<FlutterSecureStorage>(
   (ref) => const FlutterSecureStorage(),
 );
 
-final databaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase();
-  ref.onDispose(db.close);
-  return db;
+final tokenStoreProvider = Provider<TokenStore>((ref) {
+  final store = TokenStore(ref.watch(secureStorageProvider));
+  ref.onDispose(store.dispose);
+  return store;
 });
 
 /// True when any non-`none` transport is available. Reachability of the API
