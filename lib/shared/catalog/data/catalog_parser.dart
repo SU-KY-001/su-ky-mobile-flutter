@@ -55,6 +55,11 @@ abstract final class CatalogParser {
       seriesSlug: JsonFields.string(series, 'slug'),
       seriesTitle: JsonFields.string(series, 'title'),
       seriesCoverUrl: _imageUrl(series, 'cover'),
+      publishedAt: JsonFields.optDate(json, 'publishedAt'),
+      seriesStartYear: JsonFields.optInteger(series, 'startYear'),
+      seriesEndYear: JsonFields.optInteger(series, 'endYear'),
+      event: _eventRef(series),
+      sources: _sources(series),
       narrations: JsonFields.list(
         json,
         'narrations',
@@ -63,6 +68,47 @@ abstract final class CatalogParser {
       next: _link(json, 'nextEpisode'),
       hasQuiz: hasQuiz,
     );
+  }
+
+  /// Decorative: a malformed event is dropped so it can never block playback.
+  static EpisodeEventRef? _eventRef(Map<String, Object?> series) {
+    try {
+      final value = series['historicalEvent'];
+      if (value == null) return null;
+      final event = JsonFields.object(value, 'historicalEvent');
+      return EpisodeEventRef(
+        slug: JsonFields.string(event, 'slug'),
+        name: JsonFields.string(event, 'name'),
+      );
+    } on FormatException {
+      return null;
+    }
+  }
+
+  /// Decorative: malformed entries are skipped, the rest are kept. A source
+  /// link is kept only when it is an absolute https URL.
+  static List<EpisodeSource> _sources(Map<String, Object?> series) {
+    final items = series['sources'];
+    if (items is! List<Object?>) return const [];
+    final sources = <EpisodeSource>[];
+    for (final item in items) {
+      try {
+        final source = JsonFields.object(item, 'source');
+        final url = JsonFields.optString(source, 'url');
+        sources.add(
+          EpisodeSource(
+            title: JsonFields.string(source, 'title'),
+            publisher: JsonFields.optString(source, 'publisher'),
+            url: url != null && Uri.tryParse(url)?.scheme == 'https'
+                ? url
+                : null,
+          ),
+        );
+      } on FormatException {
+        continue;
+      }
+    }
+    return sources;
   }
 
   static EpisodeLink? _link(Map<String, Object?> json, String key) {

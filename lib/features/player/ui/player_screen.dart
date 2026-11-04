@@ -5,6 +5,7 @@ import 'package:su_ky_mobile/shared/audio/playback_state.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
+import 'player_about.dart';
 import 'player_controls.dart';
 import 'player_cover.dart';
 import 'player_header.dart';
@@ -58,6 +59,7 @@ class PlayerScreen extends ConsumerWidget {
                   PlayerUpNextGroup(episode: episode),
                 ] else
                   PlayerStatusView(state: state),
+                if (episode != null) PlayerAbout(episode: episode),
                 const SizedBox(height: _blockGap),
               ],
             ),

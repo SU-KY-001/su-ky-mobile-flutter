@@ -4,18 +4,18 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 
 const _collapsedLines = 3;
 
-/// Show-page description: 3 lines with a "Xem thêm" toggle. The toggle only
+/// Description clamped to 3 lines with a "Xem thêm" toggle. The toggle only
 /// appears when the text really overflows.
-class SeriesDescription extends StatefulWidget {
-  const SeriesDescription({super.key, required this.text});
+class ExpandableDescription extends StatefulWidget {
+  const ExpandableDescription({super.key, required this.text});
 
   final String text;
 
   @override
-  State<SeriesDescription> createState() => _SeriesDescriptionState();
+  State<ExpandableDescription> createState() => _ExpandableDescriptionState();
 }
 
-class _SeriesDescriptionState extends State<SeriesDescription> {
+class _ExpandableDescriptionState extends State<ExpandableDescription> {
   var _expanded = false;
 
   @override
@@ -43,6 +43,10 @@ class _SeriesDescriptionState extends State<SeriesDescription> {
             ),
             if (overflows)
               TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.centerLeft,
+                ),
                 onPressed: () => setState(() => _expanded = !_expanded),
                 child: Text(
                   _expanded ? l.seriesDescriptionLess : l.seriesDescriptionMore,

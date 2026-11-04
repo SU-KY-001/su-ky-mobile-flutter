@@ -356,7 +356,30 @@
   "seriesNotFound": "This series was not found.",
   "seriesBackToPodcast": "Back to Podcast",
   "seriesNoAudio": "This series has no episode with audio yet.",
-  "seriesPlayFirst": "Play first episode with audio",
+  "playerAboutTitle": "About",
+  "playerReleased": "Released {date}",
+  "@playerReleased": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerYears": "Period {start}–{end}",
+  "@playerYears": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "playerRelatedEvent": "Related event",
+  "playerSourcesTitle": "Sources",
+  "playerSourceOpen": "Open link in browser",
+  "playerSourceOpenFailed": "Couldn't open the source link",
   "episodeNoAudio": "No audio yet",
   "episodeNoAudioNotice": "This episode has no audio to play yet.",
   "homeAllPeriods": "All",

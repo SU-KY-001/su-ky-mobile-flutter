@@ -11,17 +11,25 @@ import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 /// Episodes without audio stay visible but dimmed (same as RN).
 const _unavailableOpacity = 0.72;
 const _rowPadding = 12.0;
+const _indexWidth = 32.0;
 const _textGap = 4.0;
 const _playSize = AppDesign.tapTarget;
 const _metaSeparator = ' · ';
 
-/// Spotify show-page episode row: title, muted description, meta line and a
+/// Album track row: number, title, muted description, meta line and a
 /// trailing circular play button. Quiz entry lives in the Quiz tab and the
 /// player, so the row never triggers a per-episode detail request.
 class EpisodeListTile extends ConsumerWidget {
-  const EpisodeListTile({super.key, required this.episode});
+  const EpisodeListTile({
+    super.key,
+    required this.episode,
+    required this.number,
+  });
 
   final EpisodeSummary episode;
+
+  /// 1-based position in the series, like a track number.
+  final int number;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +62,16 @@ class EpisodeListTile extends ConsumerWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(
+                width: _indexWidth,
+                child: Text(
+                  '$number',
+                  style: context.text.titleSmall?.copyWith(
+                    color: AppDesign.muted,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

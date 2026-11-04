@@ -13,7 +13,8 @@ import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
 const _notFoundStatus = 404;
-const _headingGap = 16.0;
+const _headingGap = 28.0;
+const _listGap = 8.0;
 
 class SeriesScreen extends ConsumerWidget {
   const SeriesScreen({super.key, required this.slug});
@@ -75,7 +76,11 @@ class _SeriesBody extends StatelessWidget {
       SeriesHeader(series: series),
       const SizedBox(height: _headingGap),
       SectionHeading(AppLocalizations.of(context).episodeList),
-      for (final episode in series.episodes) EpisodeListTile(episode: episode),
+      const SizedBox(height: _listGap),
+      for (var i = 0; i < series.episodes.length; i++) ...[
+        if (i > 0) const Divider(height: 1),
+        EpisodeListTile(episode: series.episodes[i], number: i + 1),
+      ],
     ],
   );
 }

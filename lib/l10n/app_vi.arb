@@ -356,7 +356,30 @@
   "seriesNotFound": "Không tìm thấy series này.",
   "seriesBackToPodcast": "Về Podcast",
   "seriesNoAudio": "Series này chưa có tập nào có audio.",
-  "seriesPlayFirst": "Phát tập có audio",
+  "playerAboutTitle": "Giới thiệu",
+  "playerReleased": "Phát hành {date}",
+  "@playerReleased": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerYears": "Giai đoạn {start}–{end}",
+  "@playerYears": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "playerRelatedEvent": "Sự kiện liên quan",
+  "playerSourcesTitle": "Nguồn tham khảo",
+  "playerSourceOpen": "Mở liên kết trong trình duyệt",
+  "playerSourceOpenFailed": "Không mở được liên kết nguồn",
   "episodeNoAudio": "Chưa có audio",
   "episodeNoAudioNotice": "Tập này chưa có audio để nghe.",
   "homeAllPeriods": "Tất cả",

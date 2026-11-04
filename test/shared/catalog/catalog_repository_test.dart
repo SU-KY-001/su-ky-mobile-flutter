@@ -198,6 +198,75 @@ void main() {
         expect(bad, isA<Err<EpisodeDetail>>());
       },
     );
+
+    test(
+      'episode detail reads event, sources and dates; rejects bad ones',
+      () async {
+        Map<String, Object?> ep({Object? sources, Object? event}) => {
+          'id': 'e1',
+          'slug': 'e1',
+          'title': 'T',
+          'description': 'D',
+          'publishedAt': '2026-10-22T04:12:29.452Z',
+          'series': {
+            'slug': 's',
+            'title': 'S',
+            'cover': null,
+            'startYear': 1858,
+            'endYear': 1945,
+            'historicalEvent': event,
+            'sources': sources,
+          },
+          'narrations': [_narration()],
+          'previousEpisode': null,
+          'nextEpisode': null,
+          'hasQuiz': false,
+        };
+        final ok = await _repo(
+          (_) => StubReply(
+            200,
+            ep(
+              event: {'slug': 'ev', 'name': 'Sự kiện'},
+              sources: [
+                {'title': 'Nguồn A', 'publisher': 'NXB', 'url': 'https://a.vn'},
+                {'title': 'Nguồn B', 'publisher': null, 'url': null},
+              ],
+            ),
+          ),
+        ).episodeDetail('e1');
+        final d = (ok as Ok<EpisodeDetail>).value;
+        expect(d.publishedAt?.year, 2026);
+        expect((d.seriesStartYear, d.seriesEndYear), (1858, 1945));
+        expect((d.event?.slug, d.event?.name), ('ev', 'Sự kiện'));
+        expect(d.sources.map((s) => s.title), ['Nguồn A', 'Nguồn B']);
+        expect(d.sources.first.url, 'https://a.vn');
+        expect(d.sources.last.publisher, isNull);
+
+        final none = await _repo((_) => StubReply(200, ep()))
+            .episodeDetail('e1');
+        final empty = (none as Ok<EpisodeDetail>).value;
+        expect(empty.event, isNull);
+        expect(empty.sources, isEmpty);
+
+        final lenient = await _repo(
+          (_) => StubReply(
+            200,
+            ep(
+              event: {'slug': ''},
+              sources: [
+                {'title': ''},
+                'not a map',
+                {'title': 'Giữ lại', 'url': 'http://insecure.vn'},
+              ],
+            ),
+          ),
+        ).episodeDetail('e1');
+        final kept = (lenient as Ok<EpisodeDetail>).value;
+        expect(kept.event, isNull);
+        expect(kept.sources.map((s) => s.title), ['Giữ lại']);
+        expect(kept.sources.single.url, isNull);
+      },
+    );
   });
 
   group('periods and events', () {
