@@ -377,5 +377,50 @@
         "type": "String"
       }
     }
+  },
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileMissionsDone": "{count, plural, =0{Chưa có nhiệm vụ nào đã xong} other{{count} nhiệm vụ đã xong}}",
+  "@profileMissionsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileRecentTitle": "Đã nghe gần đây",
+  "profileRecentEmpty": "Chưa có lịch sử nghe.",
+  "profileHistoryProgress": "{series} · Đã nghe {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "profileScheduleTooltip": "Lịch phát sóng",
+  "scheduleTitle": "Lịch phát sóng",
+  "scheduleEmpty": "Chưa có lịch phát trong tháng này.",
+  "scheduleReleased": "Đã phát hành",
+  "scheduleUpcoming": "Sắp ra mắt",
+  "schedulePrevMonth": "Tháng trước",
+  "scheduleNextMonth": "Tháng sau",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
   }
 }

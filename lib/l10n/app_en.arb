@@ -331,5 +331,50 @@
   "homeAllPeriods": "All",
   "homeSeriesEmpty": "No series for this period yet.",
   "searchMinCharsHint": "Type at least 2 characters to search.",
-  "playbackSpeed": "{speed}x"
+  "playbackSpeed": "{speed}x",
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileMissionsDone": "{count, plural, =0{No missions done yet} other{{count} missions done}}",
+  "@profileMissionsDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileRecentTitle": "Recently listened",
+  "profileRecentEmpty": "No listening history yet.",
+  "profileHistoryProgress": "{series} · Listened {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "profileScheduleTooltip": "Release schedule",
+  "scheduleTitle": "Release schedule",
+  "scheduleEmpty": "No releases scheduled this month.",
+  "scheduleReleased": "Released",
+  "scheduleUpcoming": "Coming soon",
+  "schedulePrevMonth": "Previous month",
+  "scheduleNextMonth": "Next month",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
+  }
 }

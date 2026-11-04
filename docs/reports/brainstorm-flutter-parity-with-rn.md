@@ -1,7 +1,7 @@
 # Brainstorm: đưa Flutter đạt parity với RN mobile
 
 Ngày: 2026-11-04. Nguồn: 4 scout đọc `su-ky-project` (apps/mobile, apps/api, docs) + repo Flutter.
-Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe), P6 (Quiz) và P7 (Nhiệm vụ tuần + XP) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P8–P11. Auth, catalog, phát audio, tiến độ nghe và quiz đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10** (xem mục 5).
+Status: **đã duyệt thiết kế**. P-1, P0, P1, P2 (Khung ứng dụng), P3 (Catalog), P4 (Phát audio), P5 (Đồng bộ tiến độ nghe), P6 (Quiz), P7 (Nhiệm vụ tuần + XP) và P8 (Hồ sơ, Lịch sử nghe, Lịch phát sóng) đã xong ở mức code (`flutter analyze` sạch trong `lib/`, build APK debug qua, chưa kiểm runtime); còn P9–P11. Auth, catalog, phát audio, tiến độ nghe, quiz, lịch sử nghe và lịch phát sóng đã nối API thật. **Test và chạy emulator chỉ làm một lần ở P11, sau khi xong P1–P10**; ngoại lệ là 5 test mới của P8 đã chạy riêng và xanh (xem mục 5).
 
 ## 1. Vấn đề
 Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`), style khác (Figma khác). API thật: `https://suky-api.the1struleoffightclub.top` (đã set trong `env/dev.json`).
@@ -14,7 +14,7 @@ Flutter = prototype UI mock. Cần UX + chức năng + logic y RN (`apps/mobile`
 | Player | expo-audio, `/narrations/:id/playback`, sync bitmap, resume, đổi ngôi kể | **Đã nối thật (P4, P5)**: `just_audio` + phát nền, đổi ngôi kể, resume local → server, sync bitmap và completion |
 | Quiz | list + episode quiz + `Idempotency-Key` | **Đã nối thật (P6)**: tab Quiz, làm bài theo slug, nộp attempt với UUID v4, kết quả + xem lại |
 | Missions | `/me/weekly-missions` chỉ hiện trong tab Hồ sơ (XP, nhiệm vụ xong, thanh tiến độ); RN không có màn vinh danh | **Đã nối thật (P7)**: `shared/missions` + màn nhiệm vụ tuần (XP, tiến độ); Vinh danh và chi tiết nhiệm vụ đã xoá |
-| Profile/History/Schedule | có | không có |
+| Profile/History/Schedule | có | **Đã nối thật (P8)**: Hồ sơ có thẻ XP + "Đã nghe gần đây"; Lịch phát sóng công khai theo tháng (dữ liệu thật đang rỗng) |
 | Điều hướng | 5 tab + mini-player nổi | **Đã có shell (P2)**: `StatefulShellRoute`, `AppShell` giữ mini-player; tab hiện có: Khám phá, Podcast, Quiz (P6), Hồ sơ; Lịch sử thêm khi có màn |
 | Search | placeholder (chưa thật) | **Thật (P3)**: debounce 400ms, tối thiểu 2 ký tự, khớp `title` |
 
@@ -40,8 +40,8 @@ Khuyến nghị **A**. C bác bỏ: RN dùng state làm router chỉ vì Expo se
 ## 5. Kế hoạch: 11 plan, mỗi plan một mốc ổn định
 
 Quy ước cỡ task (ước tính, chưa đo): **S** < nửa ngày, **M** nửa đến 1 ngày. Không có task **L**: task nào > 1 ngày đã bị tách. Mỗi task kèm key l10n vi+en và không để lại mock trong phần nó thay.
-**Quy ước kiểm thử (chốt 2026-11-04): P1–P10 không viết test và không chạy emulator.** Toàn bộ test (unit, widget, script gọi API thật) và smoke trên emulator gom vào **P11**, chạy một lần sau khi xong P1–P10. Quy tắc "mỗi hành vi mới kèm test" trong `AGENTS.md` được hoãn đến P11; không xoá test hiện có, nhưng test cũ vỡ do P1–P10 (ví dụ `test/widget_test.dart` assert chuỗi lỗi đăng nhập cũ) chỉ sửa ở P11.
-**Mọi task phải tuân thủ mục "Enforced standards" trong `AGENTS.md`** (không chuỗi cứng, không màu cứng, state bất biến trong view model, mock chỉ ở `mock/` hoặc `data/mock_*`, file <= 250 dòng, màn không nhận callback điều hướng). Task xong khi `dart format`, `flutter analyze` và các lệnh grep/find trong "Verify" của `AGENTS.md` sạch; `flutter test` chạy ở P11.
+**Quy ước kiểm thử (chốt 2026-11-04): P1–P10 không viết test và không chạy emulator.** Toàn bộ test (unit, widget, script gọi API thật) và smoke trên emulator gom vào **P11**, chạy một lần sau khi xong P1–P10. Quy tắc "mỗi hành vi mới kèm test" trong `AGENTS.md` được hoãn đến P11; không xoá test hiện có, nhưng test cũ vỡ do P1–P10 (ví dụ `test/widget_test.dart` assert chuỗi lỗi đăng nhập cũ) chỉ sửa ở P11. **Ngoại lệ đã chốt ở P8:** plan P8 có 5 file test mới ở phase 4 (repo history, repo/view model/screen schedule, profile); chúng phải tự biên dịch và chạy riêng bằng `flutter test <file>` và đã xanh. Test cũ vỡ vẫn để P11.
+**Mọi task phải tuân thủ mục "Enforced standards" trong `AGENTS.md`** (không chuỗi cứng, không màu cứng, state bất biến trong view model, mock chỉ ở `mock/` hoặc `data/mock_*`, file <= 250 dòng, màn không nhận callback điều hướng). Task xong khi `dart format`, `flutter analyze` và các lệnh grep/find trong "Verify" của `AGENTS.md` sạch; `flutter test` chạy ở P11 (trừ test mới của P8).
 Mỗi plan kết thúc ở trạng thái app build được và `flutter analyze` sạch, không dở dang.
 
 ### Bản đồ phụ thuộc
@@ -75,9 +75,9 @@ Quy ước: chức năng **chưa có mock** thì plan chứa nó mở đầu b�
 | Tab Quiz (danh sách, lọc topic, badge) | Thật (P6) | `quiz_list_screen.dart` + `quiz_card.dart`; topic suy ra từ catalog, khách xem được | xong |
 | Nhiệm vụ tuần | Thật (P7) | `weekly_missions_screen.dart` + `shared/missions/{domain,data}`; chi tiết nhiệm vụ đã xoá | xong |
 | Vinh danh | Đã xoá (P7) | RN không có; đã bỏ màn, route, widget và key l10n | xong |
-| Hồ sơ đầy đủ (XP, nhiệm vụ xong) | **Chưa** | | 8.0a |
-| Lịch sử nghe | **Chưa** | | 8.0b |
-| Lịch phát hành (có trạng thái rỗng) | **Chưa** | Dữ liệu thật tháng 10-11 đang rỗng | 8.0c |
+| Hồ sơ đầy đủ (XP, nhiệm vụ xong) | Thật (P8) | `profile_xp_card.dart`; bấm thẻ mở `/weekly-missions` thay vì liệt kê nhiệm vụ trong Hồ sơ | xong ở 8.1 |
+| Lịch sử nghe | Thật (P8) | `shared/history` + `profile_history_section.dart`; `limit=10`, `status=all`, không lọc/phân trang | xong ở 8.2 |
+| Lịch phát hành (có trạng thái rỗng) | Thật (P8) | `features/schedule`; dữ liệu thật tháng 10-11/2026 rỗng nên trạng thái trống là đường chính | xong ở 8.3 |
 | Tab Lịch sử: timeline dọc + pills thời kỳ | **Chưa** | | 9.0a |
 | Chi tiết sự kiện lịch sử | **Chưa** | | 9.0b |
 
@@ -209,16 +209,18 @@ Mốc: nhiệm vụ tuần và XP thật, cập nhật sau khi nghe xong tập h
 
 Chốt khi làm: khách vào màn thấy lời mời đăng nhập (provider trả `null`, không gọi API) vì route chưa guard; `activityType`/`status` lạ bị bỏ từng item và ghi log, thiếu `items`/`totalXp` mới lỗi cả phản hồi. Xoá `test/features/weekly_missions/ui/mission_detail_screen_test.dart` và test view model cũ để ở P11 (cùng đợt sửa test). Chưa kiểm: gọi API thật, đổi tuần khi app mở, làm mới sau khi hoàn thành tập; gom vào P11.
 
-### P8. Hồ sơ đầy đủ, Lịch sử nghe, Lịch phát hành
-Mốc: hồ sơ có XP, lịch sử có nghe tiếp, lịch phát hành theo tháng.
-| # | Task | Cỡ |
-|---|---|---|
-| 8.0a | **Dựng mock UI Hồ sơ đầy đủ** (chưa có mock): thẻ người dùng, XP, số nhiệm vụ đã xong, đăng xuất | M |
-| 8.0b | **Dựng mock UI Lịch sử nghe** (chưa có mock): danh sách tập kèm % tiến độ, lọc trạng thái, nút nghe tiếp, trạng thái trống | M |
-| 8.0c | **Dựng mock UI Lịch phát hành** (chưa có mock): chuyển tháng, nhãn Đã phát hành/Sắp ra mắt, trạng thái trống | M |
-| 8.1 | Hồ sơ: XP, số nhiệm vụ đã xong (cần P7) | M |
-| 8.2 | Lịch sử nghe `/api/me/listening-history` (lọc trạng thái, phân trang) + nút nghe tiếp | M |
-| 8.3 | Lịch phát hành `/api/showcase/releases` (chuyển tháng, giới hạn 62 ngày) + nút nghe | M |
+### P8. Hồ sơ đầy đủ, Lịch sử nghe, Lịch phát hành — ĐÃ LÀM (code xong, chưa kiểm runtime)
+Mốc: hồ sơ có XP, lịch sử có nghe tiếp, lịch phát hành theo tháng. Plan: `plans/261105-0200-p8-profile-history-schedule/`. ADR: `docs/adr/0010-profile-history-schedule.md`. Mã: `lib/shared/history/{domain,data}`, `lib/features/schedule/{domain,data,ui}`, `lib/features/profile/ui/`.
+| # | Task | Cỡ | Trạng thái |
+|---|---|---|---|
+| 8.0a/b/c | ~~Dựng mock UI trước~~: bỏ, nối API thật ngay như P6; mock sẽ bị thay trong cùng plan | - | Bỏ |
+| 8.1 | Hồ sơ: thẻ XP + số nhiệm vụ đã xong (cần P7), chuông mở Lịch; khách không gọi history/missions | M | Xong |
+| 8.2 | Lịch sử nghe `/api/me/listening-history` (`limit=10`, `status=all`, **không lọc/phân trang**) + nút nghe tiếp | M | Xong |
+| 8.3 | Lịch phát hành `/api/showcase/releases` (chuyển tháng, giới hạn 62 ngày) + nút nghe khi `released` | M | Xong |
+
+Chốt khi làm: lịch sử nằm trong Hồ sơ (không thêm tab, tab Lịch sử thuộc P9); dữ liệu ở `shared/history` để làm mới theo `learningActivityProvider` mà không import chéo feature; thẻ XP dẫn sang `/weekly-missions` thay vì lặp danh sách nhiệm vụ (lệch RN có chủ ý); tháng tính theo giờ địa phương rồi `toUtc()` nên luôn 28–31 ngày và qua năm đúng; `percent` thập phân được làm tròn/clamp một lần, thanh tiến độ theo `percent` chứ không suy từ `isCompleted`; tập `available: false` không có nút nghe; Lịch công khai, khách vẫn xem được và nút nghe đi qua `playFromUi`. Bỏ "lọc trạng thái, phân trang" của dòng 8.2 cũ vì vượt parity RN (RN chỉ lấy trang đầu, `status=all`). Không dựng 8.0a/b/c.
+Test mới (5 file) tự biên dịch và chạy riêng xanh: `test/shared/history/history_repository_test.dart`, `test/features/schedule/{schedule_repository,schedule_view_model,schedule_screen}_test.dart`, `test/features/profile/profile_screen_test.dart`.
+Chưa kiểm runtime: gọi `listening-history` thật bằng tài khoản app, làm mới sau khi nghe xong, và bất kỳ dòng release thật nào (API trả rỗng mọi tháng 2026-01…2027-01 nên UI có dữ liệu chỉ kiểm bằng test + schema). Gom vào P11.
 
 ### P9. Dòng thời gian + Sự kiện lịch sử
 Mốc: tab Lịch sử lọc theo thời kỳ, mở chi tiết sự kiện và series liên quan.
@@ -278,4 +280,4 @@ Mốc: có test cho toàn bộ phần đã làm; `flutter test` xanh; smoke emul
 - Không còn mock/dữ liệu cứng; `dart format`, `flutter analyze`, `flutter test` xanh.
 
 ## 9. Bước tiếp
-P-1 đến P7 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007), P6 `plans/261105-0100-p6-quiz/` (ADR 0009) và P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008) đã `completed`. P6 đã gọi `bump()` khi `isPassed`, nên 7.2 khép lại. P8 không còn bị P7 chặn: 8.1 dùng `weeklyMissionsProvider` của P7. Tiếp: P8 và P9 (độc lập, có thể song song), rồi P10. Chạy test và emulator một lần ở P11.
+P-1 đến P8 đã xong ở mức code (`flutter analyze` sạch trong `lib/`, `flutter build apk --debug` thành công; chưa chạy app, test cũ vỡ sẽ sửa ở P11). Plan P4 `plans/261104-2300-p4-audio-core/` (ADR 0006), P5 `plans/261104-2359-p5-progress-sync/` (ADR 0007), P6 `plans/261105-0100-p6-quiz/` (ADR 0009), P7 `plans/261105-0000-p7-missions-xp/` (ADR 0008) và P8 `plans/261105-0200-p8-profile-history-schedule/` (ADR 0010) đã `completed`. P6 đã gọi `bump()` khi `isPassed`, nên 7.2 khép lại. P8 dùng `weeklyMissionsProvider` của P7 cho thẻ XP và `learningActivityProvider` của P5 để làm mới lịch sử. 5 test mới của P8 đã chạy riêng và xanh; test cũ vỡ vẫn để P11. Tiếp: P9 (Dòng thời gian + Sự kiện lịch sử), rồi P10. Chạy test và emulator một lần ở P11.
