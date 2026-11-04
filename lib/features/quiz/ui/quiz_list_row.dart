@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -48,7 +49,7 @@ class QuizListRow extends StatelessWidget {
                     maxLines: _maxTitleLines,
                     overflow: TextOverflow.ellipsis,
                     style: context.text.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: _titleGap),
@@ -66,11 +67,12 @@ class QuizListRow extends StatelessWidget {
             ),
             if (card.hasCompleted == true)
               Icon(
-                Icons.check_circle,
+                Symbols.check_circle,
+                fill: 1,
                 color: QuizColors.green,
                 semanticLabel: l.quizCompletedBadge,
               ),
-            const Icon(Icons.chevron_right, color: AppDesign.muted),
+            const Icon(Symbols.chevron_right, color: AppDesign.muted),
           ],
         ),
       ),

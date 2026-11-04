@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -64,7 +65,7 @@ class QuizScreen extends ConsumerWidget {
           leading: IconButton(
             onPressed: leave,
             tooltip: l.close,
-            icon: const Icon(Icons.close),
+            icon: const Icon(Symbols.close),
           ),
           title: switch (stage) {
             QuizStage.question when session != null => QuizProgressBar(

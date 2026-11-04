@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
@@ -28,7 +29,7 @@ class AuthFields extends ConsumerWidget {
             autofillHints: const [AutofillHints.name],
             decoration: InputDecoration(
               hintText: l.nameHint,
-              prefixIcon: const Icon(Icons.person_outline, size: 19),
+              prefixIcon: const Icon(Symbols.person, size: 19),
             ),
           ),
           const SizedBox(height: 10),
@@ -42,7 +43,7 @@ class AuthFields extends ConsumerWidget {
           autofillHints: const [AutofillHints.email],
           decoration: InputDecoration(
             hintText: l.emailHint,
-            prefixIcon: const Icon(Icons.mail_outline, size: 19),
+            prefixIcon: const Icon(Symbols.mail, size: 19),
           ),
         ),
         const SizedBox(height: 10),
@@ -56,14 +57,12 @@ class AuthFields extends ConsumerWidget {
           obscureText: form.obscured,
           decoration: InputDecoration(
             hintText: '••••••••',
-            prefixIcon: const Icon(Icons.lock_outline, size: 19),
+            prefixIcon: const Icon(Symbols.lock, size: 19),
             suffixIcon: IconButton(
               onPressed: vm.toggleVisibility,
               tooltip: l.password,
               icon: Icon(
-                form.obscured
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
+                form.obscured ? Symbols.visibility : Symbols.visibility_off,
                 size: 19,
               ),
             ),

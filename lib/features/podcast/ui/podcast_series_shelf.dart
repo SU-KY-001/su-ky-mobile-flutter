@@ -56,7 +56,7 @@ class _ShelfItem extends StatelessWidget {
             maxLines: _titleLines,
             overflow: TextOverflow.ellipsis,
             style: context.text.labelLarge?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           Text(

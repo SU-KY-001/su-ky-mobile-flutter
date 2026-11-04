@@ -42,14 +42,14 @@ class EventHeader extends StatelessWidget {
           event.timeLabel,
           style: context.text.labelLarge?.copyWith(
             color: context.accent,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: _nameGap),
         Text(
           event.name,
           style: context.text.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: _summaryGap),

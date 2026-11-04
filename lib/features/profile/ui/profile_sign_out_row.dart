@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_nav_row.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -12,7 +13,7 @@ class ProfileSignOutRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     return ProfileNavRow(
-      icon: Icons.logout,
+      icon: Symbols.logout,
       title: l.profileSignOut,
       danger: true,
       onTap: () async {

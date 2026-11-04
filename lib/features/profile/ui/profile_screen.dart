@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_group.dart';
@@ -39,7 +40,7 @@ class ProfileScreen extends ConsumerWidget {
           IconButton(
             onPressed: () => context.push(AppRoutes.schedule),
             tooltip: l.profileScheduleTooltip,
-            icon: const Icon(Icons.notifications_none),
+            icon: const Icon(Symbols.notifications),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/timeline/ui/event_citations.dart';
 import 'package:su_ky_mobile/features/timeline/ui/event_header.dart';
@@ -27,7 +28,7 @@ class EventDetailScreen extends ConsumerWidget {
         leading: IconButton(
           onPressed: () => context.popOrGo(AppRoutes.history),
           tooltip: l.back,
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(Symbols.chevron_left),
         ),
         title: Text(l.eventDetailTitle),
       ),

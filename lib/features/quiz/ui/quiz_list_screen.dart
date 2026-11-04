@@ -40,7 +40,7 @@ class QuizListScreen extends ConsumerWidget {
           l.quizListTitle,
           style: const TextStyle(
             fontSize: _titleSize,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

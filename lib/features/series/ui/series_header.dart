@@ -51,7 +51,7 @@ class SeriesHeader extends ConsumerWidget {
         Text(
           series.title,
           style: context.text.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: _metaGap),

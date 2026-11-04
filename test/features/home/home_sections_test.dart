@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
 import 'package:su_ky_mobile/core/di/app_retry.dart';
@@ -9,7 +10,6 @@ import 'package:su_ky_mobile/core/error/app_exception.dart';
 import 'package:su_ky_mobile/core/error/result.dart';
 import 'package:su_ky_mobile/features/home/ui/home_events_section.dart';
 import 'package:su_ky_mobile/features/home/ui/home_periods_section.dart';
-
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_repository.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode.dart';
@@ -188,7 +188,7 @@ void main() {
       final router = await _pump(tester, _Repo(), const HomePeriodsSection());
       await _scrollToSection(tester);
       expect(find.text('Thời Lý'), findsOneWidget);
-      expect(find.byIcon(Icons.chevron_right), findsNWidgets(2));
+      expect(find.byIcon(Symbols.chevron_right), findsNWidgets(2));
 
       final container = ProviderScope.containerOf(
         tester.element(find.byType(Scaffold)),

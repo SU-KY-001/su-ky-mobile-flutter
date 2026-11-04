@@ -55,7 +55,7 @@ class _Stat extends StatelessWidget {
     children: [
       Text(
         '$value',
-        style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+        style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
       ),
       Text(
         label,

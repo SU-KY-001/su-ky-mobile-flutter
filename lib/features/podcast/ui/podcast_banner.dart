@@ -59,7 +59,7 @@ class PodcastBanner extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: context.text.titleLarge?.copyWith(
                 color: AppDesign.white,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

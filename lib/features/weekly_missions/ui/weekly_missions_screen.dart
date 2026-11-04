@@ -64,7 +64,7 @@ class _MissionsBody extends StatelessWidget {
         const SizedBox(height: AppDesign.pagePadding),
         Text(
           l.missionsListTitle,
-          style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         for (final mission in missions.items) ...[
           MissionTile(mission: mission),

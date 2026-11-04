@@ -68,7 +68,7 @@ class EpisodeListTile extends ConsumerWidget {
                   '$number',
                   style: context.text.titleSmall?.copyWith(
                     color: AppDesign.muted,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -81,7 +81,7 @@ class EpisodeListTile extends ConsumerWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: context.text.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     if (description != null) ...[

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/search/ui/series_result_row.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -24,7 +25,7 @@ class SearchScreen extends ConsumerWidget {
         leading: IconButton(
           onPressed: () => context.popOrGo(AppRoutes.home),
           tooltip: l.back,
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Symbols.arrow_back),
         ),
         title: SearchInput(
           value: query,

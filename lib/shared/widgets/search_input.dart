@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 
 /// Borderless auto-focused field for an app bar title. Owns only the text
@@ -54,7 +55,7 @@ class _SearchInputState extends State<SearchInput> {
           : IconButton(
               onPressed: () => widget.onChanged(''),
               tooltip: AppLocalizations.of(context).clearSearch,
-              icon: const Icon(Icons.close),
+              icon: const Icon(Symbols.close),
             ),
     ),
   );

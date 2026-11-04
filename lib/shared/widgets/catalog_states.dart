@@ -62,7 +62,7 @@ class CatalogEmpty extends StatelessWidget {
             title!,
             textAlign: TextAlign.center,
             style: context.text.titleSmall?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         Text(

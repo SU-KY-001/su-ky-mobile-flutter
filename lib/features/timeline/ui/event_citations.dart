@@ -54,7 +54,7 @@ class _CitationCard extends StatelessWidget {
             maxLines: _sourceTitleMaxLines,
             overflow: TextOverflow.ellipsis,
             style: context.text.titleSmall?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: _lineGap),

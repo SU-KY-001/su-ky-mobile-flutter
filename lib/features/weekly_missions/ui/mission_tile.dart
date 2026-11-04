@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/mission_l10n.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/missions_progress_bar.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_colors.dart';
@@ -62,7 +62,7 @@ class MissionTile extends StatelessWidget {
                   Text(
                     mission.title,
                     style: context.text.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -82,7 +82,7 @@ class MissionTile extends StatelessWidget {
                         ),
                         style: context.text.labelMedium?.copyWith(
                           color: AppDesign.muted,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -111,7 +111,8 @@ class _Trailing extends StatelessWidget {
     switch (mission.status) {
       case MissionStatus.completed:
         return Icon(
-          Icons.check_circle,
+          Symbols.check_circle,
+          fill: 1,
           size: _checkSize,
           color: WeeklyMissionsColors.green,
           semanticLabel: label,
@@ -133,7 +134,7 @@ class _Trailing extends StatelessWidget {
               l.missionsXpReward(mission.xpReward),
               style: context.text.labelMedium?.copyWith(
                 color: WeeklyMissionsColors.gold,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

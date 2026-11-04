@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_defaults.dart';
 import 'package:su_ky_mobile/shared/audio/audio_time.dart';
@@ -38,7 +39,7 @@ class PlayerControls extends ConsumerWidget {
           onPressed: () =>
               unawaited(controller.skip(-AudioDefaults.seekStepSeconds)),
           tooltip: l.seekBack,
-          icon: const Icon(Icons.fast_rewind_rounded),
+          icon: const Icon(Symbols.fast_rewind),
         ),
         IconButton.filled(
           style: IconButton.styleFrom(
@@ -49,19 +50,20 @@ class PlayerControls extends ConsumerWidget {
           iconSize: _playIconSize,
           tooltip: _playTooltip(l),
           onPressed: () => unawaited(controller.togglePlayPause()),
-          icon: Icon(_playIcon),
+          icon: Icon(_playIcon, fill: 1),
         ),
         IconButton(
           onPressed: () =>
               unawaited(controller.skip(AudioDefaults.seekStepSeconds)),
           tooltip: l.seekForward,
-          icon: const Icon(Icons.fast_forward_rounded),
+          icon: const Icon(Symbols.fast_forward),
         ),
         IconButton(
           onPressed: controller.toggleSleepTimer,
           tooltip: l.sleepTimer,
           icon: Icon(
-            state.sleepEnabled ? Icons.bedtime : Icons.bedtime_outlined,
+            Symbols.bedtime,
+            fill: state.sleepEnabled ? 1 : 0,
             color: state.sleepEnabled ? context.accent : AppDesign.muted,
           ),
         ),
@@ -70,8 +72,8 @@ class PlayerControls extends ConsumerWidget {
   }
 
   IconData get _playIcon {
-    if (state.completed) return Icons.replay_rounded;
-    return state.playing ? Icons.pause_rounded : Icons.play_arrow_rounded;
+    if (state.completed) return Symbols.replay;
+    return state.playing ? Symbols.pause : Symbols.play_arrow;
   }
 
   String _playTooltip(AppLocalizations l) {

@@ -17,7 +17,7 @@ class ProfileSectionLabel extends StatelessWidget {
       title,
       style: context.text.labelMedium?.copyWith(
         color: AppDesign.muted,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
     ),
   );

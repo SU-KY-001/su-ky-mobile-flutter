@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode_detail.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -84,7 +85,7 @@ class _SourceRow extends ConsumerWidget {
                       maxLines: _titleMaxLines,
                       overflow: TextOverflow.ellipsis,
                       style: context.text.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     if (publisher != null)
@@ -100,7 +101,10 @@ class _SourceRow extends ConsumerWidget {
               if (url != null)
                 Tooltip(
                   message: l.playerSourceOpen,
-                  child: const Icon(Icons.open_in_new, color: AppDesign.muted),
+                  child: const Icon(
+                    Symbols.open_in_new,
+                    color: AppDesign.muted,
+                  ),
                 ),
             ],
           ),

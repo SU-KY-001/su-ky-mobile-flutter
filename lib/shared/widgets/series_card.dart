@@ -71,7 +71,7 @@ class SeriesCard extends StatelessWidget {
                         (large
                                 ? context.text.titleMedium
                                 : context.text.labelLarge)
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                            ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                   if (series.description != null) ...[
                     const SizedBox(height: 6),

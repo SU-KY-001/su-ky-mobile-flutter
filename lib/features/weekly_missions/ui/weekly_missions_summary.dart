@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/missions_progress_bar.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_colors.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -25,7 +25,8 @@ class WeeklySummary extends StatelessWidget {
         Row(
           children: [
             const Icon(
-              Icons.stars_rounded,
+              Symbols.stars,
+              fill: 1,
               size: _starSize,
               color: WeeklyMissionsColors.gold,
             ),
@@ -37,7 +38,7 @@ class WeeklySummary extends StatelessWidget {
                   Text(
                     '${missions.totalXp}',
                     style: context.text.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   Text(

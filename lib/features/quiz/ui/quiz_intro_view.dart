@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/features/quiz/data/quiz_providers.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
@@ -64,23 +65,23 @@ class QuizIntroView extends ConsumerWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: _titleSize,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: _sectionGap),
                 ],
                 _MetaRow(
-                  icon: Icons.quiz_outlined,
+                  icon: Symbols.quiz,
                   text: l.quizQuestions(quiz.questions.length),
                 ),
                 const SizedBox(height: _rowGap),
                 _MetaRow(
-                  icon: Icons.flag_outlined,
+                  icon: Symbols.flag,
                   text: l.quizPassScoreLine(quiz.passScorePercent),
                 ),
                 const SizedBox(height: _rowGap),
                 _MetaRow(
-                  icon: Icons.check_circle_outline,
+                  icon: Symbols.check_circle,
                   text: l.quizPassNeededLine(
                     quiz.requiredCorrect,
                     quiz.questions.length,
@@ -88,7 +89,7 @@ class QuizIntroView extends ConsumerWidget {
                 ),
                 const SizedBox(height: _rowGap),
                 _MetaRow(
-                  icon: Icons.timer_outlined,
+                  icon: Symbols.timer,
                   text: l.quizDurationLine(quiz.estimatedMinutes),
                 ),
                 const SizedBox(height: _sectionGap),

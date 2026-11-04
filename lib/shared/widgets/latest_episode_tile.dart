@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/audio_time.dart';
 import 'package:su_ky_mobile/shared/audio/play_gate.dart';
@@ -59,7 +60,7 @@ class LatestEpisodeTile extends ConsumerWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: context.text.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Text(
@@ -76,7 +77,7 @@ class LatestEpisodeTile extends ConsumerWidget {
             IconButton(
               onPressed: open,
               tooltip: l.play,
-              icon: const Icon(Icons.play_circle_outline),
+              icon: const Icon(Symbols.play_circle),
               iconSize: _playIconSize,
             ),
           ],

@@ -41,7 +41,7 @@ class _ProfileGuestPromptState extends ConsumerState<ProfileGuestPrompt> {
         Text(
           l.profileGuestTitle,
           textAlign: TextAlign.center,
-          style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          style: context.text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: _textGap),
         Text(

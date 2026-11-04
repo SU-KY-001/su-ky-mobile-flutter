@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
@@ -36,13 +37,14 @@ class QuizReviewItem extends StatelessWidget {
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       expandedAlignment: Alignment.centerLeft,
       leading: Icon(
-        correct ? Icons.check_circle : Icons.cancel,
+        correct ? Symbols.check_circle : Symbols.cancel,
+        fill: 1,
         color: correct ? QuizColors.green : AppDesign.red,
       ),
       title: Text(
         entry.question.text,
         style: const TextStyle(
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
           height: _titleHeight,
         ),
       ),

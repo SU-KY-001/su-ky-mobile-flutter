@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 
 /// Bottom-bar destinations, in display order of the RN app. Profile is not a
 /// destination: it opens from the avatar in the top-right corner.
 enum AppTab {
-  discover(Icons.home_outlined),
-  history(Icons.menu_book_outlined),
-  podcast(Icons.mic_none),
-  quiz(Icons.emoji_events_outlined);
+  discover(Symbols.home),
+  history(Symbols.menu_book),
+  podcast(Symbols.mic),
+  quiz(Symbols.emoji_events);
 
   const AppTab(this.icon);
   final IconData icon;

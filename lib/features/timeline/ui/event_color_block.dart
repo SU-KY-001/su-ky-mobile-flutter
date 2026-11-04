@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 const _defaultHeight = 120.0;
 const _iconSize = 40.0;
@@ -20,7 +21,7 @@ class EventColorBlock extends StatelessWidget {
       alignment: Alignment.center,
       color: scheme.primaryContainer,
       child: Icon(
-        Icons.history_edu_outlined,
+        Symbols.history_edu,
         size: _iconSize,
         color: scheme.onPrimaryContainer.withValues(alpha: _iconOpacity),
       ),

@@ -40,7 +40,7 @@ class QuizQuestionView extends StatelessWidget {
                   question.text,
                   style: const TextStyle(
                     fontSize: _questionSize,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     height: 1.3,
                   ),
                 ),
@@ -86,7 +86,7 @@ class _SubmitError extends StatelessWidget {
         Text(
           l.quizSubmitFailed,
           style: const TextStyle(
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             color: AppDesign.red,
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/schedule/data/schedule_providers.dart';
 import 'package:su_ky_mobile/features/schedule/domain/release.dart';
@@ -29,7 +30,7 @@ class ScheduleScreen extends ConsumerWidget {
         leading: IconButton(
           onPressed: () => context.popOrGo(AppRoutes.profile),
           tooltip: l.back,
-          icon: const Icon(Icons.chevron_left),
+          icon: const Icon(Symbols.chevron_left),
         ),
         title: Text(l.scheduleTitle),
       ),
@@ -68,21 +69,21 @@ class _MonthSwitcher extends ConsumerWidget {
           IconButton(
             onPressed: model.previous,
             tooltip: l.schedulePrevMonth,
-            icon: const Icon(Icons.chevron_left),
+            icon: const Icon(Symbols.chevron_left),
           ),
           Expanded(
             child: Text(
               l.scheduleMonth(month),
               textAlign: TextAlign.center,
               style: context.text.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           IconButton(
             onPressed: model.next,
             tooltip: l.scheduleNextMonth,
-            icon: const Icon(Icons.chevron_right),
+            icon: const Icon(Symbols.chevron_right),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/features/schedule/domain/release.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/play_gate.dart';
@@ -44,7 +45,7 @@ class ReleaseTile extends ConsumerWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: context.text.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
@@ -60,7 +61,7 @@ class ReleaseTile extends ConsumerWidget {
                   released ? l.scheduleReleased : l.scheduleUpcoming,
                   style: context.text.labelSmall?.copyWith(
                     color: released ? context.accent : AppDesign.muted,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -74,7 +75,7 @@ class ReleaseTile extends ConsumerWidget {
           else
             const SizedBox.square(
               dimension: AppDesign.tapTarget,
-              child: Icon(Icons.notifications_none, color: AppDesign.muted),
+              child: Icon(Symbols.notifications, color: AppDesign.muted),
             ),
         ],
       ),

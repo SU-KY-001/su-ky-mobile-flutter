@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/app/theme/app_theme.dart';
@@ -250,11 +251,14 @@ void main() {
       matching: find.byType(HistoryTile),
     );
     expect(
-      find.descendant(of: available, matching: find.byIcon(Icons.play_arrow)),
+      find.descendant(of: available, matching: find.byIcon(Symbols.play_arrow)),
       findsOneWidget,
     );
     expect(
-      find.descendant(of: unavailable, matching: find.byIcon(Icons.play_arrow)),
+      find.descendant(
+        of: unavailable,
+        matching: find.byIcon(Symbols.play_arrow),
+      ),
       findsNothing,
     );
   });

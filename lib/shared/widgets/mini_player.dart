@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/playback_controller.dart';
@@ -61,7 +62,7 @@ class MiniPlayer extends ConsumerWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: context.text.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
@@ -84,9 +85,8 @@ class MiniPlayer extends ConsumerWidget {
                       ),
                       onPressed: () => unawaited(controller.togglePlayPause()),
                       icon: Icon(
-                        state.playing
-                            ? Icons.pause_rounded
-                            : Icons.play_arrow_rounded,
+                        state.playing ? Symbols.pause : Symbols.play_arrow,
+                        fill: 1,
                       ),
                     ),
                   ],

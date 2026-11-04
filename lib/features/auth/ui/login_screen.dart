@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
@@ -32,7 +33,7 @@ class LoginScreen extends ConsumerWidget {
         leading: IconButton(
           onPressed: () => context.popOrGo(AppRoutes.home),
           tooltip: l.close,
-          icon: const Icon(Icons.close),
+          icon: const Icon(Symbols.close),
         ),
       ),
       child: SingleChildScrollView(
@@ -43,7 +44,7 @@ class LoginScreen extends ConsumerWidget {
             Text(
               signUp ? l.authSignUpHeading : l.loginHeading,
               style: context.text.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
             const SizedBox(height: _titleGap),

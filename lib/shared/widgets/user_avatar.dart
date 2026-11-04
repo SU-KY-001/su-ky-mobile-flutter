@@ -28,7 +28,7 @@ class UserAvatar extends ConsumerWidget {
         name.isEmpty ? '?' : name.characters.first.toUpperCase(),
         style: context.text.titleMedium?.copyWith(
           color: context.accent,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w700,
           fontSize: radius * _initialScale,
         ),
       ),

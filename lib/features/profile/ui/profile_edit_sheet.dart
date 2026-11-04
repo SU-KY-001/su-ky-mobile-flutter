@@ -116,7 +116,7 @@ class _ProfileEditSheetState extends ConsumerState<ProfileEditSheet> {
               Text(
                 l.profileEditTitle,
                 style: context.text.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: AppDesign.gap),

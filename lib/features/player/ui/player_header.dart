@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode_detail.dart';
@@ -26,7 +27,7 @@ class PlayerHeader extends StatelessWidget {
           IconButton(
             onPressed: () => context.popOrGo(AppRoutes.home),
             tooltip: l.close,
-            icon: const Icon(Icons.keyboard_arrow_down),
+            icon: const Icon(Symbols.keyboard_arrow_down),
           ),
           Expanded(
             child: current == null
@@ -45,7 +46,7 @@ class PlayerHeader extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: context.text.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],

@@ -164,7 +164,7 @@ class _EventRow extends StatelessWidget {
               maxLines: _titleMaxLines,
               overflow: TextOverflow.ellipsis,
               style: context.text.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: _titleGap),

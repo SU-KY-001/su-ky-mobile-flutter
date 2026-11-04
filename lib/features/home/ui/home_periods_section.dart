@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
@@ -69,11 +70,11 @@ class _PeriodTile extends StatelessWidget {
                     maxLines: _nameMaxLines,
                     overflow: TextOverflow.ellipsis,
                     style: context.text.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: AppDesign.muted),
+                const Icon(Symbols.chevron_right, color: AppDesign.muted),
               ],
             ),
           ),

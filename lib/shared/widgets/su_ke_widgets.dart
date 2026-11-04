@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
@@ -61,7 +62,7 @@ class SectionHeading extends StatelessWidget {
             title,
             style: context.text.titleLarge?.copyWith(
               fontSize: 20,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -101,6 +102,6 @@ class RoundPlay extends StatelessWidget {
         ? AppLocalizations.of(context).pause
         : AppLocalizations.of(context).play,
     onPressed: onTap,
-    icon: Icon(playing ? Icons.pause_rounded : Icons.play_arrow_rounded),
+    icon: Icon(playing ? Symbols.pause : Symbols.play_arrow, fill: 1),
   );
 }

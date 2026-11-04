@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
@@ -51,8 +52,8 @@ class QuizOptionTile extends StatelessWidget {
                 children: [
                   Icon(
                     selected
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
+                        ? Symbols.radio_button_checked
+                        : Symbols.radio_button_unchecked,
                     color: selected ? accent : AppDesign.muted,
                   ),
                   const SizedBox(width: _iconGap),
@@ -62,8 +63,8 @@ class QuizOptionTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: _textSize,
                         fontWeight: selected
-                            ? FontWeight.w700
-                            : FontWeight.w500,
+                            ? FontWeight.w600
+                            : FontWeight.w400,
                       ),
                     ),
                   ),

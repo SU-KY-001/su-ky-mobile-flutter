@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/features/auth/ui/session_controller.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -35,6 +36,6 @@ class _GuestAvatar extends StatelessWidget {
   Widget build(BuildContext context) => const CircleAvatar(
     radius: _avatarRadius,
     backgroundColor: AppDesign.tint,
-    child: Icon(Icons.person_outline, size: 20, color: AppDesign.muted),
+    child: Icon(Symbols.person, size: 20, color: AppDesign.muted),
   );
 }

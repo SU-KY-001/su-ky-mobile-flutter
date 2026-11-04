@@ -22,7 +22,7 @@ class PlayerTrackInfo extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: context.text.titleLarge?.copyWith(
           fontSize: _titleSize,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
         ),
       ),
       const SizedBox(height: _lineGap),

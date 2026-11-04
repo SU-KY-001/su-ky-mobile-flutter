@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/audio/play_gate.dart';
@@ -25,13 +26,13 @@ class PlayerUpNextGroup extends ConsumerWidget {
     final rows = <Widget>[
       if (episode.hasQuiz)
         _Row(
-          icon: Icons.emoji_events_outlined,
+          icon: Symbols.emoji_events,
           title: l.playerStartQuiz,
           onTap: () => context.push(AppRoutes.quizFor(episode.slug)),
         ),
       if (next != null)
         _Row(
-          icon: Icons.queue_music,
+          icon: Symbols.queue_music,
           title: next.title,
           caption: l.playerUpNext,
           onTap: () => unawaited(playFromUi(context, ref, next.slug)),
@@ -97,13 +98,13 @@ class _Row extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: context.text.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppDesign.muted),
+            const Icon(Symbols.chevron_right, color: AppDesign.muted),
           ],
         ),
       ),

@@ -42,7 +42,7 @@ class QuizSummaryView extends StatelessWidget {
                   l.quizScoreFraction(session.correctCount, session.total),
                   style: const TextStyle(
                     fontSize: _scoreSize,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: _lineGap),
@@ -50,14 +50,14 @@ class QuizSummaryView extends StatelessWidget {
                   result.isPassed ? l.quizPassed : l.quizFailed,
                   style: TextStyle(
                     fontSize: _statusSize,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     color: statusColor,
                   ),
                 ),
                 const SizedBox(height: _lineGap),
                 Text(
                   l.quizXpLine(result.xpAwarded, result.totalXp),
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
             ),

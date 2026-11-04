@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/app/router/app_routes.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/domain/episode_detail.dart';
@@ -105,7 +106,7 @@ class _EventCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(Icons.history_edu_outlined, color: context.accent),
+                Icon(Symbols.history_edu, color: context.accent),
                 const SizedBox(width: AppDesign.gap),
                 Expanded(
                   child: Column(
@@ -122,13 +123,13 @@ class _EventCard extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: context.text.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: AppDesign.muted),
+                const Icon(Symbols.chevron_right, color: AppDesign.muted),
               ],
             ),
           ),

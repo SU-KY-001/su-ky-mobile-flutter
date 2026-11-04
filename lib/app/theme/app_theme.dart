@@ -4,6 +4,9 @@ import 'package:su_ky_mobile/shared/design/app_design.dart';
 const _navBarHeight = 72.0;
 const _navIconSize = 32.0;
 
+/// Material Symbols stroke weight (100-700); 400 is the font default.
+const _navIconWeight = 400.0;
+
 abstract final class AppTheme {
   static final light = ThemeData(
     useMaterial3: true,
@@ -23,7 +26,7 @@ abstract final class AppTheme {
         fontFamily: 'Inter',
         color: AppDesign.ink,
         fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
       ),
     ),
     dividerTheme: const DividerThemeData(color: AppDesign.line, thickness: 1),
@@ -38,7 +41,7 @@ abstract final class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
         textStyle: const TextStyle(
           fontFamily: 'Inter',
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
       ),
     ),
@@ -86,6 +89,7 @@ abstract final class AppTheme {
       iconTheme: WidgetStateProperty.resolveWith(
         (states) => IconThemeData(
           size: _navIconSize,
+          weight: _navIconWeight,
           color: states.contains(WidgetState.selected)
               ? AppDesign.red
               : AppDesign.muted,

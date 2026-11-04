@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/core/auth/session_user.dart';
 import 'package:su_ky_mobile/features/profile/ui/profile_edit_sheet.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
@@ -43,7 +44,7 @@ class ProfileUserHeader extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        Icons.photo_camera_outlined,
+                        Symbols.photo_camera,
                         size: _badgeIcon,
                         color: context.accent,
                       ),
@@ -63,7 +64,7 @@ class ProfileUserHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: context.text.titleLarge?.copyWith(
                       fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   Text(
@@ -77,7 +78,7 @@ class ProfileUserHeader extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppDesign.muted),
+            const Icon(Symbols.chevron_right, color: AppDesign.muted),
           ],
         ),
       ),

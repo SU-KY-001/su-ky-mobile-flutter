@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 
 const _iconBox = 40.0;
@@ -58,7 +59,7 @@ class ProfileNavRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: context.text.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     color: label,
                   ),
                 ),
@@ -72,7 +73,7 @@ class ProfileNavRow extends StatelessWidget {
                 ),
               if (onTap != null && !danger)
                 const Icon(
-                  Icons.chevron_right,
+                  Symbols.chevron_right,
                   size: _iconSize,
                   color: AppDesign.muted,
                 ),

@@ -29,7 +29,7 @@ class ScheduleDayList extends StatelessWidget {
           child: Text(
             l.scheduleDayHeader(day),
             style: context.text.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
