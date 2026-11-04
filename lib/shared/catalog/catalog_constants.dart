@@ -2,6 +2,10 @@
 abstract final class CatalogDefaults {
   static const seriesPageSize = 20;
 
+  /// One page of historical events. The server caps the limit at 50 and the
+  /// public history holds far fewer, so there is no pagination (P9).
+  static const eventsLimit = 50;
+
   /// How many series the "latest episodes" block scans (RN `podcastApi.ts`).
   static const latestSeriesScanCount = 6;
   static const latestEpisodesCount = 6;

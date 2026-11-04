@@ -5,6 +5,7 @@ import '../../../core/error/result.dart';
 import '../catalog_constants.dart';
 import '../domain/episode.dart';
 import '../domain/episode_detail.dart';
+import '../domain/historical_event.dart';
 import '../domain/historical_period.dart';
 import '../domain/series.dart';
 import 'catalog_repository.dart';
@@ -50,6 +51,36 @@ final periodsProvider = FutureProvider.autoDispose<List<HistoricalPeriod>>((
   ref.cacheFor(CatalogDefaults.staleTime);
   return _unwrap(await ref.watch(catalogRepositoryProvider).periods());
 });
+
+/// Historical events of one period, or of all periods when [periodId] is
+/// null.
+final eventsProvider = FutureProvider.autoDispose
+    .family<List<HistoricalEvent>, String?>((ref, periodId) async {
+      ref.cacheFor(CatalogDefaults.staleTime);
+      return _unwrap(
+        await ref.watch(catalogRepositoryProvider).events(periodId: periodId),
+      );
+    });
+
+/// One event with its sources.
+final eventDetailProvider = FutureProvider.autoDispose
+    .family<HistoricalEvent, String>((ref, slug) async {
+      ref.cacheFor(CatalogDefaults.staleTime);
+      return _unwrap(
+        await ref.watch(catalogRepositoryProvider).eventDetail(slug),
+      );
+    });
+
+/// Series whose primary historical event is [eventId]. Events without a
+/// linked series return an empty list.
+final eventSeriesProvider = FutureProvider.autoDispose
+    .family<List<SeriesSummary>, String>((ref, eventId) async {
+      ref.cacheFor(CatalogDefaults.staleTime);
+      final page = _unwrap(
+        await ref.watch(catalogRepositoryProvider).listSeries(eventId: eventId),
+      );
+      return page.items;
+    });
 
 final latestEpisodesProvider = FutureProvider.autoDispose<List<LatestEpisode>>((
   ref,

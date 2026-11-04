@@ -12,6 +12,8 @@ import 'package:su_ky_mobile/features/quiz/ui/quiz_screen.dart';
 import 'package:su_ky_mobile/features/schedule/ui/schedule_screen.dart';
 import 'package:su_ky_mobile/features/search/ui/search_screen.dart';
 import 'package:su_ky_mobile/features/series/ui/series_screen.dart';
+import 'package:su_ky_mobile/features/timeline/ui/event_detail_screen.dart';
+import 'package:su_ky_mobile/features/timeline/ui/timeline_screen.dart';
 import 'package:su_ky_mobile/features/weekly_missions/ui/weekly_missions_screen.dart';
 import 'package:su_ky_mobile/shared/widgets/main_navigation.dart';
 
@@ -32,6 +34,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     AppTab.discover: GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const HomeScreen(),
+    ),
+    AppTab.history: GoRoute(
+      path: AppRoutes.history,
+      builder: (context, state) => const TimelineScreen(),
     ),
     AppTab.podcast: GoRoute(
       path: AppRoutes.podcast,
@@ -73,6 +79,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.series,
         builder: (context, state) =>
             SeriesScreen(slug: state.pathParameters['slug'] ?? ''),
+      ),
+      GoRoute(
+        path: AppRoutes.event,
+        builder: (context, state) =>
+            EventDetailScreen(slug: state.pathParameters['slug'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.player,

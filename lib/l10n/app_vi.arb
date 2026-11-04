@@ -112,7 +112,6 @@
   "remaining": "Còn 14 phút",
   "playerTitle": "Tập 2: Ngô Quyền chuẩn bị trận địa",
   "bachDang": "Bạch Đằng 938",
-  "timeline": "NIÊN ĐẠI LỊCH SỬ",
   "allEras": "Tất cả thời kỳ",
   "southernHan": "Kháng chiến Nam Hán",
   "lyTran": "Thời Lý – Trần",
@@ -422,5 +421,35 @@
         "format": "yMMMM"
       }
     }
-  }
+  },
+  "timelineTitle": "Dòng thời gian lịch sử",
+  "timelineSubtitle": "Dấu mốc nghìn năm dựng nước và giữ nước",
+  "timelineEmptyTitle": "Chưa có sự kiện trong thời kỳ này",
+  "timelineEmptyMessage": "Chọn “Tất cả” để xem mọi thời kỳ.",
+  "eventDetailTitle": "Chi tiết sự kiện",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Nguồn tư liệu lịch sử",
+  "eventSourceFallbackAuthor": "Tài liệu lịch sử",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Podcast liên quan"
 }

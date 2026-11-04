@@ -14,9 +14,12 @@ abstract final class AppRoutes {
   static const quiz = '/episodes/:slug/quiz';
   static const weeklyMissions = '/weekly-missions';
   static const schedule = '/schedule';
+  static const history = '/history';
+  static const event = '/events/:slug';
   static const _returnToParam = 'returnTo';
   static String quizFor(String slug) => '/episodes/$slug/quiz';
   static String seriesFor(String slug) => '/series/$slug';
+  static String eventFor(String slug) => '/events/$slug';
 
   /// Login location that comes back to [returnTo] after signing in.
   static String loginFor(String? returnTo) => returnTo == null

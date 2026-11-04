@@ -6,12 +6,12 @@ import 'package:su_ky_mobile/features/home/ui/continue_listening_card.dart';
 import 'package:su_ky_mobile/features/home/ui/home_colors.dart';
 import 'package:su_ky_mobile/features/home/ui/home_header.dart';
 import 'package:su_ky_mobile/features/home/ui/home_view_model.dart';
-import 'package:su_ky_mobile/features/home/ui/period_pills.dart';
 import 'package:su_ky_mobile/l10n/gen/app_localizations.dart';
 import 'package:su_ky_mobile/shared/catalog/data/catalog_providers.dart';
 import 'package:su_ky_mobile/shared/design/app_design.dart';
 import 'package:su_ky_mobile/shared/widgets/catalog_states.dart';
 import 'package:su_ky_mobile/shared/widgets/latest_episodes_section.dart';
+import 'package:su_ky_mobile/shared/widgets/period_pills.dart';
 import 'package:su_ky_mobile/shared/widgets/series_carousel.dart';
 import 'package:su_ky_mobile/shared/widgets/su_ke_widgets.dart';
 
@@ -83,7 +83,11 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          const PeriodPills(),
+          PeriodPills(
+            selected: periodId,
+            onSelect: (id) =>
+                ref.read(homeViewModelProvider.notifier).select(id),
+          ),
           const SizedBox(height: 24),
           const ContinueListeningCard(),
           const SizedBox(height: 28),

@@ -112,7 +112,6 @@
   "remaining": "14 min left",
   "playerTitle": "Episode 2: Ngo Quyen prepares the battlefield",
   "bachDang": "Bach Dang 938",
-  "timeline": "HISTORICAL PERIOD",
   "allEras": "All periods",
   "southernHan": "Southern Han resistance",
   "lyTran": "Ly–Tran dynasties",
@@ -376,5 +375,35 @@
         "format": "yMMMM"
       }
     }
-  }
+  },
+  "timelineTitle": "Historical timeline",
+  "timelineSubtitle": "A thousand years of nation-building and defence",
+  "timelineEmptyTitle": "No events in this period yet",
+  "timelineEmptyMessage": "Choose “All” to see every period.",
+  "eventDetailTitle": "Event details",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Historical sources",
+  "eventSourceFallbackAuthor": "Historical document",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Related podcasts"
 }

@@ -9,14 +9,17 @@ import '../../../core/network/dio_factory.dart';
 import '../catalog_constants.dart';
 import '../domain/episode.dart';
 import '../domain/episode_detail.dart';
+import '../domain/historical_event.dart';
 import '../domain/historical_period.dart';
 import '../domain/paged.dart';
 import '../domain/series.dart';
 import 'catalog_parser.dart';
+import 'historical_event_parser.dart';
 
 const _seriesPath = '/api/series';
 const _periodsPath = '/api/historical-periods';
 const _episodesPath = '/api/episodes';
+const _eventsPath = '/api/historical-events';
 const _notFoundStatus = 404;
 const _notFoundCode = 'NOT_FOUND';
 
@@ -26,10 +29,19 @@ abstract class CatalogRepository {
     int limit = CatalogDefaults.seriesPageSize,
     String? query,
     String? periodId,
+    String? eventId,
   });
   Future<Result<SeriesDetail>> seriesDetail(String slug);
   Future<Result<EpisodeDetail>> episodeDetail(String slug);
   Future<Result<List<HistoricalPeriod>>> periods();
+
+  /// Historical events of one period, or of all periods when [periodId] is
+  /// null. One page only: the public history holds fewer events than the
+  /// server page size.
+  Future<Result<List<HistoricalEvent>>> events({String? periodId});
+
+  /// One event with its sources.
+  Future<Result<HistoricalEvent>> eventDetail(String slug);
 
   /// Newest playable episodes across the first series. The API has no
   /// episode list endpoint, so this fans out to series details (as RN does).
@@ -47,6 +59,7 @@ class ApiCatalogRepository implements CatalogRepository {
     int limit = CatalogDefaults.seriesPageSize,
     String? query,
     String? periodId,
+    String? eventId,
   }) => _guard('Series list', () async {
     final res = await _dio.get<Object?>(
       _seriesPath,
@@ -55,6 +68,7 @@ class ApiCatalogRepository implements CatalogRepository {
         'limit': limit,
         if (query != null && query.trim().isNotEmpty) 'q': query.trim(),
         'periodId': ?periodId,
+        'eventId': ?eventId,
       },
     );
     return CatalogParser.seriesPage(res.data);
@@ -104,6 +118,39 @@ class ApiCatalogRepository implements CatalogRepository {
         final res = await _dio.get<Object?>(_periodsPath);
         return CatalogParser.periods(res.data);
       });
+
+  @override
+  Future<Result<List<HistoricalEvent>>> events({String? periodId}) =>
+      _guard('Historical events', () async {
+        final res = await _dio.get<Object?>(
+          _eventsPath,
+          queryParameters: {
+            'page': 1,
+            'limit': CatalogDefaults.eventsLimit,
+            'periodId': ?periodId,
+          },
+        );
+        return HistoricalEventParser.list(res.data);
+      });
+
+  @override
+  Future<Result<HistoricalEvent>> eventDetail(String slug) {
+    if (!isValidSlug(slug)) {
+      return Future.value(
+        const Err(
+          ApiException(
+            'Invalid event slug',
+            statusCode: _notFoundStatus,
+            errorCode: _notFoundCode,
+          ),
+        ),
+      );
+    }
+    return _guard('Historical event detail', () async {
+      final res = await _dio.get<Object?>('$_eventsPath/$slug');
+      return HistoricalEventParser.detail(res.data);
+    });
+  }
 
   @override
   Future<Result<List<LatestEpisode>>> latestEpisodes() async {
