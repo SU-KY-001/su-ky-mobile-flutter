@@ -340,7 +340,7 @@
       }
     }
   },
-  "profileMissionsDone": "{count, plural, =0{No missions done yet} other{{count} missions done}}",
+  "profileMissionsDone": "{count, plural, =0{No missions done yet} =1{1 mission done} other{{count} missions done}}",
   "@profileMissionsDone": {
     "placeholders": {
       "count": {
