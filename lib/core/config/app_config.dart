@@ -19,8 +19,6 @@ enum AppEnvironment {
 class AppConfig {
   const AppConfig({required this.environment, required this.apiBaseUrl});
 
-  static const appName = 'Sử Ký';
-
   /// Fails fast on an invalid `ENV` or missing/invalid `API_BASE_URL`.
   /// Supply values with `--dart-define-from-file=env/<env>.json`.
   factory AppConfig.fromEnvironment() => AppConfig(

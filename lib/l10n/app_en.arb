@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "Su Ke",
+  "appName": "Su Ky",
   "taps": "Taps: {count}",
   "@taps": {
     "placeholders": {
@@ -11,7 +11,7 @@
   },
   "increment": "Increment",
   "audioHistory": "HISTORY AUDIO",
-  "brandAudio": "SU KE AUDIO",
+  "brandAudio": "SU KY AUDIO",
   "discover": "Discover",
   "search": "Search",
   "profile": "Profile",
@@ -54,11 +54,11 @@
   "loginAction": "Sign in & keep listening",
   "orContinue": "OR CONTINUE WITH",
   "googleAction": "Continue with Google",
-  "noAccount": "New to Su Ke?",
+  "noAccount": "New to Su Ky?",
   "register": "Sign up for free",
   "emailHint": "your.name@gmail.com",
   "invalidCredentials": "Enter a valid email and a password of at least 8 characters.",
-  "authSignUpHeading": "Create your Su Ke account",
+  "authSignUpHeading": "Create your Su Ky account",
   "authSignUpSubtitle": "Sign up to sync your listening progress and save quizzes.",
   "authSignUpAction": "Sign up & keep listening",
   "name": "Your name",
@@ -294,8 +294,33 @@
   "missionsTotalXp": "Total XP",
   "missionsCompletedLabel": "Missions done",
   "missionsWeekEnd": "Ends {date}",
+  "@missionsWeekEnd": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
   "missionsProgressRatio": "{current}/{target}",
+  "@missionsProgressRatio": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
   "missionsXpReward": "+{xp} XP",
+  "@missionsXpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
   "missionsStatusCompleted": "Completed",
   "missionsStatusExpired": "Expired",
   "missionsEmptyTitle": "No missions this week",
@@ -320,7 +345,21 @@
   "catalogErrorGeneric": "Could not load the content.",
   "catalogRetry": "Try again",
   "episodeMinutes": "{minutes} min",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "seriesEpisodeCount": "{count, plural, =1{1 episode} other{{count} episodes}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "seriesNotFound": "This series was not found.",
   "seriesBackToPodcast": "Back to Podcast",
   "seriesNoAudio": "This series has no episode with audio yet.",
@@ -331,6 +370,13 @@
   "homeSeriesEmpty": "No series for this period yet.",
   "searchMinCharsHint": "Type at least 2 characters to search.",
   "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
   "profileXpTotal": "{xp} XP",
   "@profileXpTotal": {
     "placeholders": {

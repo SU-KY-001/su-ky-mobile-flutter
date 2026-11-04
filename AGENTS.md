@@ -6,7 +6,6 @@ Flutter app, feature-first MVVM (Flutter official architecture). Read nearest ne
 ```sh
 flutter pub get
 cp env/dev.example.json env/dev.json
-dart run build_runner build --delete-conflicting-outputs   # after changing drift/freezed/json
 flutter gen-l10n                                            # after changing lib/l10n/*.arb
 flutter run --dart-define-from-file=env/dev.json
 dart format lib test
@@ -31,9 +30,9 @@ test/                mirrors lib/ one-to-one
 docs/adr/            architecture decisions
 ```
 
-## Stack: Riverpod 3 (state + DI, no codegen), go_router, dio, drift,
-shared_preferences, flutter_secure_storage, connectivity_plus,
-freezed/json_serializable, intl.
+## Stack: Riverpod 3 (state + DI, no codegen), go_router, dio,
+shared_preferences, flutter_secure_storage, connectivity_plus, intl.
+No local database and no codegen packages; only l10n is generated (ADR 0012).
 
 ## Dependency rule
 `ui -> domain <- data`; `features/*` -> `core`; `app` -> `features`+`core`. `core` import nothing from `features`/`app`. Feature never import another feature internals; share via `core` or `shared`, or route navigation.
@@ -82,7 +81,7 @@ Verify before "done": run commands under **Verify** below, all must be empty/gre
 - Screens never receive route callbacks (`onBack`, `onSeries`, ...). They call `context.push/go(AppRoutes.x)`. Router only maps path -> screen with data params (ids). New route = constant in `app_routes.dart`.
 
 ### Dependencies and unused code
-- Package or provider with zero consumers removed, not kept "for later". Exception: ADR names plan that adds its first consumer (currently Drift: `core/storage` + `databaseProvider`). Add new packages in change that first uses them.
+- Package or provider with zero consumers removed, not kept "for later". Add new packages in the change that first uses them.
 
 ### Tests
 - Every new view model: happy path, empty, error. Every refactor keeps existing behavior tests green; delete tests that only pin wording or layout.

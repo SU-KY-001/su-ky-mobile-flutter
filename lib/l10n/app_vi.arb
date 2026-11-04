@@ -1,6 +1,6 @@
 {
   "@@locale": "vi",
-  "appName": "Sử Kế",
+  "appName": "Sử Ký",
   "taps": "Số lần nhấn: {count}",
   "@taps": {
     "placeholders": {
@@ -11,7 +11,7 @@
   },
   "increment": "Tăng",
   "audioHistory": "AUDIO LỊCH SỬ",
-  "brandAudio": "SỬ KẾ AUDIO",
+  "brandAudio": "SỬ KÝ AUDIO",
   "discover": "Khám phá",
   "search": "Tìm kiếm",
   "profile": "Cá nhân",
@@ -22,7 +22,7 @@
   "battles": "Trận chiến vang dội",
   "people": "Danh nhân đất Việt",
   "continueListening": "ĐANG NGHE DỞ",
-  "seriesHeading": "Đại tác Sử Kế",
+  "seriesHeading": "Đại tác Sử Ký",
   "viewAll": "Xem tất cả",
   "seriesTitle": "Bạch Đằng 938: Ngút trời cọc gỗ ngàn thu",
   "seriesShort": "Đại thắng Bạch Đằng 938",
@@ -54,7 +54,7 @@
   "loginAction": "Đăng nhập & Tiếp tục nghe",
   "orContinue": "HOẶC TIẾP TỤC VỚI",
   "googleAction": "Tiếp tục với Google",
-  "noAccount": "Chưa có tài khoản Sử Kế?",
+  "noAccount": "Chưa có tài khoản Sử Ký?",
   "register": "Đăng ký miễn phí",
   "emailHint": "nguyen.van.a@gmail.com",
   "invalidCredentials": "Nhập email hợp lệ và mật khẩu từ 8 ký tự.",
