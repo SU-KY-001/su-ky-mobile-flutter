@@ -11,7 +11,7 @@ Ngày: 2026-11-05. Plan: `plans/261105-0500-p11-testing/`. Quy tắc: **không s
 | ID | Module | Bước tái hiện | Mong đợi | Thực tế | Bằng chứng | File nghi ngờ | Mức | Trạng thái |
 |---|---|---|---|---|---|---|---|---|
 | BUG-01 | Audio / đồng bộ tiến độ | Đang nghe, đã đến lần gửi tiến độ (một lần gửi đang chạy); trong lúc chờ phản hồi, một giây mới được đánh dấu đã nghe; sau đó tạm dừng hoặc hết bài | `end()`/pause gửi nốt các giây vừa nghe | Lần gửi thành công xoá cờ `_dirty` của các giây đánh dấu trong lúc chờ; `end()` không gửi, các giây đó mất | `test/shared/audio/progress_sync_test.dart` test `end() sends seconds played while a send was in flight` | `lib/shared/audio/progress_sync.dart` | thấp | **đã sửa** (số phiên bản `_markVersion`: chỉ xoá cờ khi không có giây nào được đánh dấu từ lúc gửi) |
-| BUG-02 | Đăng nhập | Màn đăng nhập, bấm "Quên mật khẩu" | Mở luồng quên mật khẩu | Hiện thông báo demo (`demoNotice`), chưa nối API | `test/app/router_flow_test.dart` test `forgot-password does not pretend the UI is a demo` (đang `skip`; bỏ skip là đỏ) | `lib/features/auth/ui/login_screen.dart` | thấp | open |
+| BUG-02 | Đăng nhập | Màn đăng nhập, bấm "Quên mật khẩu" | Mở luồng quên mật khẩu | Hiện thông báo demo. Server production trả `400 RESET_PASSWORD_DISABLED` (chưa có dịch vụ gửi email), nên chưa thể nối API | `test/app/router_flow_test.dart` test `login form has no forgot-password action` | `lib/features/auth/ui/auth_fields.dart` | thấp | **đã ẩn nút** (thêm lại và gọi `request-password-reset` khi server bật gửi email) |
 
 ## Test cũ đã sửa/xoá
 

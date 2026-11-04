@@ -332,16 +332,15 @@ void main() {
       );
     });
 
-    // BUG-02: skipped, see docs/reports/p11-test-findings.md
-    _test('forgot-password does not pretend the UI is a demo', (tester) async {
+    // The server answers RESET_PASSWORD_DISABLED until it has a mail sender,
+    // so the sign-in form must not offer password recovery.
+    _test('login form has no forgot-password action', (tester) async {
       final (_, c) = await _launch(tester);
       c.read(routerProvider).go(AppRoutes.login);
       await tester.pumpAndSettle();
-      final forgot = find.text(_l(tester).forgotPassword);
-      await tester.ensureVisible(forgot);
-      await tester.tap(forgot);
-      await tester.pump();
-      expect(find.text(_l(tester).demoNotice), findsNothing);
-    }, skip: true);
+      expect(find.text(_l(tester).password), findsOneWidget);
+      expect(find.textContaining('Quên mật khẩu'), findsNothing);
+      expect(find.textContaining('Forgot password'), findsNothing);
+    });
   });
 }

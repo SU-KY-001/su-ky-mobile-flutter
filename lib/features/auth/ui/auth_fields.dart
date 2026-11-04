@@ -7,9 +7,7 @@ import 'auth_form_view_model.dart';
 
 /// Name (sign-up only), email and password inputs plus the form error line.
 class AuthFields extends ConsumerWidget {
-  const AuthFields({required this.onForgotPassword, super.key});
-
-  final VoidCallback onForgotPassword;
+  const AuthFields({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,20 +46,7 @@ class AuthFields extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Text(l.password, style: context.text.bodySmall),
-            const Spacer(),
-            if (!signUp)
-              TextButton(
-                onPressed: onForgotPassword,
-                child: Text(
-                  l.forgotPassword,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-          ],
-        ),
+        Text(l.password, style: context.text.bodySmall),
         TextField(
           // Keyed by mode: a mode switch clears the password in the model, so
           // the field must be rebuilt empty to stay in sync.

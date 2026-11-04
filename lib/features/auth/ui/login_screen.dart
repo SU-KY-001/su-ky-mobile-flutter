@@ -93,7 +93,7 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 32),
-            AuthFields(onForgotPassword: notice),
+            const AuthFields(),
             const SizedBox(height: 18),
             FilledButton.icon(
               // Success replaces the stack with the destination: the session
