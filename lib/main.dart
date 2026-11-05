@@ -3,12 +3,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
+import 'core/auth/signed_in.dart';
 import 'core/config/app_config.dart';
+import 'core/di/app_retry.dart';
 import 'core/di/providers.dart';
 import 'core/logging/app_logger.dart';
+import 'features/auth/ui/session_controller.dart';
+import 'l10n/gen/app_localizations.dart';
+import 'shared/audio/audio_defaults.dart';
 
 Future<void> main() async {
   await runZonedGuarded(
@@ -30,11 +36,22 @@ Future<void> main() async {
         return true;
       };
       final prefs = await SharedPreferences.getInstance();
+      await JustAudioBackground.init(
+        androidNotificationChannelId: AudioDefaults.notificationChannelId,
+        androidNotificationChannelName: lookupAppLocalizations(
+          const Locale('vi'),
+        ).audioChannelName,
+        androidNotificationOngoing: true,
+      );
       runApp(
         ProviderScope(
+          retry: appRetry,
           overrides: [
             appConfigProvider.overrideWithValue(config),
             sharedPreferencesProvider.overrideWithValue(prefs),
+            signedInProvider.overrideWith(
+              (ref) => ref.watch(sessionControllerProvider).isAuthenticated,
+            ),
           ],
           child: const App(),
         ),

@@ -5,8 +5,6 @@ analyzer:
     - build/**
     - android/**
     - web/**
-    - '**/*.g.dart'
-    - '**/*.freezed.dart'
     - lib/l10n/gen/**
   language:
     strict-casts: true

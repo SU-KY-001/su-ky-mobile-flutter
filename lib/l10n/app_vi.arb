@@ -3,7 +3,498 @@
   "appName": "Sử Ký",
   "taps": "Số lần nhấn: {count}",
   "@taps": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "increment": "Tăng"
+  "increment": "Tăng",
+  "discover": "Khám phá",
+  "search": "Tìm kiếm",
+  "profile": "Cá nhân",
+  "searchHint": "Tìm triều đại, trận đánh, nhân vật...",
+  "all": "Tất cả",
+  "battles": "Trận chiến vang dội",
+  "people": "Danh nhân đất Việt",
+  "viewAll": "Xem tất cả",
+  "seriesTitle": "Bạch Đằng 938: Ngút trời cọc gỗ ngàn thu",
+  "seriesShort": "Đại thắng Bạch Đằng 938",
+  "secondSeries": "Hào khí Đông A: Ba lần thắng Nguyên Mông",
+  "secondAuthor": "Ban Nghiên cứu Sử Việt",
+  "warHistory": "Chiến sử",
+  "tranDynasty": "Kỳ Nhà Trần",
+  "ngoDynasty": "Kỳ Nhà Ngô",
+  "sixEpisodes": "6 tập trọn bộ",
+  "eightEpisodes": "8 tập trọn bộ",
+  "newEpisodes": "Tập mới phát hành",
+  "today": "Hôm nay",
+  "damTitle": "Kỳ tích Đầm Dạ Trạch",
+  "damSubtitle": "Chiến thuật du kích thời kỳ đầu",
+  "damEra": "THỜI TIỀN LÝ · 24 PHÚT",
+  "meTitle": "Tiếng trống đồng Mê Linh",
+  "meSubtitle": "Lời thề đền nợ nước, trả thù nhà",
+  "meEra": "KHỞI NGHĨA HAI BÀ TRƯNG · 31 PHÚT",
+  "lyTitle": "Chiếu dời đô 1010: Khát vọng định đô",
+  "lySubtitle": "Tầm nhìn chiến lược về Thăng Long",
+  "lyEra": "NHÀ LÝ · 19 PHÚT",
+  "loginHeading": "Lắng nghe hào khí nghìn năm",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "loginAction": "Đăng nhập & Tiếp tục nghe",
+  "noAccount": "Chưa có tài khoản Sử Ký?",
+  "register": "Đăng ký miễn phí",
+  "emailHint": "nguyen.van.a@gmail.com",
+  "invalidCredentials": "Nhập email hợp lệ và mật khẩu từ 8 ký tự.",
+  "authSignUpHeading": "Tạo tài khoản Sử Ký",
+  "authSignUpAction": "Đăng ký & Tiếp tục nghe",
+  "name": "Tên của bạn",
+  "nameHint": "Nguyễn Văn A",
+  "haveAccount": "Đã có tài khoản?",
+  "signIn": "Đăng nhập",
+  "authWrongCredentials": "Sai email hoặc mật khẩu.",
+  "authEmailTaken": "Email này đã được đăng ký.",
+  "authNetworkError": "Không kết nối được máy chủ. Thử lại sau.",
+  "authUnknownError": "Có lỗi xảy ra. Thử lại sau.",
+  "notifications": "Thông báo",
+  "audioChannelName": "Phát podcast",
+  "playerLoading": "Đang tải…",
+  "playerUnavailable": "Tập này chưa có bản thu sẵn sàng.",
+  "playerNetworkError": "Không thể tải âm thanh từ máy chủ.",
+  "playerPlaybackError": "Không phát được âm thanh. Thử lại.",
+  "playerRetry": "Thử lại",
+  "playerEmpty": "Chưa chọn tập nào để nghe.",
+  "playerEmptyAction": "Chọn tập trong Podcast",
+  "playerSeriesLine": "Sử Ký · {series}",
+  "@playerSeriesLine": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      }
+    }
+  },
+  "playerFromSeries": "Đang phát từ",
+  "playerUpNext": "Tập tiếp theo",
+  "playerAboutSeries": "Về series",
+  "playerMore": "Thêm tùy chọn",
+  "playerReplay": "Nghe lại",
+  "scheduleDayHeader": "{date}",
+  "@scheduleDayHeader": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "MMMMEEEEd"
+      }
+    }
+  },
+  "narrationFirstPerson": "Lời kể nhân vật",
+  "narrationThirdPerson": "Người dẫn chuyện",
+  "loginRequiredTitle": "Cần đăng nhập để nghe",
+  "loginRequiredMessage": "Đăng nhập để nghe đầy đủ câu chuyện và lưu tiến trình cá nhân.",
+  "loginRequiredLater": "Để sau",
+  "loginRequiredAction": "Đăng nhập",
+  "noNotifications": "Chưa có thông báo mới.",
+  "eraTag": "Đại Thắng Niên Kỷ 938",
+  "seriesAuthor": "GS. Sử học Đặng Văn Liêm & Ban Biên Khảo",
+  "durationTotal": "2 giờ 45 phút",
+  "listeners": "1.2k thính giả",
+  "seriesDescription": "Mùa đông năm 938, Ngô Quyền lãnh đạo nhân dân đánh tan quân Nam Hán trên sông Bạch Đằng, kết thúc 1000 năm Bắc thuộc.",
+  "listenFromStart": "Nghe từ đầu",
+  "episodeList": "Tất cả tập",
+  "sixTracks": "6 tập",
+  "sortEpisodes": "Thứ tự 1–6",
+  "listened": "Đã nghe",
+  "remaining": "Còn 14 phút",
+  "playerTitle": "Tập 2: Ngô Quyền chuẩn bị trận địa",
+  "allEras": "Tất cả thời kỳ",
+  "southernHan": "Kháng chiến Nam Hán",
+  "lyTran": "Thời Lý – Trần",
+  "recentSearches": "Tìm kiếm gần đây",
+  "clearHistory": "Xóa lịch sử",
+  "recent1": "Rạch Gầm - Xoài Mút",
+  "recent2": "Quang Trung đại phá quân Thanh",
+  "recent3": "Bình Ngô Đại Cáo",
+  "featuredSeries": "Series nổi bật",
+  "resultsCount": "6 kết quả",
+  "resistanceTag": "KHÁNG CHIẾN CHỐNG NAM HÁN",
+  "searchDescription": "Trận thủy chiến kinh điển chấm dứt hơn 1000 năm Bắc thuộc, mở ra kỷ nguyên độc lập tự chủ lâu dài cho dân tộc.",
+  "historian": "GS. Sử học kể",
+  "relatedEpisodes": "Tập podcast liên quan",
+  "bestMatch": "Phù hợp nhất",
+  "listeningBadge": "ĐANG NGHE 42%",
+  "explorePrompt": "Chưa tìm thấy niên đại mong muốn?",
+  "exploreDescription": "Tra cứu bản đồ niên biểu tương tác 4000 năm lịch sử",
+  "emptyResults": "Không tìm thấy nội dung. Thử từ khóa khác nhé.",
+  "share": "Chia sẻ",
+  "play": "Phát",
+  "pause": "Tạm dừng",
+  "back": "Quay lại",
+  "close": "Đóng",
+  "seekBack": "Lùi 15 giây",
+  "seekForward": "Tiến 15 giây",
+  "sleepTimer": "Hẹn giờ ngủ",
+  "avatarInitials": "VK",
+  "rating": "4.9",
+  "playerStartQuiz": "Làm quiz",
+  "quizQuestions": "{count} câu hỏi",
+  "@quizQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPassScoreLine": "Điểm đạt {percent}%",
+  "@quizPassScoreLine": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPassNeededLine": "Cần đúng ít nhất {needed}/{total} câu",
+  "@quizPassNeededLine": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDurationLine": "Khoảng {minutes, plural, other{{minutes} phút}}",
+  "@quizDurationLine": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "quizIntroHint": "Sau khi nộp bài, bạn có thể xem lại đáp án và lời giải chi tiết.",
+  "quizStart": "Bắt đầu",
+  "quizRestart": "Làm lại quiz",
+  "quizNext": "Tiếp tục",
+  "quizSubmit": "Nộp bài",
+  "quizSubmitting": "Đang nộp bài…",
+  "quizSubmitFailed": "Chưa nộp được bài. Đáp án của bạn vẫn được giữ, hãy thử lại.",
+  "quizRightAnswer": "Đáp án chính xác",
+  "quizYourAnswer": "Đáp án bạn chọn",
+  "quizOptionLine": "{label}. {text}",
+  "@quizOptionLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quizExplanation": "Lời giải chi tiết",
+  "quizScoreFraction": "{correct}/{total}",
+  "@quizScoreFraction": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDone": "Tiếp tục",
+  "quizMetaLine": "{questions} · {plays}",
+  "@quizMetaLine": {
+    "placeholders": {
+      "questions": {
+        "type": "String"
+      },
+      "plays": {
+        "type": "String"
+      }
+    }
+  },
+  "quizPassed": "Đã vượt qua",
+  "quizFailed": "Chưa đạt điểm qua",
+  "quizXpLine": "+{xp} XP · Tổng {total} XP",
+  "@quizXpLine": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizReview": "Xem lại đáp án",
+  "quizReviewTitle": "Khảo thí lịch sử & Lời giải",
+  "quizFilterAll": "Tất cả ({count})",
+  "@quizFilterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterWrong": "Câu sai ({count})",
+  "@quizFilterWrong": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterRight": "Câu đúng ({count})",
+  "@quizFilterRight": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoMatches": "Không có câu hỏi trong mục này.",
+  "quizBackResults": "Quay lại màn hình kết quả",
+  "quizExitTitle": "Thoát bài đang làm?",
+  "quizExitBody": "Lượt làm này chưa được nộp nên sẽ không được lưu.",
+  "quizContinue": "Tiếp tục làm",
+  "quizExit": "Thoát quiz",
+  "quizLoadFailed": "Không tải được quiz này.",
+  "quizRetry": "Thử lại",
+  "quizNotFound": "Tập này chưa có quiz.",
+  "quizUnavailable": "Tập này chưa có bộ câu hỏi ôn tập.",
+  "quizListTitle": "Quiz",
+  "quizAllTopics": "Tất cả chủ đề",
+  "quizCompletedBadge": "ĐÃ HOÀN THÀNH",
+  "quizPlays": "{count, plural, =0{Chưa có lượt chơi} other{{count} lượt chơi}}",
+  "@quizPlays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizListEmptyTitle": "Chưa có quiz nào",
+  "quizListEmptyMessage": "Quiz mới sẽ xuất hiện ở đây khi được phát hành.",
+  "missionsHeaderTitle": "Nhiệm vụ tuần",
+  "missionsListTitle": "Nhiệm vụ của bạn",
+  "missionsTotalXp": "Tổng XP",
+  "missionsCompletedLabel": "Nhiệm vụ xong",
+  "missionsWeekEnd": "Hết hạn {date}",
+  "@missionsWeekEnd": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "missionsProgressRatio": "{current}/{target}",
+  "@missionsProgressRatio": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsXpReward": "+{xp} XP",
+  "@missionsXpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatusCompleted": "Hoàn thành",
+  "missionsStatusExpired": "Hết hạn",
+  "missionsHowEpisode": "{count, plural, =1{Nghe xong 1 tập trong tuần này.} other{Nghe xong {count} tập khác nhau trong tuần này.}} Mỗi tập chỉ tính một lần.",
+  "@missionsHowEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsHowQuiz": "{count, plural, =1{Vượt qua 1 bài quiz trong tuần này.} other{Vượt qua {count} bài quiz khác nhau trong tuần này.}} Mỗi quiz chỉ tính một lần.",
+  "@missionsHowQuiz": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsEmptyTitle": "Chưa có nhiệm vụ tuần này",
+  "missionsEmptyMessage": "Nhiệm vụ mới sẽ xuất hiện khi bạn bắt đầu học.",
+  "missionsGuestTitle": "Đăng nhập để xem nhiệm vụ",
+  "missionsGuestMessage": "Nhiệm vụ tuần và XP được đồng bộ với tài khoản của bạn.",
+  "weeklyMissions": "Nhiệm vụ tuần",
+  "profileTitle": "Hồ sơ cá nhân",
+  "profileGuestTitle": "Chưa đăng nhập",
+  "profileGuestMessage": "Đăng nhập để đồng bộ tiến trình nghe, lưu quiz và tích luỹ XP.",
+  "profileSignInNow": "Đăng nhập ngay",
+  "profileSignOut": "Đăng xuất",
+  "profileSignUp": "Đăng ký",
+  "profileSignOutConfirmTitle": "Đăng xuất?",
+  "profileSignOutConfirmMessage": "Bạn cần đăng nhập lại để đồng bộ tiến trình.",
+  "profileSignOutCancel": "Hủy",
+  "profileStatXp": "XP",
+  "profileStatMissions": "Nhiệm vụ xong",
+  "tabHistory": "Lịch sử",
+  "tabPodcast": "Podcast",
+  "tabQuiz": "Quiz",
+  "podcastTitle": "Podcast",
+  "podcastSeriesHeading": "Series lịch sử",
+  "podcastEmptyTitle": "Chưa có series nào",
+  "podcastEmptyMessage": "Nội dung mới sẽ xuất hiện ở đây khi được phát hành.",
+  "catalogErrorNetwork": "Không kết nối được máy chủ.",
+  "catalogErrorGeneric": "Không tải được nội dung.",
+  "catalogRetry": "Thử lại",
+  "episodeMinutes": "{minutes} phút",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesEpisodeCount": "{count, plural, =1{1 tập} other{{count} tập}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNotFound": "Không tìm thấy series này.",
+  "seriesBackToPodcast": "Về Podcast",
+  "seriesNoAudio": "Series này chưa có tập nào có audio.",
+  "playerAboutTitle": "Giới thiệu",
+  "playerReleased": "Phát hành {date}",
+  "@playerReleased": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerYears": "Giai đoạn {start}–{end}",
+  "@playerYears": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "playerRelatedEvent": "Sự kiện liên quan",
+  "playerSourcesTitle": "Nguồn tham khảo",
+  "playerSourceOpen": "Mở liên kết trong trình duyệt",
+  "playerSourceOpenFailed": "Không mở được liên kết nguồn",
+  "episodeNoAudio": "Chưa có audio",
+  "episodeNoAudioNotice": "Tập này chưa có audio để nghe.",
+  "homeAllPeriods": "Tất cả",
+  "homeSeriesEmpty": "Chưa có series cho thời kỳ này.",
+  "searchMinCharsHint": "Nhập ít nhất 2 ký tự để tìm kiếm.",
+  "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileSectionActivity": "Hoạt động",
+  "profileSectionAccount": "Tài khoản",
+  "profileEditTitle": "Chỉnh sửa hồ sơ",
+  "profileEditNameLabel": "Tên hiển thị",
+  "profileEditNameHint": "Tên của bạn",
+  "profileEditChangeAvatar": "Đổi ảnh đại diện",
+  "profileEditRemoveAvatar": "Xoá ảnh",
+  "profileEditSave": "Lưu",
+  "profileEditFailed": "Không lưu được hồ sơ. Thử lại nhé.",
+  "profileEditOffline": "Không có kết nối mạng. Kiểm tra rồi thử lại.",
+  "profileRecentTitle": "Đã nghe gần đây",
+  "profileRecentEmpty": "Chưa có lịch sử nghe.",
+  "profileHistoryProgress": "{series} · Đã nghe {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "scheduleTitle": "Lịch phát sóng",
+  "scheduleEmpty": "Chưa có lịch phát trong tháng này.",
+  "scheduleReleased": "Đã phát hành",
+  "scheduleUpcoming": "Sắp ra mắt",
+  "schedulePrevMonth": "Tháng trước",
+  "scheduleNextMonth": "Tháng sau",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
+  },
+  "timelineTitle": "Dòng thời gian",
+  "timelineEmptyTitle": "Chưa có sự kiện trong thời kỳ này",
+  "timelineEmptyMessage": "Chọn “Tất cả” để xem mọi thời kỳ.",
+  "eventDetailTitle": "Chi tiết sự kiện",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Nguồn tư liệu lịch sử",
+  "eventSourceFallbackAuthor": "Tài liệu lịch sử",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Podcast liên quan",
+  "seriesDescriptionMore": "Xem thêm",
+  "seriesDescriptionLess": "Thu gọn",
+  "missionsProgressCount": "{done}/{total}",
+  "@missionsProgressCount": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "homeEventsTitle": "Sự kiện lịch sử",
+  "homeEventsEmpty": "Chưa có sự kiện nào.",
+  "homePeriodsTitle": "Khám phá theo thời kỳ",
+  "clearSearch": "Xóa"
 }

@@ -3,7 +3,498 @@
   "appName": "Su Ky",
   "taps": "Taps: {count}",
   "@taps": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "increment": "Increment"
+  "increment": "Increment",
+  "discover": "Discover",
+  "search": "Search",
+  "profile": "Profile",
+  "searchHint": "Find dynasties, battles, people...",
+  "all": "All",
+  "battles": "Great battles",
+  "people": "Historical figures",
+  "viewAll": "View all",
+  "seriesTitle": "Bach Dang 938: The legendary wooden stakes",
+  "seriesShort": "Victory at Bach Dang 938",
+  "secondSeries": "Dong A: Three victories over the Mongols",
+  "secondAuthor": "Vietnam History Research",
+  "warHistory": "Military history",
+  "tranDynasty": "Tran dynasty",
+  "ngoDynasty": "Ngo dynasty",
+  "sixEpisodes": "6 episodes",
+  "eightEpisodes": "8 episodes",
+  "newEpisodes": "New episodes",
+  "today": "Today",
+  "damTitle": "The miracle of Da Trach marsh",
+  "damSubtitle": "Early guerrilla tactics",
+  "damEra": "EARLY LY · 24 MIN",
+  "meTitle": "The bronze drums of Me Linh",
+  "meSubtitle": "An oath to defend the nation",
+  "meEra": "TRUNG SISTERS · 31 MIN",
+  "lyTitle": "The capital relocation of 1010",
+  "lySubtitle": "The vision for Thang Long",
+  "lyEra": "LY DYNASTY · 19 MIN",
+  "loginHeading": "Listen to a thousand years of spirit",
+  "email": "Email",
+  "password": "Password",
+  "loginAction": "Sign in & keep listening",
+  "noAccount": "New to Su Ky?",
+  "register": "Sign up for free",
+  "emailHint": "your.name@gmail.com",
+  "invalidCredentials": "Enter a valid email and a password of at least 8 characters.",
+  "authSignUpHeading": "Create your Su Ky account",
+  "authSignUpAction": "Sign up & keep listening",
+  "name": "Your name",
+  "nameHint": "Jane Doe",
+  "haveAccount": "Already have an account?",
+  "signIn": "Sign in",
+  "authWrongCredentials": "Wrong email or password.",
+  "authEmailTaken": "This email is already registered.",
+  "authNetworkError": "Cannot reach the server. Try again.",
+  "authUnknownError": "Something went wrong. Try again.",
+  "notifications": "Notifications",
+  "audioChannelName": "Podcast playback",
+  "playerLoading": "Loading…",
+  "playerUnavailable": "This episode has no recording ready yet.",
+  "playerNetworkError": "Could not load the audio from the server.",
+  "playerPlaybackError": "Could not play the audio. Try again.",
+  "playerRetry": "Retry",
+  "playerEmpty": "No episode selected yet.",
+  "playerEmptyAction": "Pick an episode in Podcast",
+  "playerSeriesLine": "Su Ky · {series}",
+  "@playerSeriesLine": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      }
+    }
+  },
+  "playerFromSeries": "Playing from",
+  "playerUpNext": "Up next",
+  "playerAboutSeries": "About the series",
+  "playerMore": "More options",
+  "playerReplay": "Listen again",
+  "scheduleDayHeader": "{date}",
+  "@scheduleDayHeader": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "MMMMEEEEd"
+      }
+    }
+  },
+  "narrationFirstPerson": "Character voice",
+  "narrationThirdPerson": "Narrator",
+  "loginRequiredTitle": "Sign in to listen",
+  "loginRequiredMessage": "Sign in to hear the full story and save your listening progress.",
+  "loginRequiredLater": "Later",
+  "loginRequiredAction": "Sign in",
+  "noNotifications": "No new notifications.",
+  "eraTag": "Year of victory 938",
+  "seriesAuthor": "Prof. Dang Van Liem & the editorial team",
+  "durationTotal": "2 hours 45 minutes",
+  "listeners": "1.2k listeners",
+  "seriesDescription": "In the winter of 938, Ngo Quyen defeated the Southern Han on the Bach Dang River, ending a millennium of northern rule.",
+  "listenFromStart": "Listen from the start",
+  "episodeList": "All episodes",
+  "sixTracks": "6 tracks",
+  "sortEpisodes": "Order 1–6",
+  "listened": "Listened",
+  "remaining": "14 min left",
+  "playerTitle": "Episode 2: Ngo Quyen prepares the battlefield",
+  "allEras": "All periods",
+  "southernHan": "Southern Han resistance",
+  "lyTran": "Ly–Tran dynasties",
+  "recentSearches": "Recent searches",
+  "clearHistory": "Clear history",
+  "recent1": "Rach Gam - Xoai Mut",
+  "recent2": "Quang Trung defeats the Qing",
+  "recent3": "Binh Ngo Dai Cao",
+  "featuredSeries": "Featured series",
+  "resultsCount": "6 results",
+  "resistanceTag": "RESISTANCE AGAINST THE SOUTHERN HAN",
+  "searchDescription": "The iconic naval victory that brought a lasting era of independence.",
+  "historian": "Told by a historian",
+  "relatedEpisodes": "Related episodes",
+  "bestMatch": "Best match",
+  "listeningBadge": "LISTENING 42%",
+  "explorePrompt": "Looking for another period?",
+  "exploreDescription": "Explore an interactive timeline of 4,000 years of history",
+  "emptyResults": "No results. Try another search.",
+  "share": "Share",
+  "play": "Play",
+  "pause": "Pause",
+  "back": "Back",
+  "close": "Close",
+  "seekBack": "Rewind 15 seconds",
+  "seekForward": "Forward 15 seconds",
+  "sleepTimer": "Sleep timer",
+  "avatarInitials": "VK",
+  "rating": "4.9",
+  "playerStartQuiz": "Take the quiz",
+  "quizQuestions": "{count} questions",
+  "@quizQuestions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPassScoreLine": "Pass score {percent}%",
+  "@quizPassScoreLine": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPassNeededLine": "Get at least {needed}/{total} right",
+  "@quizPassNeededLine": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDurationLine": "About {minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "@quizDurationLine": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "quizIntroHint": "After submitting, you can review every answer with a detailed explanation.",
+  "quizStart": "Start",
+  "quizRestart": "Try again",
+  "quizNext": "Continue",
+  "quizSubmit": "Submit answers",
+  "quizSubmitting": "Submitting…",
+  "quizSubmitFailed": "Could not submit this attempt. Your answers are kept; try again.",
+  "quizRightAnswer": "Correct answer",
+  "quizYourAnswer": "Your answer",
+  "quizOptionLine": "{label}. {text}",
+  "@quizOptionLine": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quizExplanation": "Explanation",
+  "quizScoreFraction": "{correct}/{total}",
+  "@quizScoreFraction": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDone": "Continue",
+  "quizMetaLine": "{questions} · {plays}",
+  "@quizMetaLine": {
+    "placeholders": {
+      "questions": {
+        "type": "String"
+      },
+      "plays": {
+        "type": "String"
+      }
+    }
+  },
+  "quizPassed": "Passed",
+  "quizFailed": "Not passed yet",
+  "quizXpLine": "+{xp} XP · Total {total} XP",
+  "@quizXpLine": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizReview": "Review answers",
+  "quizReviewTitle": "Quiz & explanations",
+  "quizFilterAll": "All ({count})",
+  "@quizFilterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterWrong": "Incorrect ({count})",
+  "@quizFilterWrong": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizFilterRight": "Correct ({count})",
+  "@quizFilterRight": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoMatches": "No questions in this category.",
+  "quizBackResults": "Back to results",
+  "quizExitTitle": "Leave this quiz?",
+  "quizExitBody": "This attempt has not been submitted, so it will not be saved.",
+  "quizContinue": "Keep going",
+  "quizExit": "Leave quiz",
+  "quizLoadFailed": "Could not load this quiz.",
+  "quizRetry": "Retry",
+  "quizNotFound": "This episode has no quiz yet.",
+  "quizUnavailable": "No quiz is available for this episode yet.",
+  "quizListTitle": "Quizzes",
+  "quizAllTopics": "All topics",
+  "quizCompletedBadge": "COMPLETED",
+  "quizPlays": "{count, plural, =0{No plays yet} =1{1 play} other{{count} plays}}",
+  "@quizPlays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizListEmptyTitle": "No quizzes yet",
+  "quizListEmptyMessage": "New quizzes will appear here once they are published.",
+  "missionsHeaderTitle": "Weekly Missions",
+  "missionsListTitle": "Your missions",
+  "missionsTotalXp": "Total XP",
+  "missionsCompletedLabel": "Missions done",
+  "missionsWeekEnd": "Ends {date}",
+  "@missionsWeekEnd": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "missionsProgressRatio": "{current}/{target}",
+  "@missionsProgressRatio": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsXpReward": "+{xp} XP",
+  "@missionsXpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsStatusCompleted": "Completed",
+  "missionsStatusExpired": "Expired",
+  "missionsHowEpisode": "Finish {count, plural, =1{1 episode} other{{count} different episodes}} this week. Each episode counts once.",
+  "@missionsHowEpisode": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsHowQuiz": "Pass {count, plural, =1{1 quiz} other{{count} different quizzes}} this week. Each quiz counts once.",
+  "@missionsHowQuiz": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "missionsEmptyTitle": "No missions this week",
+  "missionsEmptyMessage": "New missions will appear as you start learning.",
+  "missionsGuestTitle": "Sign in to see your missions",
+  "missionsGuestMessage": "Weekly missions and XP sync with your account.",
+  "weeklyMissions": "Weekly missions",
+  "profileTitle": "Profile",
+  "profileGuestTitle": "Not signed in",
+  "profileGuestMessage": "Sign in to sync your listening progress, save quizzes and earn XP.",
+  "profileSignInNow": "Sign in now",
+  "profileSignOut": "Sign out",
+  "profileSignUp": "Sign up",
+  "profileSignOutConfirmTitle": "Sign out?",
+  "profileSignOutConfirmMessage": "You will need to sign in again to sync your progress.",
+  "profileSignOutCancel": "Cancel",
+  "profileStatXp": "XP",
+  "profileStatMissions": "Missions done",
+  "tabHistory": "History",
+  "tabPodcast": "Podcast",
+  "tabQuiz": "Quiz",
+  "podcastTitle": "Podcast",
+  "podcastSeriesHeading": "History series",
+  "podcastEmptyTitle": "No series yet",
+  "podcastEmptyMessage": "New content will appear here once it is published.",
+  "catalogErrorNetwork": "Cannot reach the server.",
+  "catalogErrorGeneric": "Could not load the content.",
+  "catalogRetry": "Try again",
+  "episodeMinutes": "{minutes} min",
+  "@episodeMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesEpisodeCount": "{count, plural, =1{1 episode} other{{count} episodes}}",
+  "@seriesEpisodeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNotFound": "This series was not found.",
+  "seriesBackToPodcast": "Back to Podcast",
+  "seriesNoAudio": "This series has no episode with audio yet.",
+  "playerAboutTitle": "About",
+  "playerReleased": "Released {date}",
+  "@playerReleased": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "playerYears": "Period {start}–{end}",
+  "@playerYears": {
+    "placeholders": {
+      "start": {
+        "type": "int"
+      },
+      "end": {
+        "type": "int"
+      }
+    }
+  },
+  "playerRelatedEvent": "Related event",
+  "playerSourcesTitle": "Sources",
+  "playerSourceOpen": "Open link in browser",
+  "playerSourceOpenFailed": "Couldn't open the source link",
+  "episodeNoAudio": "No audio yet",
+  "episodeNoAudioNotice": "This episode has no audio to play yet.",
+  "homeAllPeriods": "All",
+  "homeSeriesEmpty": "No series for this period yet.",
+  "searchMinCharsHint": "Type at least 2 characters to search.",
+  "playbackSpeed": "{speed}x",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "profileXpTotal": "{xp} XP",
+  "@profileXpTotal": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
+  "profileSectionActivity": "Activity",
+  "profileSectionAccount": "Account",
+  "profileEditTitle": "Edit profile",
+  "profileEditNameLabel": "Display name",
+  "profileEditNameHint": "Your name",
+  "profileEditChangeAvatar": "Change photo",
+  "profileEditRemoveAvatar": "Remove photo",
+  "profileEditSave": "Save",
+  "profileEditFailed": "Couldn't save your profile. Try again.",
+  "profileEditOffline": "No network. Check your connection and try again.",
+  "profileRecentTitle": "Recently listened",
+  "profileRecentEmpty": "No listening history yet.",
+  "profileHistoryProgress": "{series} · Listened {percent}%",
+  "@profileHistoryProgress": {
+    "placeholders": {
+      "series": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "scheduleTitle": "Release schedule",
+  "scheduleEmpty": "No releases scheduled this month.",
+  "scheduleReleased": "Released",
+  "scheduleUpcoming": "Coming soon",
+  "schedulePrevMonth": "Previous month",
+  "scheduleNextMonth": "Next month",
+  "scheduleMonth": "{date}",
+  "@scheduleMonth": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMM"
+      }
+    }
+  },
+  "timelineTitle": "Timeline",
+  "timelineEmptyTitle": "No events in this period yet",
+  "timelineEmptyMessage": "Choose “All” to see every period.",
+  "eventDetailTitle": "Event details",
+  "eventBreadcrumb": "{period} / {phase}",
+  "@eventBreadcrumb": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      },
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "eventSourcesTitle": "Historical sources",
+  "eventSourceFallbackAuthor": "Historical document",
+  "eventSourceLine": "{author} · {locator}",
+  "@eventSourceLine": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "locator": {
+        "type": "String"
+      }
+    }
+  },
+  "eventRelatedTitle": "Related podcasts",
+  "seriesDescriptionMore": "Show more",
+  "seriesDescriptionLess": "Show less",
+  "missionsProgressCount": "{done}/{total}",
+  "@missionsProgressCount": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "homeEventsTitle": "Historical events",
+  "homeEventsEmpty": "No events yet.",
+  "homePeriodsTitle": "Explore by period",
+  "clearSearch": "Clear"
 }
